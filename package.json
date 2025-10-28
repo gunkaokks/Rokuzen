@@ -1,0 +1,31 @@
+{
+  "name": "trabalho-pi-oficial",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon JavaScript/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gunkaokks/Rokuzen.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/gunkaokks/Rokuzen/issues"
+  },
+  "homepage": "https://github.com/gunkaokks/Rokuzen#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongodb": "^6.20.0",
+    "mongoose": "^8.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
