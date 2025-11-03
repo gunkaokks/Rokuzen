@@ -24,7 +24,7 @@ body {
 .container {
     width: 100%;
     height: 100vh;
-    background-image: linear-gradient(rgba(0, 50, 0, 0.715), rgba(0, 20, 0, 0.8)), url(fundo.jpg);
+    background-image: linear-gradient(rgba(0, 50, 0, 0.715), rgba(0, 20, 0, 0.8)), url(Fundo.jpg);
     background-position: center;
     background-size: cover;
     position: relative;

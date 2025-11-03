@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rokuzen</title>
+
+    <link rel="shortcut icon" href="../Imagens/LogoTopo.png" type="image/x-icon">
+    <link rel="stylesheet" href="login.css">
+
+    <script src="https://kit.fontawesome.com/a27cc7b249.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <!--Botão de voltar-->
+    <div class="container">
+        <a href="javascript:history.back()" class="back-button">&lt;</a>
+
+        <!-- Esqueci minha senha -->
+        <div class="senha-box m-20">
+            <h1 id="title-senha">Esqueci minha senha</h1>
+            <p>Você irá receber um e-mail no endereço informado abaixo contendo um procedimento para criar uma nova
+                senha</p>
+            <form id="loginForm">
+                <div class="btn-field">
+                </div>
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="email" name="email" placeholder="Digite o e-mail cadastrado" required>
+                    </div>
+                    <p>Não recebeu um e-mail? <a href="#">Reenviar e-mail</a></p>
+                    <button type="submit" id="entrarBtn" class="enviarbutton">Enviar</button>
+                </div>
+            </form>
+
+            <!-- Botões para ativar edição, salvar e desfazer -->
+            <div class="edit-buttons-container" style="display: none;">
+                <div class="edit-buttons">
+                    <button class="edit-button" onclick="ativarEdicao()">Ativar Edição</button>
+                    <button class="edit-button" onclick="salvarEdicoes()">Salvar Edições</button>
+                    <button class="edit-button" onclick="desfazerEdicoes()">Desfazer Edições</button>
+                </div>
+            </div>
+
+
+            <!-- Modal e outros elementos permanecem os mesmos -->
+            <div class="modal" id="modal">
+                <div class="modal-content">
+                    <p id="modal-message"></p>
+                    <button class="modal-button" onclick="fecharModal()"></button>
+                </div>
+            </div>
+            <script src="/edit.js"></script>
+
+            <script>
+                const signupForm = document.getElementById("signupForm");
+                const loginForm = document.getElementById("loginForm");
+
+                const signupBtn = document.getElementById("signupBtn");
+                const signinBtn = document.getElementById("signinBtn");
+
+                const signupBtn2 = document.getElementById("signupBtn2");
+                const signinBtn2 = document.getElementById("signinBtn2");
+
+                const title = document.getElementById("title");
+            </script>
+            <script src="/login.js"></script>
+</body>
+
+</html>
