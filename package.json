@@ -1,11 +1,11 @@
 {
   "name": "trabalho-pi-oficial",
   "version": "1.0.0",
-  "description": "",
+  "description": "O projeto tem como foco principal desenvolver uma interface web responsiva para a ROKUZEN, focada em otimizar o atendimento presencial nas unidades. A solução permitirá visualizar em tempo real a ocupação dos postos de atendimento, as escalas dos terapeutas e o status de cada sala, cadeira ou poltrona. Com controles para início e término de sessões, o sistema visa reduzir atrasos, evitar conflitos e melhorar a gestão dos recursos.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon backend.js"
   },
   "repository": {
     "type": "git",
@@ -20,10 +20,15 @@
   },
   "homepage": "https://github.com/gunkaokks/Rokuzen#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "mongodb": "^6.20.0",
-    "mongoose": "^8.19.2"
+    "mongoose": "^8.19.3",
+    "mongoose-unique-validator": "^4.0.1",
+    "nodemailer": "^7.0.10"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
