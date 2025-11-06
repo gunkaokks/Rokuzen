@@ -1,45 +1,133 @@
 document.addEventListener("DOMContentLoaded", function () {
     const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
 
-    if (!loginForm) {
-        console.error('Elemento com ID "loginForm" não encontrado.');
-        return;
-    }
+if (loginForm) {
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault();
 
-    loginForm.addEventListener("submit", function (event) {
-        event.preventDefault();
+            const email = document.querySelector("#loginForm input[name='email']").value;
+            const senha = document.querySelector("#loginForm input[name='senha']").value;
 
-        const email = document.querySelector("input[name='email']").value;
-        const senha = document.querySelector("input[name='senha']").value;
+            console.log('Tentando login:', { email, senha });
 
-        fetch("http://localhost:3000/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, senha }),
-        })
-            .then(response => response.json())
+            if (!email || !senha) {
+                alert("Por favor, preencha email e senha.");
+                return;
+            }
+
+            fetch("http://localhost:3000/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ 
+                    email: email,
+                    senha: senha 
+                }),
+            })
+            .then(response => {
+                console.log('Status da resposta:', response.status);
+                return response.json();
+            })
             .then(data => {
-                console.log(data);  // Verifique o que está sendo retornado
+                console.log('Resposta completa do login:', data);
 
-                if (data.success) {
+                if (data.mensagem && data.mensagem.includes('sucesso')) {
                     localStorage.setItem("loggedIn", "true");
-                    localStorage.setItem("nome", data.nome);
-                    localStorage.setItem("email", email);
-                    localStorage.setItem("senha", senha);
+                    localStorage.setItem("sessaoId", data.sessaoId);
+                    localStorage.setItem("usuario", JSON.stringify(data.usuario));
+                    localStorage.setItem("nome", data.usuario.nome);
+                    localStorage.setItem("email", data.usuario.email);
+                    localStorage.setItem("tipo", data.usuario.tipo);
 
-                    alert(data.message);
-                    window.location.href = "/HTML/Administrador.html";
+                    alert(data.mensagem);
+                    console.log('Redirecionando para index.html');
+                    window.location.href = "../index.html";
+                    
+                } else if (data.erro) {
+                    alert(data.erro);
                 } else {
-                    alert("Login falhou: " + data.message);
+                    alert("Erro: tente novamente mais tarde");
                 }
             })
             .catch(error => {
                 console.error("Erro ao fazer login:", error);
-                alert("Erro ao tentar fazer login.");
+                alert("Erro: tente novamente mais tarde.");
             });
-    });
+        });
+    }
+
+// Cadastro
+
+    if (signupForm) {
+        signupForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const nome = document.querySelector("#signupForm input[name='nome']").value;
+            const email = document.querySelector("#signupForm input[name='email']").value;
+            const telefone = document.querySelector("#signupForm input[name='telefone']").value;
+            const senha = document.querySelector("#signupForm input[name='senha']").value;
+
+            console.log('Dados do cadastro:', { nome, email, telefone, senha });
+
+            if (!nome || !email || !telefone || !senha) {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            if (senha.length < 6) {
+                alert("A senha deve ter pelo menos 6 caracteres.");
+                return;
+            }
+
+            fetch("http://localhost:3000/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ 
+                    nome: nome,
+                    email: email,
+                    telefone: telefone,
+                    senha: senha 
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Resposta do cadastro:', data);
+
+                    if (data.mensagem === 'Usuário criado com sucesso!') {
+                        alert(data.mensagem);
+                        signupForm.reset();
+                        signupForm.style.display = 'none';
+                        loginForm.style.display = 'block';
+                        document.getElementById('title').innerHTML = 'Login';
+                        
+                    } else {
+                        alert((data.erro || "Cadastro falhou"));
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao cadastrar:", error);
+                    alert("Erro ao tentar cadastrar.");
+                });
+        });
+    }
+
+    const sessaoId = localStorage.getItem("sessaoId");
+    if (sessaoId) {
+        fetch(`http://localhost:3000/verificar-sessao/${sessaoId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.logado) {
+                    window.location.href = "/HTML/Administrador.html";
+                }
+            })
+            .catch(error => {
+                console.error("Erro ao verificar sessão:", error);
+                localStorage.removeItem("sessaoId");
+                localStorage.removeItem("usuario");
+            });
+    }
 });
-
-

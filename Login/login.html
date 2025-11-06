@@ -42,7 +42,7 @@
             </form>
 
             <!-- Formulário de Cadastro -->
-            <form id="signupForm" action="http://localhost:3000/signup" method="post" style="display: none;">
+            <form id="signupForm" style="display: none;">
                 <div class="btn-field">
                     <button type="button" id="signupBtn2" class="button disable">Login</button>
                     <button type="button" id="signinBtn2" class="button">Cadastro</button>
@@ -55,6 +55,10 @@
                     <div class="input-field">
                         <i class="fa-solid fa-envelope"></i>
                         <input type="email" name="email" placeholder="Email" required>
+                    </div>
+                    <div class="input-field">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="tel" name="telefone" placeholder="Telefone" required>
                     </div>
                     <div class="input-field">
                         <i class="fa-solid fa-lock"></i>
@@ -83,7 +87,6 @@
             <button class="modal-button" onclick="fecharModal()"></button>
         </div>
     </div>
-    <script src="/edit.js"></script>
 
     <script>
         const signupForm = document.getElementById("signupForm");

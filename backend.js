@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 const uniqueValidator = require('mongoose-unique-validator')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const app = express()
 app.use(express.json())
 app.use(cors())
@@ -11,7 +12,7 @@ dotenv.config()
 
 const stringConexaoBD = process.env.CONEXAO_BD
 
-async function conectarAoMongoDB () {
+async function conectarAoMongoDB() {
   await mongoose.connect(stringConexaoBD)
 }
 
@@ -27,10 +28,12 @@ const Unidade = mongoose.model("Unidade", unidadeSchema)
 const clienteSchema = new mongoose.Schema({
   nome_cliente: { type: String, required: true },
   email_cliente: { type: String, unique: true },
-  telefone_cliente:{ type: String, unique: true }, data_nascimento: Date,
-  respostas_saude: { tem_dor_cronica: Boolean, local_dor: String, pressao_arterial: String, gravidez: Boolean,
+  telefone_cliente: { type: String, unique: true }, data_nascimento: Date,
+  respostas_saude: {
+    tem_dor_cronica: Boolean, local_dor: String, pressao_arterial: String, gravidez: Boolean,
     medicamentos: [String],
-    alergias: [String]}, primeiro_atendimento: Date, observacoes: String
+    alergias: [String]
+  }, primeiro_atendimento: Date, observacoes: String
 }, { timestamps: true })
 clienteSchema.plugin(uniqueValidator)
 const Cliente = mongoose.model("Cliente", clienteSchema)
@@ -59,16 +62,16 @@ const atendimentoSchema = new mongoose.Schema({
   servico_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Servico', required: true },
   colaborador_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Colaborador', required: true },
   parceiro_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Parceiro' },
-  
+
   inicio_atendimento: { type: Date, required: true },
   fim_atendimento: { type: Date, required: true },
-  
+
   valor_servico: { type: Number, required: true },
   tipo_pagamento: { type: String, enum: ['dinheiro', 'pix', 'cartao', 'cortesia'], required: true },
   status_pagamento: { type: String, enum: ['pendente', 'pago', 'cancelado'], default: 'pendente' }, observacao_cliente: String,
   foi_marcado_online: { type: Boolean, default: false },
   pacote_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Pacote' },
-  
+
   duracao_real_minutos: Number,
   satisfacao_cliente: { type: Number, min: 1, max: 5 }
 }, { timestamps: true })
@@ -99,11 +102,11 @@ const PontoEletronico = mongoose.model("PontoEletronico", pontoEletronicoSchema)
 // Aqui é o sistema de login, cadastro etc
 
 const usuarioSchema = mongoose.Schema({
-  nome: {type: String, required: true},
-  email: {type: String, required: true, unique: true},
-  senha: {type: String, required: true},
-  telefone: {type: String, required: true, unique: true},
-  tipo: {type: String, enum: ['master', 'gerente', 'recepcao', 'terapeuta', 'usuario'], default: 'usuario'},
+  nome: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  senha: { type: String, required: true },
+  telefone: { type: String, required: true, unique: true },
+  tipo: { type: String, enum: ['master', 'gerente', 'recepcao', 'terapeuta', 'usuario'], default: 'usuario' },
   data_criacao: { type: Date, default: Date.now }
 })
 usuarioSchema.plugin(uniqueValidator)
@@ -119,21 +122,21 @@ app.get('/', (req, res) => {
 app.post('/signup', async (req, res) => {
   try {
     console.log('Dados recebidos no signup:', req.body)
-    
+
     const nome = req.body.nome
     const email = req.body.email
     const senha = req.body.senha
     const telefone = req.body.telefone
     const tipo = req.body.tipo || 'usuario'
-    
+
     if (!nome || nome.trim() === '') {
       return res.status(400).json({ erro: 'Nome é obrigatório' })
     }
-    
+
     if (!email || email.trim() === '') {
       return res.status(400).json({ erro: 'Email é obrigatório' })
     }
-    
+
     if (!senha || senha.trim() === '') {
       return res.status(400).json({ erro: 'Senha é obrigatória' })
     }
@@ -143,10 +146,10 @@ app.post('/signup', async (req, res) => {
     }
 
     console.log('Criptografando senha...')
-    
+
     // Criptografa a senha
     const senhaCriptografada = await bcrypt.hash(senha, 10)
-    
+
     console.log('Senha criptografada com sucesso')
 
     const usuario = new Usuario({
@@ -156,12 +159,12 @@ app.post('/signup', async (req, res) => {
       telefone: telefone,
       tipo: tipo
     })
-    
+
     // Salva no banco
     const respostaMongo = await usuario.save()
     console.log('Usuário salvo no MongoDB:', respostaMongo._id)
-    
-    res.status(201).json({ 
+
+    res.status(201).json({
       mensagem: 'Usuário criado com sucesso!',
       usuario: {
         nome: nome,
@@ -174,11 +177,11 @@ app.post('/signup', async (req, res) => {
   }
   catch (exception) {
     console.log('Erro no cadastro:', exception.message)
-    
+
     if (exception.code === 11000) {
-      return res.status(409).json({ erro: 'Email já existe' })    
+      return res.status(409).json({ erro: 'Email já existe' })
     }
-    
+
     res.status(500).json({ erro: 'Erro interno: ' + exception.message })
   }
 })
@@ -199,6 +202,12 @@ app.post('/login', async (req, res) => {
     if (!senhaValida) {
       return res.status(401).json({ erro: 'Senha incorreta' })
     }
+    
+    const token = jwt.sign(
+      { email: email }, 
+      "chave-secreta", 
+      { expiresIn: "1h" }
+    )
 
     const sessaoId = Math.random().toString(36).substring(2)
     sessoesAtivas[sessaoId] = {
@@ -210,8 +219,9 @@ app.post('/login', async (req, res) => {
     res.json({
       mensagem: 'Login realizado com sucesso!',
       sessaoId: sessaoId,
+      token: token,
       usuario: {
-        nome: usuario.nome, 
+        nome: usuario.nome,
         email: usuario.email,
         telefone: usuario.telefone,
         tipo: usuario.tipo,
@@ -377,12 +387,12 @@ app.get('/pontos', async (req, res) => {
 })
 
 app.listen(3000, () => {
-    try {
-      conectarAoMongoDB()
-      console.log('server up & running & conexão ok')
-      console.log('📊 Sistema de atendimentos integrado!')
-    }
-    catch (e) {
-      console.log("erro:" + e)
-    }
+  try {
+    conectarAoMongoDB()
+    console.log('server up & running & conexão ok')
+    console.log('📊 Sistema de atendimentos integrado!')
+  }
+  catch (e) {
+    console.log("erro:" + e)
+  }
 })
