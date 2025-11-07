@@ -274,4 +274,192 @@ html {
     filter: brightness(50%);
 }
 
+/* botoes banner */
+.carousel-item .btn {
+    background-color: #69A625;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+.carousel-item .btn:hover {
+    background-color: #3b5f13;
+    color: #fff;
+}
+.carousel-item .btn:active {
+    background-color: #21350a;
+    color: #fff;
+}
+
+/* Missão visao e valores */
+.container-missao {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    padding: 40px 20px;
+    flex-wrap: wrap; 
+    width: 100%;
+    margin: 0 auto; 
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); 
+}
+.missao-titulo {
+    font-size: 25px; 
+    color: #1D1D1F; 
+    margin-right: 40px; 
+    white-space: nowrap;
+    text-align: center; 
+    width: auto; 
+    margin: 10px;
+    font-weight: 600;
+}
+.missao-itens {
+    display: flex;
+    align-items: flex-start; 
+    flex-wrap: wrap; 
+    gap: 100px;
+    margin-top: 0;
+    width: 100%; 
+    justify-content: center; 
+}
+.missao-item {
+    text-align: center;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    width: 250px; 
+    padding: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+}
+.missao-item:hover {
+    transform: translateY(-8px); 
+}
+.icone-missao {
+    font-size: 48px; 
+    color: #69a625; 
+    margin-bottom: 15px;
+}
+.missao-numeros {
+    font-size: 22px;
+    font-weight: bold;
+    color: #2B2B2E; 
+}
+.missao-descricao {
+    font-size: 15px;
+    color: #2B2B2E; 
+}
+@media screen and (max-width: 1024px) {
+    .container-missao {
+        flex-direction: column; 
+        text-align: center;
+    }
+    .missao-titulo {
+        margin-right: 0; 
+        margin-bottom: 30px; 
+        font-size: 28px;
+    }
+    .missao-itens {
+        justify-content: center; 
+    }
+    .missao-item {
+        width: 150px; 
+        padding: 18px; 
+    }
+    .icone-conquista {
+        font-size: 40px;
+    }
+}
+@media screen and (max-width: 768px) {
+    .container-missao {
+        padding: 20px; 
+    }
+    .missao-titulo {
+        margin-bottom: 25px;
+        font-size: 24px;
+    }
+    .missao-itens {
+        flex-direction: column; 
+        align-items: center;
+        justify-content: center; 
+    }
+    .missao-item {
+        width: 130px;
+        padding: 15px; 
+    }
+    .icone-missao {
+        font-size: 36px; 
+    }
+    .missao-numeros {
+        font-size: 18px; 
+    }
+    .missao-descricao {
+        font-size: 13px; 
+    }
+}
+
+/* Combo 4 cards */
+.cards1 {
+    background-color: #EDEDED;
+    background-image: url(/Imagens/img-Coletivo/fundo.png);
+    background-size: contain;
+    width: 100%;
+    padding: 1% 0 3% 0;
+}
+.card1 {
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+}
+.card1 h2 {
+    color: #69A625;
+    font-family: 'Roboto', sans-serif;
+    font-size: 25px;
+    font-weight: bold;
+}
+.card1 p {
+    color: #2B2B2E;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    margin-top: 5%;
+}
+.row {
+    display: flex;
+    justify-content: center;
+}
+.secao4-div-card1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 10px;
+    padding: 20px;
+    box-shadow: 2px 2px 16px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    background-color: white;
+    transition: all 0.5s ease;
+    text-align: center;
+}
+.secao4-div-card1:hover {
+    transform: scale(1.05);
+    z-index: 1;
+}
+@media (max-width: 768px) {
+    .secao4-div-card1 {
+        width: 100%;
+    }
+}
+
+
+
+
+
+
+
+
+
 

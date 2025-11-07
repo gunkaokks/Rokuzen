@@ -9,11 +9,11 @@
 
     <script src="/JavaScript/home.js"></script>
     <link href="CSS/home.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!--Bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!--Ícones da página-->
     <script src="https://kit.fontawesome.com/e64e449d7c.js" crossorigin="anonymous"></script>
     <!--Plugin de acessibilidade-->
@@ -79,13 +79,156 @@
                     <p style="margin-left: 10%">Massagens terapêuticas, um momento dedicado a você.
                         <br>Descubra o equilíbrio entre corpo e mente através das nossas terapias especializadas.</br>
                         <br><strong> Agende sua sessão agora mesmo! </strong>
+                        <a href="HTML/agendamento.html" class="btn btn-lg" style="margin-left: 5%">Agende aqui!</a>
                 </div>
             </div>
-        
+            <div class="carousel-item">
+                <div class="overlay-image" style="background-image:url(./Imagens/Massagem.jpg);"></div>
+                <div class="container">
+                    <h1 style="margin-left: 10%">Descubra o poder das massagens</h1>
+                    <p style="margin-left: 10%">Permita-se descobrir a massagem ideal para relaxar e renovar suas
+                        energias.
+                        <br><strong> Clique em “Saiba mais” e descubra os diferentes tipos de massagem.</strong>
+                    </p>
+                    <a href="HTML/servicos.html" class="btn btn-lg" style="margin-left: 10%">Saiba Mais</a>
+
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="overlay-image" style="background-image:url(./Imagens/CamaMassagens.jpg);"></div>
+                <div class="container">
+                    <h1 style="margin-left: 10%">Conheça um pouco da nossa história!</h1>
+                    <p style="margin-left: 10%"> Rokuzen é uma empresa brasileira de massagem terapêutica
+                        que se propõe a conduzir bem-estar às pessoas,
+                        por meio de técnicas orientais milenares,
+                        como o Shiatsu e Anmá. </p>
+                    <a href="./HTML/quemSomos.html" class="btn btn-lg" style="margin-left: 10%">Quem somos!</a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="overlay-image" style="background-image:url(./Imagens/Loja.jpg);"></div>
+                <div class="container">
+                    <h1 style="margin-left: 10%">Várias unidades por São Paulo!</h1>
+                    <p style="margin-left: 10%">Localize a unidade mais próxima de você e
+                        <br>descubra como é simples cuidar do seu corpo e mente com quem entende de bem-estar.</br>
+                        <strong> Estamos pertinho de você!</strong>
+                    </p>
+                    <a href="HTML/unidades.html" class="btn btn-lg" style="margin-left: 10%">Nossas unidades</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles do Carrossel -->
+        <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+    <!-- Missão , Visão e Valores -->
+    <div class="container-missao fade-in ">
+        <div class="missao-titulo">Visão, Missão e Valores</div>
 
 
+        <div class="missao-itens">
+            <div class="missao-item">
+                <div class="icone-missao"><i class="fa-solid fa-rocket"></i></div>
+                <div class="missao-numeros">Missão</div>
+                <div class="missao-descricao">Proporcionar um momento terapêutico integrado e dedicado aos seus sentidos.</div>
+            </div>
+
+            <div class="missao-item">
+                <div class="icone-missao"><i class="fa-solid fa-eye"></i></div>
+                <div class="missao-numeros">Visão</div>
+                <div class="missao-descricao">Ser um instrumento de saúde e bem-estar para as pessoas.</div>
+            </div>
+
+            <div class="missao-item">
+                <div class="icone-missao"><i class="fa-solid fa-star"></i></div>
+                <div class="missao-numeros">Valores</div>
+                <div class="missao-descricao">Respeito, Cooperação e comprometimento</div>
+            </div>
+        </div>
+    </div>
+
+    <!--Combo 4 Cards-->
+    <div class="cards1 fade-in">
+        <div class="container mt-12">
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mt-2">
+                    <div class="card1">
+                        <div class="secao4-div-card1">
+                            <h2>Benefícios da massagem</h2>
+                            <p>A massagem ajuda a <b>aliviar tensões musculares, melhorar a circulação e reduzir o estresse.</b>
+                                Ela promove <b>relaxamento profundo</b> e estimula os <b>hormônios do bem-estar.</b>
+                                Assim, traz equilíbrio, leveza e mais qualidade de vida para corpo e mente.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mt-2">
+                    <div class="card1">
+                        <div class="secao4-div-card1">
+                            <h2>Nossa Proposta</h2>
+                            <p>
+                                Oferecer um serviço de massagem terapêutica acessível e de alta qualidade,
+                                focado no bem-estar e na satisfação dos nossos clientes.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container mt-12">
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mt-2">
+                    <div class="card1">
+                        <div class="secao4-div-card1">
+                            <h2>Nosso Objetivo</h2>
+                            <p>
+                                Proporcionar um atendimento personalizado e humanizado, que respeite as necessidades e
+                                desejos de cada cliente, promovendo uma experiência única e transformadora.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mt-2">
+                    <div class="card1">
+                        <div class="secao4-div-card1">
+                            <h2>O que Queremos</h2>
+                            <p>
+                                Criar um ambiente acolhedor e inclusivo, onde todos se sintam à vontade para explorar
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
+    <!-- Scripts Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+    <script src="/JavaScript/home.js"></script>
 
 </body>
 
