@@ -1,0 +1,47 @@
+body {
+  background-color: #f8f9fa;
+  font-family: "Poppins", sans-serif;
+}
+
+nav.navbar {
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.unidades-container {
+  margin-top: 120px;
+  padding: 40px 20px;
+}
+
+.card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.btn-mapa {
+  background-color: #198754;
+  border: none;
+}
+
+.btn-mapa:hover {
+  background-color: #157347;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-weight: 600;
+}
