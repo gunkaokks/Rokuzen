@@ -34,9 +34,7 @@ Gustavo Itiro Nakaoka (24.01465-6)
 
 7- Miro (desenvolvimento de personas, mapas de empatia, entre outros)
 
-8- Trello (gestão de tempo)
-
-9- Bootstrap (site responsivo)
+8- Bootstrap (site responsivo)
 
 <code><img height="32" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/javascript/javascript.png" alt="Javascript"/></code>
 <code><img height="32" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/html/html.png" alt="HTML5"/></code>
