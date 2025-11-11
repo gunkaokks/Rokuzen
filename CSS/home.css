@@ -1,13 +1,13 @@
 .navbar {
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     height: 80px;
     padding: 10px 10px;
-    position: fixed; 
-    top: 0; 
+    position: fixed;
+    top: 0;
     left: 0;
-    width: 100%; 
-    z-index: 1050; 
-    background-color: #fff; 
+    width: 100%;
+    z-index: 1050;
+    background-color: #fff;
 }
 
 .logo {
@@ -18,6 +18,7 @@
     margin-left: 100px;
     margin-top: 5px;
 }
+
 .agende-button {
     background-color: #69a625;
     color: #fff;
@@ -38,19 +39,21 @@
 
 .agende-button:hover {
     background-color: #487218;
-    color: #fff; 
+    color: #fff;
 }
 
 .navbar-toggler {
     border: none;
     font-size: 15px;
-    margin-right: 110px; 
+    margin-right: 110px;
 }
 
-.navbar-toggler:focus, .btn-close:focus {
+.navbar-toggler:focus,
+.btn-close:focus {
     box-shadow: none;
     outline: none;
 }
+
 .nav-link {
     font-weight: 500;
     position: relative;
@@ -58,36 +61,43 @@
     margin-top: 40px;
     margin-left: 10px;
 }
-.nav-link:hover, .nav-link.active {
+
+.nav-link:hover,
+.nav-link.active {
     color: #1D1D1F;
 }
-.nav-item.dropdown > .nav-link::after {
-    display: none; 
+
+.nav-item.dropdown>.nav-link::after {
+    display: none;
 }
+
 .nav-item .dropdown-menu {
     display: none;
     position: absolute;
-    top: 100%; 
+    top: 100%;
     left: 0;
-    background-color: #ffffff; 
-    padding: 10px 0; 
-    border-radius: 5px; 
-    min-width: 180px; 
+    background-color: #ffffff;
+    padding: 10px 0;
+    border-radius: 5px;
+    min-width: 180px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    border: none; 
+    border: none;
 }
+
 .nav-item:hover .dropdown-menu {
     display: block;
 }
+
 .dropdown-menu .dropdown-item {
     font-weight: 500;
-    padding: 10px 20px; 
-    color: #1D1D1F; 
-    text-align: left; 
-    background-color: transparent; 
-    transition: background-color 0.3s ease; 
+    padding: 10px 20px;
+    color: #1D1D1F;
+    text-align: left;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
     margin-top: -5px;
 }
+
 .dropdown-item {
     display: block;
     padding-left: 20px;
@@ -107,17 +117,20 @@
         visibility: hidden;
         transition: 0.3s ease-in-out;
     }
+
     .nav-link:hover::before {
         width: 100%;
         visibility: visible;
     }
 }
+
 .container2 {
     text-align: right;
     color: white;
     padding-right: 200px;
     padding-left: 15px;
 }
+
 .offcanvas-body {
     margin-right: 1%;
     margin-left: 50px;
@@ -156,23 +169,28 @@
     bottom: 0;
     left: 0;
 }
+
 .hero-section .container {
     height: 100vh;
     z-index: 1;
     position: relative;
 }
+
 .hero-section h1 {
     font-size: 1.5em;
 }
+
 .hero-section h2 {
     font-size: 1.2em;
 }
+
 .container {
     text-align: center;
     margin-top: 50px;
 }
-.nav-item.dropdown > .nav-link::after {
-    display: none; 
+
+.nav-item.dropdown>.nav-link::after {
+    display: none;
 }
 
 /* Ajuste de espaçamento dentro do hambúrguer */
@@ -181,29 +199,35 @@
     justify-content: center;
     align-items: center;
 }
+
 .nav-item .nav-link {
-    margin-top: 10px; 
-    margin-bottom: 10px; 
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
+
 .offcanvas-header .offcanvas-title {
     font-size: 20px;
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
 }
+
 .offcanvas-header .btn-close {
     margin-top: 0;
-    padding: 10px; 
+    padding: 10px;
 }
+
 .nav-item.dropdown .nav-link {
-    margin-top: 10px; /
+    margin-top: 10px;/
 }
+
 .nav-item .dropdown-menu {
-    padding: 5px 0; 
+    padding: 5px 0;
 }
 
 /* Estilos Gerais */
 * {
     font-family: "Roboto", sans-serif;
 }
+
 html {
     scroll-behavior: smooth;
 }
@@ -218,6 +242,7 @@ html {
     margin-left: 15px;
     margin-right: 60px;
 }
+
 .carousel-item p {
     color: #fff;
     padding: 5px;
@@ -226,6 +251,7 @@ html {
     margin-left: 15px;
     margin-right: 60px;
 }
+
 .carousel-item .container {
     position: absolute;
     top: 50%;
@@ -234,6 +260,7 @@ html {
     text-align: left;
     z-index: 10;
 }
+
 .carousel-item {
     height: 32rem;
     background: #000;
@@ -242,6 +269,7 @@ html {
     background-position: center;
     background-size: cover;
 }
+
 .sequencia {
     position: absolute;
     bottom: 0;
@@ -249,11 +277,13 @@ html {
     right: 0;
     padding-bottom: 50px;
 }
+
 .edit-mode-border {
     border: 5px solid rgba(105, 166, 37, 0.7);
     padding: 10px;
     box-sizing: border-box;
 }
+
 .carousel-item {
     height: 32rem;
     background: #000;
@@ -262,6 +292,7 @@ html {
     background-position: center;
     background-size: cover;
 }
+
 .overlay-image {
     position: absolute;
     bottom: 0;
@@ -286,10 +317,12 @@ html {
     margin-left: 15px;
     margin-right: 15px;
 }
+
 .carousel-item .btn:hover {
     background-color: #3b5f13;
     color: #fff;
 }
+
 .carousel-item .btn:active {
     background-color: #21350a;
     color: #fff;
@@ -298,105 +331,124 @@ html {
 /* Missão visao e valores */
 .container-missao {
     display: flex;
-    justify-content: center; 
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
     padding: 40px 20px;
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
     width: 100%;
-    margin: 0 auto; 
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); 
+    margin: 0 auto;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
 }
+
 .missao-titulo {
-    font-size: 25px; 
-    color: #1D1D1F; 
-    margin-right: 40px; 
+    font-size: 25px;
+    color: #1D1D1F;
+    margin-right: 40px;
     white-space: nowrap;
-    text-align: center; 
-    width: auto; 
+    text-align: center;
+    width: auto;
     margin: 10px;
     font-weight: 600;
 }
+
 .missao-itens {
     display: flex;
-    align-items: flex-start; 
-    flex-wrap: wrap; 
+    align-items: flex-start;
+    flex-wrap: wrap;
     gap: 100px;
     margin-top: 0;
-    width: 100%; 
-    justify-content: center; 
+    width: 100%;
+    justify-content: center;
 }
+
 .missao-item {
     text-align: center;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     align-items: center;
-    width: 250px; 
+    width: 250px;
     padding: 30px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .missao-item:hover {
-    transform: translateY(-8px); 
+    transform: translateY(-8px);
 }
+
 .icone-missao {
-    font-size: 48px; 
-    color: #69a625; 
+    font-size: 48px;
+    color: #69a625;
     margin-bottom: 15px;
 }
+
 .missao-numeros {
     font-size: 22px;
     font-weight: bold;
-    color: #2B2B2E; 
+    color: #2B2B2E;
 }
+
 .missao-descricao {
     font-size: 15px;
-    color: #2B2B2E; 
+    color: #2B2B2E;
 }
+
 @media screen and (max-width: 1024px) {
     .container-missao {
-        flex-direction: column; 
+        flex-direction: column;
         text-align: center;
     }
+
     .missao-titulo {
-        margin-right: 0; 
-        margin-bottom: 30px; 
+        margin-right: 0;
+        margin-bottom: 30px;
         font-size: 28px;
     }
+
     .missao-itens {
-        justify-content: center; 
+        justify-content: center;
     }
+
     .missao-item {
-        width: 150px; 
-        padding: 18px; 
+        width: 150px;
+        padding: 18px;
     }
+
     .icone-conquista {
         font-size: 40px;
     }
 }
+
 @media screen and (max-width: 768px) {
     .container-missao {
-        padding: 20px; 
+        padding: 20px;
     }
+
     .missao-titulo {
         margin-bottom: 25px;
         font-size: 24px;
     }
+
     .missao-itens {
-        flex-direction: column; 
+        flex-direction: column;
         align-items: center;
-        justify-content: center; 
+        justify-content: center;
     }
+
     .missao-item {
         width: 130px;
-        padding: 15px; 
+        padding: 15px;
     }
+
     .icone-missao {
-        font-size: 36px; 
+        font-size: 36px;
     }
+
     .missao-numeros {
-        font-size: 18px; 
+        font-size: 18px;
     }
+
     .missao-descricao {
-        font-size: 13px; 
+        font-size: 13px;
     }
 }
 
@@ -408,18 +460,21 @@ html {
     width: 100%;
     padding: 1% 0 3% 0;
 }
+
 .card1 {
     justify-content: center;
     align-items: center;
     border: none;
     background-color: transparent;
 }
+
 .card1 h2 {
     color: #69A625;
     font-family: 'Roboto', sans-serif;
     font-size: 25px;
     font-weight: bold;
 }
+
 .card1 p {
     color: #2B2B2E;
     font-family: 'Roboto', sans-serif;
@@ -427,10 +482,12 @@ html {
     font-size: 15px;
     margin-top: 5%;
 }
+
 .row {
     display: flex;
     justify-content: center;
 }
+
 .secao4-div-card1 {
     display: flex;
     flex-direction: column;
@@ -444,22 +501,102 @@ html {
     transition: all 0.5s ease;
     text-align: center;
 }
+
 .secao4-div-card1:hover {
     transform: scale(1.05);
     z-index: 1;
 }
+
 @media (max-width: 768px) {
     .secao4-div-card1 {
         width: 100%;
     }
 }
 
+/* sessão OIP */
+.missao-titulo {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.oip {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 15px;
+}
+
+.content {
+    padding: 30px;
+    margin-bottom: 25px;
+    transition: all 0.4s ease;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+}
+
+.content .icons {
+    font-size: 50px;
+    margin-bottom: 16px;
+    color: #69A625;
+}
+
+.content:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+    color: initial;
+}
+
+.content h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-align: left;
+    color: #333;
+}
 
 
+.content p {
+    font-size: 1rem;
+    text-align: left;
+    line-height: 1.6;
+    margin-top: 5px;
+    flex-grow: 1;
+    color: #555;
+}
 
+/*Card-zigzag*/
+.titulo-card-zigzag {
+    font-size: 25px;
+    color: #1D1D1F;
+}
 
+.button {
+    background-color: #69A625;
+    color: white;
+    border: none;
+    padding: 14px 35px;
+    border-radius: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-
-
+.button:hover {
+    background-color: #55871F;
+    box-shadow: 0 8px 20px rgba(105, 166, 37, 0.4);
+    transform: translateY(-2px);
+}
 
 
