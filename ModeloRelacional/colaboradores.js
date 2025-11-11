@@ -9,9 +9,14 @@ const colaboradorSchema = new mongoose.Schema({
     type: Boolean, 
     default: true 
   },
+  // Tipos de colaboradores com os números:
+  // 1 - Master
+  // 2 - Gerente
+  // 3 - Recepção
+  // 4 - Terapeuta
   tipo_colaborador: { 
     type: Number, 
-    default: 3  // 3 = terapeuta
+    default: 3
   },
   especialidades: [String],
   email: String,
