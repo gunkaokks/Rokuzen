@@ -744,3 +744,8 @@ html {
     margin: 0 auto;
     padding: 0 15px;
 }
+
+.copyright {
+    text-align: center; 
+    width: 100%; /* Garante que o elemento ocupe toda a largura disponível */
+}
