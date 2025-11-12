@@ -8,36 +8,37 @@
 
     <link rel="shortcut icon" href="../Imagens/LogoTopo.png" type="image/x-icon">
     <link rel="stylesheet" href="login.css">
-
     <script src="https://kit.fontawesome.com/a27cc7b249.js" crossorigin="anonymous"></script>
-
 </head>
 
 <body>
-    <!--Botão de voltar-->
     <div class="container">
         <a href="javascript:history.back()" class="back-button">&lt;</a>
 
-        <!-- Formulário de Login -->
         <div class="form-box m-20">
             <h1 id="title">Login</h1>
+
+            <!-- Formulário de Login -->
             <form id="loginForm">
                 <div class="btn-field">
                     <button type="button" id="signupBtn" class="button">Login</button>
                     <button type="button" id="signinBtn" class="button disable">Cadastro</button>
                 </div>
+
                 <div class="input-group">
                     <div class="input-field">
                         <i class="fa-solid fa-envelope"></i>
                         <input type="email" id="email" name="email" placeholder="Email" required>
                     </div>
+
                     <div class="input-field">
                         <i class="fa-solid fa-lock"></i>
-                        <input type="password" id="senha" name="senha" placeholder="Senha" required
-                            autocomplete="current-password">
+                        <input type="password" id="senha" name="senha" placeholder="Senha" required autocomplete="current-password">
                     </div>
+
                     <p>Esqueceu a senha? <a href="/Login/esqueceusenha.html">Clique Aqui</a></p>
                 </div>
+
                 <button type="submit" id="entrarBtn" class="button">Entrar</button>
             </form>
 
@@ -47,46 +48,38 @@
                     <button type="button" id="signupBtn2" class="button disable">Login</button>
                     <button type="button" id="signinBtn2" class="button">Cadastro</button>
                 </div>
+
                 <div class="input-group">
                     <div class="input-field" id="nameField">
                         <i class="fa-solid fa-user"></i>
                         <input type="text" name="nome" placeholder="Nome" required>
                     </div>
+
                     <div class="input-field">
                         <i class="fa-solid fa-envelope"></i>
                         <input type="email" name="email" placeholder="Email" required>
                     </div>
+
                     <div class="input-field">
                         <i class="fa-solid fa-phone"></i>
                         <input type="tel" name="telefone" placeholder="Telefone" required>
                     </div>
+
                     <div class="input-field">
                         <i class="fa-solid fa-lock"></i>
                         <input type="password" name="senha" placeholder="Senha" required>
                     </div>
+
                     <p>Esqueceu a senha? <a href="/Login/esqueceusenha.html">Clique Aqui</a></p>
                 </div>
+
                 <button type="submit" id="cadastrarBtn" class="button">Cadastrar</button>
             </form>
         </div>
     </div>
 
-    <!-- Botões para ativar edição, salvar e desfazer -->
-    <div class="edit-buttons-container" style="display: none;">
-        <div class="edit-buttons">
-            <button class="edit-button" onclick="ativarEdicao()">Ativar Edição</button>
-            <button class="edit-button" onclick="salvarEdicoes()">Salvar Edições</button>
-            <button class="edit-button" onclick="desfazerEdicoes()">Desfazer Edições</button>
-        </div>
-    </div>
-
-    <!-- Modal e outros elementos permanecem os mesmos -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <p id="modal-message"></p>
-            <button class="modal-button" onclick="fecharModal()"></button>
-        </div>
-    </div>
+    <!-- 🔹 Link discreto para login de funcionário -->
+    <a href="/Login/login-funcionario.html" class="staff-login-link">Acesso do Funcionário</a>
 
     <script>
         const signupForm = document.getElementById("signupForm");
@@ -115,8 +108,7 @@
         signupBtn2.onclick = signupBtn.onclick;
         signinBtn2.onclick = signinBtn.onclick;
     </script>
+
     <script src="../JavaScript/login.js"></script>
-
 </body>
-
 </html>
