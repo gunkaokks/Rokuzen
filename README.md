@@ -14,10 +14,6 @@ Gustavo Itiro Nakaoka (24.01465-6)
 
 ---
 
-#### Importante: as especificações de como acessar o nosso banco de dados estão explicados nas primiras linhas do código no arquivo SERVER.JS. Além disso, no arquivo .ENV está a chave de nosso banco e o e-amil cadastrado para receber as informações dos formulários!]
-
----
-
 ### 🛠️Tecnologias usadas:
 
 1- HTML5
@@ -50,5 +46,8 @@ Gustavo Itiro Nakaoka (24.01465-6)
 
 ### 📄 Documentação e apresentação do projeto
 
-Link para a documentação: 
+Link para a documentaçôes: 
+[Documentação 1](https://docs.google.com/document/d/1x0rIufO_gMa3ARH5BUwHTYnGbGBSKamniGNi2rMTYQE/edit?usp=sharing)
+
+[Documentação 2](https://docs.google.com/document/d/1fTUTByXQukz4G42B6Ylzw6OssJ0zo-s1UBQAjJ-j0UY/edit?usp=sharing)
 

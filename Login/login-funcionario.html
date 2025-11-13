@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login Corporativo - Rokuzen</title>
+
+  <link rel="shortcut icon" href="../Imagens/LogoTopo.png" type="image/x-icon">
+  <link rel="stylesheet" href="login.css">
+  <script src="https://kit.fontawesome.com/a27cc7b249.js" crossorigin="anonymous"></script>
+
+  <!-- Estilos de override: garantir que o container use historia.jpg -->
+  <style>
+    /* Colocar depois do login.css garante prioridade */
+    .container {
+      background-image: linear-gradient(rgba(0,50,0,0.72), rgba(0,20,0,0.8)), url("../Imagens/historia.jpg");
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      /* caso seu login.css defina altura, isto mantém */
+      min-height: 100vh;
+    }
+
+    /* overlay levemente escuro (melhora legibilidade) */
+    .container::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.28);
+      pointer-events: none;
+    }
+
+    /* garante que o conteúdo fique acima do ::before */
+    .form-box {
+      position: relative;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="javascript:history.back()" class="back-button">&lt;</a>
+
+    <div class="form-box m-20">
+      <h1 id="title">Login Corporativo</h1>
+
+      <form id="loginFuncionarioForm">
+        <div class="input-group">
+          <div class="input-field">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="email" name="email" placeholder="Email corporativo" required>
+          </div>
+
+          <div class="input-field">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="senha" name="senha" placeholder="Senha" required autocomplete="current-password">
+          </div>
+        </div>
+
+        <button type="submit" id="entrarFuncionarioBtn" class="button">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("loginFuncionarioForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+      if (email && senha) {
+        alert("Login efetuado (simulado)");
+        window.location.href = "/PainelFuncionario/dashboard.html";
+      } else {
+        alert("Preencha todos os campos.");
+      }
+    });
+  </script>
+</body>
+</html>
