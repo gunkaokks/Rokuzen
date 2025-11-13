@@ -10,8 +10,13 @@ const servicoSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
-  duracao_minutos: Number,
-  valor_base: Number,
+  opcoes_duracao: [{
+    duracao: { type: Number, required: true },
+    valor: { type: Number, required: true },
+    descricao: { type: String }
+  }],
+  duracao_minima: { type: Number, default: 15 },
+  duracao_maxima: { type: Number, default: 120 },
   ativo: { 
     type: Boolean, 
     default: true 

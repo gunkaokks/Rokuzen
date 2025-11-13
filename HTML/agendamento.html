@@ -2,133 +2,771 @@
 <html lang="pt-BR">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agendamento | Rokuzen</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rokuzen</title>
+    <link rel="shortcut icon" href="../Imagens/LogoTopo.png" type="image/x-icon">
 
-  <link rel="shortcut icon" href="../Imagens/LogoTopo.png" type="image/x-icon">
-  <link href="CSS/agendamento.css" rel="stylesheet">
-  
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/JavaScript/home.js"></script>
+    <link href="../CSS/agendamento.css" rel="stylesheet">
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"-->
+    <!--Ícones da página-->
+    <script src="https://kit.fontawesome.com/e64e449d7c.js" crossorigin="anonymous"></script>
+    <!--Plugin de acessibilidade-->
+    <!--<script src="https://cdn.userway.org/widget.js" data-account="9AycmX4hek"></script>-->
 </head>
 
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="../index.html">
-        <img src="../Imagens/logo-rokuzen.png" width="150" alt="Rokuzen Logo">
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    <!-- Barra de navegação -->
+    <nav class="navbar navbar-expand-xxl fixed-top">
+        <div class="container-fluid box">
+            <div class="logo">
+                <a href="../index.html"><img src="../Imagens/logo-rokuzen.png" width="160px" alt="Logo Rokuzen"></a>
+            </div>
 
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="quemSomos.html">Quem somos</a></li>
-          <li class="nav-item"><a class="nav-link" href="unidades.html">Unidades</a></li>
-          <li class="nav-item"><a class="nav-link" href="noticia.html">Notícias</a></li>
-          <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
-          <li class="nav-item"><a class="nav-link" href="faleConosco.html">Fale Conosco</a></li>
-          <li class="nav-item">
-            <a href="../Login/login.html" class="btn btn-outline-success rounded-circle">
-              <i class="fa-solid fa-user"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item"><a class="nav-link" href="quemSomos.html">Quem somos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="unidades.html">Unidades</a></li>
+                        <li class="nav-item"><a class="nav-link" href="noticia.html">Notícias</a></li>
+                        <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
+                        <li class="nav-item"><a class="nav-link" href="faleConosco.html">Fale conosco</a></li>
+                        <li class="nav-item">
+                            <a href="Login/login.html" class="login-button login-button-rounded">
+                                <i class="fa-solid fa-user"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="agendamento.html" class="agende-button">
+                                <b>Agende um horário</b>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="agendamento-container">
+        <div class="agendamento-header">
+            <h1>Agende sua sessão</h1>
+            <p>Siga os passos para agendar sua massagem terapêutica</p>
+        </div>
+
+        <div class="progresso-etapas">
+            <div class="etapa-progresso concluida" data-etapa="1">
+                <div class="etapa-bolha">1</div>
+                <div class="etapa-nome">Unidade</div>
+            </div>
+            <div class="etapa-progresso ativa" data-etapa="2">
+                <div class="etapa-bolha">2</div>
+                <div class="etapa-nome">Serviço</div>
+            </div>
+            <div class="etapa-progresso" data-etapa="3">
+                <div class="etapa-bolha">3</div>
+                <div class="etapa-nome">Duração</div>
+            </div>
+            <div class="etapa-progresso" data-etapa="4">
+                <div class="etapa-bolha">4</div>
+                <div class="etapa-nome">Data & Hora</div>
+            </div>
+            <div class="etapa-progresso" data-etapa="5">
+                <div class="etapa-bolha">5</div>
+                <div class="etapa-nome">Terapeuta</div>
+            </div>
+            <div class="etapa-progresso" data-etapa="6">
+                <div class="etapa-bolha">6</div>
+                <div class="etapa-nome">Pagamento</div>
+            </div>
+            <div class="etapa-progresso" data-etapa="7">
+                <div class="etapa-bolha">7</div>
+                <div class="etapa-nome">Confirmação</div>
+            </div>
+        </div>
+
+        <!-- Etapas -->
+        <div class="etapas-container">
+            <!-- 1 - Unidades -->
+            <div class="etapa ativa" id="etapa1">
+                <h2 class="etapa-titulo">Selecione a Unidade</h2>
+                <p class="etapa-descricao">Escolha onde você gostaria de ser atendido</p>
+
+                <div class="loading" id="loadingUnidades">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Carregando unidades...</p>
+                </div>
+
+                <div class="opcoes-grid" id="opcoesUnidades" style="display: none;">
+                </div>
+
+                <div class="botoes-navegacao">
+                    <button type="button" class="btn btn-voltar" disabled>Voltar</button>
+                    <button type="button" class="btn btn-avancar" id="avancarEtapa1" disabled>Avançar</button>
+                </div>
+            </div>
+
+            <!-- 2 - Serviços -->
+            <div class="etapa" id="etapa2">
+                <h2 class="etapa-titulo">Selecione o Serviço</h2>
+                <p class="etapa-descricao">Escolha o tipo de massagem que deseja</p>
+
+                <div class="loading" id="loadingServicos">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Carregando serviços...</p>
+                </div>
+
+                <div class="opcoes-grid" id="opcoesServicos" style="display: none;">
+                </div>
+
+                <div class="botoes-navegacao">
+                    <button type="button" class="btn btn-voltar" id="voltarEtapa2">Voltar</button>
+                    <button type="button" class="btn btn-avancar" id="avancarEtapa2" disabled>Avançar</button>
+                </div>
+            </div>
+
+            <!-- 3 - Duração -->
+            <div class="etapa" id="etapa3">
+                <h2 class="etapa-titulo">Selecione a Duração</h2>
+                <p class="etapa-descricao">Escolha por quanto tempo deseja sua sessão</p>
+
+                <div class="form-group">
+                    <label for="duracao" class="form-label">Duração da sessão (minutos)</label>
+                    <input type="range" class="form-range" id="duracao" min="15" max="120" step="5" value="30">
+                    <div class="d-flex justify-content-between">
+                        <span id="duracaoMin">15 min</span>
+                        <span id="duracaoAtual">30 min</span>
+                        <span id="duracaoMax">120 min</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Opções de duração</label>
+                    <div class="horarios-grid" id="opcoesDuracao">
+                    </div>
+                </div>
+
+                <div class="botoes-navegacao">
+                    <button type="button" class="btn btn-voltar" id="voltarEtapa3">Voltar</button>
+                    <button type="button" class="btn btn-avancar" id="avancarEtapa3" disabled>Avançar</button>
+                </div>
+            </div>
+
+            <!-- 4 - Data e Hora -->
+            <div class="etapa" id="etapa4">
+                <h2 class="etapa-titulo">Selecione Data e Hora</h2>
+                <p class="etapa-descricao">Escolha quando deseja sua sessão</p>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="data" class="form-label">Data</label>
+                            <input type="date" class="form-control" id="data" min="">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Horários disponíveis</label>
+                            <div class="loading" id="loadingHorarios">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p>Carregando horários...</p>
+                            </div>
+                            <div class="horarios-grid" id="opcoesHorarios" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="botoes-navegacao">
+                    <button type="button" class="btn btn-voltar" id="voltarEtapa4">Voltar</button>
+                    <button type="button" class="btn btn-avancar" id="avancarEtapa4" disabled>Avançar</button>
+                </div>
+            </div>
+
+            <!-- 5 - Terapeuta -->
+            <div class="etapa" id="etapa5">
+                <h2 class="etapa-titulo">Selecione o Terapeuta</h2>
+                <p class="etapa-descricao">Escolha o profissional que irá realizar sua sessão</p>
+
+                <div class="loading" id="loadingTerapeutas">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Carregando terapeutas...</p>
+                </div>
+
+                <div class="opcoes-grid" id="opcoesTerapeutas" style="display: none;">
+                    <!-- Terapeutas serão carregados aqui via JavaScript -->
+                </div>
+
+                <div class="botoes-navegacao">
+                    <button type="button" class="btn btn-voltar" id="voltarEtapa5">Voltar</button>
+                    <button type="button" class="btn btn-avancar" id="avancarEtapa5" disabled>Avançar</button>
+                </div>
+            </div>
+
+            <!-- 6 - Método de Pagamento -->
+            <div class="etapa" id="etapa6">
+                <h2 class="etapa-titulo">Método de Pagamento</h2>
+                <p class="etapa-descricao">Escolha como deseja pagar pela sua sessão</p>
+
+                <div class="opcoes-grid">
+                    <div class="opcao-card" data-metodo="cartao">
+                        <i class="fa-solid fa-credit-card"></i>
+                        <h3>Cartão de Crédito</h3>
+                        <p>Pague em até 12x no cartão</p>
+                    </div>
+                    <div class="opcao-card" data-metodo="debito">
+                        <i class="fa-solid fa-money-bill"></i>
+                        <h3>Cartão de Débito</h3>
+                        <p>Pagamento à vista no débito</p>
+                    </div>
+                    <div class="opcao-card" data-metodo="pix">
+                        <i class="fa-solid fa-qrcode"></i>
+                        <h3>PIX</h3>
+                        <p>Pagamento instantâneo</p>
+                    </div>
+                    <div class="opcao-card" data-metodo="dinheiro">
+                        <i class="fa-solid fa-money-bill-wave"></i>
+                        <h3>Dinheiro</h3>
+                        <p>Pagamento em espécie</p>
+                    </div>
+                </div>
+
+                <div class="botoes-navegacao">
+                    <button type="button" class="btn btn-voltar" id="voltarEtapa6">Voltar</button>
+                    <button type="button" class="btn btn-avancar" id="avancarEtapa6" disabled>Avançar</button>
+                </div>
+            </div>
+
+            <!-- 7 - Confirmação -->
+            <div class="etapa" id="etapa7">
+                <h2 class="etapa-titulo">Confirmação do Agendamento</h2>
+                <p class="etapa-descricao">Revise as informações e confirme seu agendamento</p>
+
+                <div class="resumo-agendamento">
+                    <div class="resumo-item">
+                        <span>Unidade:</span>
+                        <strong id="resumoUnidade">-</strong>
+                    </div>
+                    <div class="resumo-item">
+                        <span>Serviço:</span>
+                        <strong id="resumoServico">-</strong>
+                    </div>
+                    <div class="resumo-item">
+                        <span>Duração:</span>
+                        <strong id="resumoDuracao">-</strong>
+                    </div>
+                    <div class="resumo-item">
+                        <span>Data e Hora:</span>
+                        <strong id="resumoDataHora">-</strong>
+                    </div>
+                    <div class="resumo-item">
+                        <span>Terapeuta:</span>
+                        <strong id="resumoTerapeuta">-</strong>
+                    </div>
+                    <div class="resumo-item">
+                        <span>Método de Pagamento:</span>
+                        <strong id="resumoPagamento">-</strong>
+                    </div>
+                    <div class="resumo-item">
+                        <span>Valor Total:</span>
+                        <strong id="resumoValor">-</strong>
+                    </div>
+                </div>
+
+                <div class="botoes-navegacao">
+                    <button type="button" class="btn btn-voltar" id="voltarEtapa7">Voltar</button>
+                    <button type="button" class="btn btn-confirmar" id="confirmarAgendamento">Confirmar
+                        Agendamento</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </nav>
 
-  <!-- Conteúdo principal -->
-  <div class="agendamento-container">
-    <h2 class="text-center mb-4">Agende seu horário</h2>
+    <!-- Scripts Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
 
-    <form id="formAgendamento">
-      <label for="unidade" class="form-label">Selecione a unidade</label>
-      <select id="unidade" class="form-select" required>
-        <option selected disabled value="">Escolha...</option>
-        <option value="Santo André">Santo André</option>
-        <option value="São Bernardo do Campo">São Bernardo do Campo</option>
-        <option value="São Paulo">São Paulo</option>
-        <option value="Mooca">Mooca</option>
-      </select>
+    <script>
+        // URL da API
+        const API_URL = 'http://localhost:3000';
 
-      <label for="tipo" class="form-label">Tipo de massagem</label>
-      <select id="tipo" class="form-select" required>
-        <option selected disabled value="">Escolha...</option>
-        <option value="quick">Quick Massage</option>
-        <option value="maca">Massagem na Maca</option>
-        <option value="reflexo">Reflexologia Podal</option>
-        <option value="auriculo">Auriculoterapia</option>
-      </select>
+        // Estado do agendamento
+        const agendamento = {
+            unidade: null,
+            servico: null,
+            duracao: null,
+            data: null,
+            hora: null,
+            terapeuta: null,
+            metodoPagamento: null,
+            valor: null
+        };
 
-      <label for="tempo" class="form-label">Duração</label>
-      <select id="tempo" class="form-select" required></select>
+        // Elementos DOM
+        const etapas = document.querySelectorAll('.etapa');
+        const progressoEtapas = document.querySelectorAll('.etapa-progresso');
 
-      <label for="data" class="form-label">Data</label>
-      <input type="date" id="data" class="form-control" required>
-
-      <label for="hora" class="form-label">Horário</label>
-      <input type="time" id="hora" class="form-control" required>
-
-      <div class="preco" id="preco"></div>
-
-      <button type="submit" class="btn btn-success w-100 mt-3">Confirmar Agendamento</button>
-    </form>
-  </div>
-
-  <script>
-    const opcoes = {
-      quick: { "15 minutos": 52, "25 minutos": 73, "35 minutos": 92 },
-      maca: { "30 minutos": 114, "45 minutos": 160, "60 minutos": 198, "90 minutos": 292, "120 minutos": 379 },
-      reflexo: { "20 minutos": 83, "30 minutos": 99, "40 minutos": 118, "60 minutos": 159 },
-      auriculo: { "10 minutos": 69 }
-    };
-
-    const tipoSelect = document.getElementById("tipo");
-    const tempoSelect = document.getElementById("tempo");
-    const preco = document.getElementById("preco");
-    const form = document.getElementById("formAgendamento");
-
-    tipoSelect.addEventListener("change", () => {
-      tempoSelect.innerHTML = "<option disabled selected>Escolha...</option>";
-      const tipo = tipoSelect.value;
-      if (opcoes[tipo]) {
-        Object.keys(opcoes[tipo]).forEach(t => {
-          const option = document.createElement("option");
-          option.value = t;
-          option.textContent = t;
-          tempoSelect.appendChild(option);
+        document.addEventListener('DOMContentLoaded', function () {
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('data').min = hoje;
+            carregarUnidades();
+            configurarEventListeners();
         });
-      }
-      preco.textContent = "";
-    });
 
-    tempoSelect.addEventListener("change", () => {
-      const tipo = tipoSelect.value;
-      const tempo = tempoSelect.value;
-      if (opcoes[tipo] && opcoes[tipo][tempo]) {
-        preco.textContent = `Valor: R$ ${opcoes[tipo][tempo].toFixed(2).replace('.', ',')}`;
-      }
-    });
+        // Navegações entre as etapas
+        function configurarEventListeners() {
+            document.getElementById('avancarEtapa1').addEventListener('click', () => avancarEtapa(1));
+            document.getElementById('voltarEtapa2').addEventListener('click', () => voltarEtapa(2));
+            document.getElementById('avancarEtapa2').addEventListener('click', () => avancarEtapa(2));
+            document.getElementById('voltarEtapa3').addEventListener('click', () => voltarEtapa(3));
+            document.getElementById('avancarEtapa3').addEventListener('click', () => avancarEtapa(3));
+            document.getElementById('voltarEtapa4').addEventListener('click', () => voltarEtapa(4));
+            document.getElementById('avancarEtapa4').addEventListener('click', () => avancarEtapa(4));
+            document.getElementById('voltarEtapa5').addEventListener('click', () => voltarEtapa(5));
+            document.getElementById('avancarEtapa5').addEventListener('click', () => avancarEtapa(5));
+            document.getElementById('voltarEtapa6').addEventListener('click', () => voltarEtapa(6));
+            document.getElementById('avancarEtapa6').addEventListener('click', () => avancarEtapa(6));
+            document.getElementById('voltarEtapa7').addEventListener('click', () => voltarEtapa(7));
+            document.getElementById('confirmarAgendamento').addEventListener('click', confirmarAgendamento);
+            document.getElementById('data').addEventListener('change', carregarHorariosDisponiveis);
+            document.querySelectorAll('#etapa6 .opcao-card').forEach(card => {
+                card.addEventListener('click', function () {
+                    document.querySelectorAll('#etapa6 .opcao-card').forEach(c => c.classList.remove('selecionada'));
+                    this.classList.add('selecionada');
+                    agendamento.metodoPagamento = this.getAttribute('data-metodo');
+                    document.getElementById('avancarEtapa6').disabled = false;
+                });
+            });
+        }
 
-    form.addEventListener("submit", e => {
-      e.preventDefault();
-      const unidade = document.getElementById("unidade").value;
-      const tipo = tipoSelect.options[tipoSelect.selectedIndex].text;
-      const tempo = tempoSelect.value;
-      const data = document.getElementById("data").value;
-      const hora = document.getElementById("hora").value;
+        function avancarEtapa(etapaAtual) {
+            if (!validarEtapa(etapaAtual)) return;
+            atualizarProgresso(etapaAtual, true);
+            document.getElementById(`etapa${etapaAtual}`).classList.remove('ativa');
+            document.getElementById(`etapa${etapaAtual + 1}`).classList.add('ativa');
 
-      if (unidade && tipo && tempo && data && hora) {
-        alert(`✅ Agendamento confirmado!\n\nUnidade: ${unidade}\nMassagem: ${tipo}\nDuração: ${tempo}\nData: ${data}\nHorário: ${hora}\n${preco.textContent}`);
-        form.reset();
-        preco.textContent = "";
-      }
-    });
-  </script>
-</body>
+            if (etapaAtual === 1) {
+                carregarServicos();
+            } else if (etapaAtual === 2) {
+                configurarDuracao();
+            } else if (etapaAtual === 4) {
+                carregarTerapeutas();
+            } else if (etapaAtual === 6) {
+                atualizarResumo();
+            }
+        }
 
-</html>
+        function voltarEtapa(etapaAtual) {
+            atualizarProgresso(etapaAtual - 1, false);
+            document.getElementById(`etapa${etapaAtual}`).classList.remove('ativa');
+            document.getElementById(`etapa${etapaAtual - 1}`).classList.add('ativa');
+        }
+
+        function atualizarProgresso(etapa, avancando) {
+            progressoEtapas.forEach((progresso, index) => {
+                const etapaNum = index + 1;
+
+                if (avancando) {
+                    if (etapaNum <= etapa) {
+                        progresso.classList.add('concluida');
+                        progresso.classList.remove('ativa');
+                    } else if (etapaNum === etapa + 1) {
+                        progresso.classList.add('ativa');
+                        progresso.classList.remove('concluida');
+                    } else {
+                        progresso.classList.remove('ativa', 'concluida');
+                    }
+                } else {
+                    if (etapaNum < etapa) {
+                        progresso.classList.add('concluida');
+                        progresso.classList.remove('ativa');
+                    } else if (etapaNum === etapa) {
+                        progresso.classList.add('ativa');
+                        progresso.classList.remove('concluida');
+                    } else {
+                        progresso.classList.remove('ativa', 'concluida');
+                    }
+                }
+            });
+        }
+
+        function validarEtapa(etapa) {
+            switch (etapa) {
+                case 1:
+                    return agendamento.unidade !== null;
+                case 2:
+                    return agendamento.servico !== null;
+                case 3:
+                    return agendamento.duracao !== null && agendamento.valor !== null;
+                case 4:
+                    return agendamento.data !== null && agendamento.hora !== null;
+                case 5:
+                    return agendamento.terapeuta !== null;
+                case 6:
+                    return agendamento.metodoPagamento !== null;
+                default:
+                    return true;
+            }
+        }
+
+        // Carregar unidades
+        async function carregarUnidades() {
+            try {
+                console.log('Carregando unidades...');
+                const response = await fetch(`${API_URL}/unidades`);
+
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+
+                const unidades = await response.json();
+                console.log('Unidades carregadas:', unidades);
+
+                const container = document.getElementById('opcoesUnidades');
+                const loading = document.getElementById('loadingUnidades');
+
+                container.innerHTML = '';
+
+                if (unidades.length === 0) {
+                    container.innerHTML = '<p class="text-center">Nenhuma unidade encontrada.</p>';
+                } else {
+                    unidades.forEach(unidade => {
+                        const card = document.createElement('div');
+                        card.className = 'opcao-card';
+                        card.setAttribute('data-unidade-id', unidade._id);
+                        card.innerHTML = `
+                        <i class="fa-solid fa-map-marker-alt"></i>
+                        <h3>${unidade.nome_unidade}</h3>
+                        <p>Clique para selecionar esta unidade</p>
+                    `;
+
+                        card.addEventListener('click', function () {
+                            document.querySelectorAll('#opcoesUnidades .opcao-card').forEach(c => c.classList.remove('selecionada'));
+                            this.classList.add('selecionada');
+                            agendamento.unidade = {
+                                id: unidade._id,
+                                nome: unidade.nome_unidade
+                            };
+                            document.getElementById('avancarEtapa1').disabled = false;
+                            console.log('Unidade selecionada:', agendamento.unidade);
+                        });
+
+                        container.appendChild(card);
+                    });
+                }
+
+                loading.style.display = 'none';
+                container.style.display = 'grid';
+
+            } catch (error) {
+                console.error('Erro ao carregar unidades:', error);
+                const loading = document.getElementById('loadingUnidades');
+                loading.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Erro ao carregar unidades: ${error.message}</p>
+                <button class="btn btn-primary mt-2" onclick="carregarUnidades()">Tentar Novamente</button>
+            `;
+            }
+        }
+
+        // Carregar serviços
+        async function carregarServicos() {
+            try {
+                console.log('Carregando serviços...');
+                const response = await fetch(`${API_URL}/servicos`);
+
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+
+                const todosServicos = await response.json();
+                const servicos = todosServicos.filter(servico =>
+                    servico.unidade_id === agendamento.unidade.id && servico.ativo !== false
+                );
+
+                console.log('Serviços filtrados:', servicos);
+
+                const container = document.getElementById('opcoesServicos');
+                const loading = document.getElementById('loadingServicos');
+
+                container.innerHTML = '';
+
+                if (servicos.length === 0) {
+                    container.innerHTML = '<p class="text-center">Nenhum serviço disponível nesta unidade.</p>';
+                } else {
+                    servicos.forEach(servico => {
+                        const card = document.createElement('div');
+                        card.className = 'opcao-card';
+                        card.setAttribute('data-servico-id', servico._id);
+                        const menorValor = servico.opcoes_duracao && servico.opcoes_duracao.length > 0
+                            ? Math.min(...servico.opcoes_duracao.map(op => op.valor))
+                            : 0;
+
+                        card.innerHTML = `
+                    <i class="fa-solid fa-spa"></i>
+                    <h3>${servico.nome_servico}</h3>
+                    <p>${servico.descricao || 'Massagem terapêutica'}</p>
+                    <p><strong>A partir de R$ ${menorValor.toFixed(2)}</strong></p>
+                `;
+
+                        card.addEventListener('click', function () {
+                            document.querySelectorAll('#opcoesServicos .opcao-card').forEach(c => c.classList.remove('selecionada'));
+                            this.classList.add('selecionada');
+                            agendamento.servico = {
+                                id: servico._id,
+                                nome: servico.nome_servico,
+                                opcoesDuracao: servico.opcoes_duracao || [],
+                                duracaoMinima: servico.duracao_minima || 15,
+                                duracaoMaxima: servico.duracao_maxima || 120,
+                                descricao: servico.descricao
+                            };
+                            document.getElementById('avancarEtapa2').disabled = false;
+                            console.log('Serviço selecionado:', agendamento.servico);
+                        });
+
+                        container.appendChild(card);
+                    });
+                }
+
+                loading.style.display = 'none';
+                container.style.display = 'grid';
+            } catch (error) {
+                console.error('Erro ao carregar serviços:', error);
+                const loading = document.getElementById('loadingServicos');
+                loading.innerHTML = `
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>Erro ao carregar serviços: ${error.message}</p>
+            <button class="btn btn-primary mt-2" onclick="carregarServicos()">Tentar Novamente</button>
+        `;
+            }
+        }
+
+        function configurarDuracao() {
+            const servico = agendamento.servico;
+            const opcoesContainer = document.getElementById('opcoesDuracao');
+
+            document.querySelector('.form-group:has(#duracao)').style.display = 'none';
+            opcoesContainer.innerHTML = '';
+
+            if (!servico.opcoesDuracao || servico.opcoesDuracao.length === 0) {
+                opcoesContainer.innerHTML = '<p class="text-center">Nenhuma opção de duração disponível para este serviço.</p>';
+                return;
+            }
+
+            servico.opcoesDuracao.forEach(opcao => {
+                const card = document.createElement('div');
+                card.className = 'opcao-card opcao-duracao';
+                card.innerHTML = `
+                <div class="duracao-tempo">${opcao.descricao || opcao.duracao + ' min'}</div>
+                <div class="duracao-valor">R$ ${opcao.valor.toFixed(2)}</div>
+            `;
+
+                card.addEventListener('click', function () {
+                    document.querySelectorAll('#opcoesDuracao .opcao-card').forEach(b => b.classList.remove('selecionada'));
+                    this.classList.add('selecionada');
+                    agendamento.duracao = opcao.duracao;
+                    agendamento.valor = opcao.valor;
+                    document.getElementById('avancarEtapa3').disabled = false;
+                    console.log('Duração selecionada:', opcao.duracao + 'min', 'Valor: R$' + opcao.valor);
+                });
+                opcoesContainer.appendChild(card);
+            });
+
+            if (servico.opcoesDuracao.length > 0) {
+                opcoesContainer.querySelector('.opcao-card').click();
+            }
+        }
+
+        // Carregar horários disponíveis
+        async function carregarHorariosDisponiveis() {
+            const data = document.getElementById('data').value;
+            if (!data) return;
+
+            const loading = document.getElementById('loadingHorarios');
+            const container = document.getElementById('opcoesHorarios');
+
+            loading.style.display = 'block';
+            container.style.display = 'none';
+            container.innerHTML = '';
+
+            try {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Horários de exemplo (ainda vamo ver se a gnt usa horarios oficiais da rokuzen ou fictícios msm)
+                const horarios = [
+                    '08:00', '09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00'
+                ];
+
+                container.innerHTML = '';
+                horarios.forEach(horario => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'horario-btn';
+                    btn.textContent = horario;
+                    btn.addEventListener('click', function () {
+                        document.querySelectorAll('#opcoesHorarios .horario-btn').forEach(b => b.classList.remove('selecionado'));
+                        this.classList.add('selecionado');
+                        agendamento.data = data;
+                        agendamento.hora = horario;
+                        document.getElementById('avancarEtapa4').disabled = false;
+                    });
+                    container.appendChild(btn);
+                });
+
+                loading.style.display = 'none';
+                container.style.display = 'grid';
+
+            } catch (error) {
+                console.error('Erro ao carregar horários:', error);
+                loading.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Erro ao carregar horários</p>
+            `;
+            }
+        }
+
+        // Carregar terapeutas
+        async function carregarTerapeutas() {
+            try {
+                console.log('Carregando terapeutas...');
+                const response = await fetch(`${API_URL}/colaboradores`);
+
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+
+                const colaboradores = await response.json();
+
+                const terapeutas = colaboradores.filter(colab =>
+                    colab.tipo_colaborador === 4 && colab.ativo !== false
+                );
+
+                console.log('Terapeutas carregados:', terapeutas);
+
+                const container = document.getElementById('opcoesTerapeutas');
+                const loading = document.getElementById('loadingTerapeutas');
+
+                container.innerHTML = '';
+
+                if (terapeutas.length === 0) {
+                    container.innerHTML = '<p class="text-center">Nenhum terapeuta disponível.</p>';
+                } else {
+                    terapeutas.forEach(terapeuta => {
+                        const card = document.createElement('div');
+                        card.className = 'opcao-card';
+                        card.setAttribute('data-terapeuta-id', terapeuta._id);
+                        card.innerHTML = `
+                        <i class="fa-solid fa-user-md"></i>
+                        <h3>${terapeuta.nome_colaborador}</h3>
+                        <p>${terapeuta.especialidades?.join(', ') || 'Massoterapeuta'}</p>
+                    `;
+
+                        card.addEventListener('click', function () {
+                            document.querySelectorAll('#opcoesTerapeutas .opcao-card').forEach(c => c.classList.remove('selecionada'));
+                            this.classList.add('selecionada');
+                            agendamento.terapeuta = {
+                                id: terapeuta._id,
+                                nome: terapeuta.nome_colaborador
+                            };
+                            document.getElementById('avancarEtapa5').disabled = false;
+                        });
+
+                        container.appendChild(card);
+                    });
+                }
+
+                loading.style.display = 'none';
+                container.style.display = 'grid';
+            } catch (error) {
+                console.error('Erro ao carregar terapeutas:', error);
+                const loading = document.getElementById('loadingTerapeutas');
+                loading.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Erro ao carregar terapeutas: ${error.message}</p>
+                <button class="btn btn-primary mt-2" onclick="carregarTerapeutas()">Tentar Novamente</button>
+            `;
+            }
+        }
+
+        function atualizarResumo() {
+            document.getElementById('resumoUnidade').textContent = agendamento.unidade?.nome || '-';
+            document.getElementById('resumoServico').textContent = agendamento.servico?.nome || '-';
+            document.getElementById('resumoDuracao').textContent = `${agendamento.duracao} minutos` || '-';
+            document.getElementById('resumoDataHora').textContent = `${agendamento.data} às ${agendamento.hora}` || '-';
+            document.getElementById('resumoTerapeuta').textContent = agendamento.terapeuta?.nome || '-';
+
+            // Métodos de pagamento (apenas simulação pq não funciona de verdade)
+            const metodos = {
+                'cartao': 'Cartão de Crédito',
+                'debito': 'Cartão de Débito',
+                'pix': 'PIX',
+                'dinheiro': 'Dinheiro'
+            };
+            document.getElementById('resumoPagamento').textContent = metodos[agendamento.metodoPagamento] || '-';
+            document.getElementById('resumoValor').textContent = `R$ ${agendamento.valor?.toFixed(2) || '0,00'}`;
+        }
+
+        // Confirmar agendamento
+        async function confirmarAgendamento() {
+            try {
+                const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
+
+                if (!usuarioLogado) {
+                    alert('Você precisa estar logado para confirmar o agendamento!');
+                    window.location.href = '../Login/login.html';
+                    return;
+                }
+
+                const dadosAgendamento = {
+                    usuario_id: usuarioLogado._id,
+                    terapeuta_id: agendamento.terapeuta.id,
+                    unidade_id: agendamento.unidade.id,
+                    servico_id: agendamento.servico.id,
+                    data_agendamento: new Date().toISOString(),
+                    inicio_sessao: new Date(`${agendamento.data}T${agendamento.hora}`).toISOString(),
+                    fim_sessao: new Date(new Date(`${agendamento.data}T${agendamento.hora}`).getTime() + agendamento.duracao * 60000).toISOString(),
+                    observacoes: `Agendamento online - ${agendamento.servico.nome} - ${agendamento.duracao}min`,
+                    valor: agendamento.valor,
+                    criado_por: usuarioLogado._id
+                };
+
+                console.log('Enviando agendamento:', dadosAgendamento);
+
+                const response = await fetch(`${API_URL}/agendamentos`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dadosAgendamento)
+                });
+
+                const resultado = await response.json();
+
+                if (response.ok) {
+                    alert(`Agendamento confirmado com sucesso!\n\nCódigo: ${resultado.agendamento._id}\n\nVocê receberá um e-mail de confirmação.`);
+                    window.location.href = '../index.html';
+                } else {
+                    throw new Error(resultado.erro || 'Erro ao confirmar agendamento');
+                }
+
+            } catch (error) {
+                console.error('Erro ao confirmar agendamento:', error);
+                alert(`Erro ao confirmar agendamento: ${error.message}`);
+            }
+        }
+    </script>

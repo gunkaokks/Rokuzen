@@ -2,9 +2,17 @@ const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
-const uniqueValidator = require('mongoose-unique-validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const Unidade = require('./ModeloRelacional/unidades')
+const Cliente = require('./ModeloRelacional/clientes')
+const Colaborador = require('./ModeloRelacional/colaboradores')
+const Servico = require('./ModeloRelacional/servicos')
+const Agendamento = require('./ModeloRelacional/agendamento')
+const Atendimento = require('./ModeloRelacional/atendimentos')
+const Escala = require('./ModeloRelacional/escalas')
+const PontoEletronico = require('./ModeloRelacional/ponto_eletronico')
+const Usuario = require('./ModeloRelacional/usuarios.js')
 const app = express()
 app.use(express.json())
 app.use(cors())
@@ -16,108 +24,11 @@ async function conectarAoMongoDB() {
   await mongoose.connect(stringConexaoBD)
 }
 
-// Aqui são os modelos de banco de dados que a Rokuzen disponibilizou pra gente
-
-// Unidades
-const unidadeSchema = new mongoose.Schema({
-  nome_unidade: { type: String, required: true }
-}, { timestamps: true })
-const Unidade = mongoose.model("Unidade", unidadeSchema)
-
-// Clientes
-const clienteSchema = new mongoose.Schema({
-  nome_cliente: { type: String, required: true },
-  email_cliente: { type: String, unique: true },
-  telefone_cliente: { type: String, unique: true }, data_nascimento: Date,
-  respostas_saude: {
-    tem_dor_cronica: Boolean, local_dor: String, pressao_arterial: String, gravidez: Boolean,
-    medicamentos: [String],
-    alergias: [String]
-  }, primeiro_atendimento: Date, observacoes: String
-}, { timestamps: true })
-clienteSchema.plugin(uniqueValidator)
-const Cliente = mongoose.model("Cliente", clienteSchema)
-
-// Colaboradores
-const colaboradorSchema = new mongoose.Schema({
-  nome_colaborador: { type: String, required: true },
-  ativo: { type: Boolean, default: true },
-  tipo_colaborador: { type: Number, default: 3 },
-  especialidades: [String], email: String, telefone: String
-}, { timestamps: true })
-const Colaborador = mongoose.model("Colaborador", colaboradorSchema)
-
-// Serviços
-const servicoSchema = new mongoose.Schema({
-  unidade_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Unidade', required: true },
-  nome_servico: { type: String, required: true }, duracao_minutos: Number, valor_base: Number,
-  ativo: { type: Boolean, default: true }, descricao: String
-}, { timestamps: true })
-const Servico = mongoose.model("Servico", servicoSchema)
-
-// Atendimentos
-const atendimentoSchema = new mongoose.Schema({
-  unidade_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Unidade', required: true },
-  cliente_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Cliente', required: true },
-  servico_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Servico', required: true },
-  colaborador_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Colaborador', required: true },
-  parceiro_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Parceiro' },
-
-  inicio_atendimento: { type: Date, required: true },
-  fim_atendimento: { type: Date, required: true },
-
-  valor_servico: { type: Number, required: true },
-  tipo_pagamento: { type: String, enum: ['dinheiro', 'pix', 'cartao', 'cortesia'], required: true },
-  status_pagamento: { type: String, enum: ['pendente', 'pago', 'cancelado'], default: 'pendente' }, observacao_cliente: String,
-  foi_marcado_online: { type: Boolean, default: false },
-  pacote_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Pacote' },
-
-  duracao_real_minutos: Number,
-  satisfacao_cliente: { type: Number, min: 1, max: 5 }
-}, { timestamps: true })
-const Atendimento = mongoose.model("Atendimento", atendimentoSchema)
-
-// Escalas
-const escalaSchema = new mongoose.Schema({
-  colaborador_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Colaborador', required: true },
-  unidade_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Unidade', required: true },
-  inicio_escala: { type: Date, required: true },
-  fim_escala: { type: Date, required: true }, dia_semana: String,
-  tipo_escala: { type: String, enum: ['normal', 'extra', 'feriado'], default: 'normal' }
-}, { timestamps: true })
-const Escala = mongoose.model("Escala", escalaSchema)
-
-// Pontos eletrônicos
-const pontoEletronicoSchema = new mongoose.Schema({
-  colaborador_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Colaborador', required: true },
-  unidade_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Unidade', required: true },
-  entrada: { type: Date, required: true }, saida: Date, data: String,
-  esta_presente: { type: Boolean, default: true },
-  fez_recepcao: { type: Boolean, default: false },
-  pontos_recepcao: { type: Number, default: 0 },
-  cobriu_colega: { type: Boolean, default: false }, observacoes: String
-}, { timestamps: true })
-const PontoEletronico = mongoose.model("PontoEletronico", pontoEletronicoSchema)
-
-// Aqui é o sistema de login, cadastro etc
-
-const usuarioSchema = mongoose.Schema({
-  nome: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  senha: { type: String, required: true },
-  telefone: { type: String, required: true, unique: true },
-  tipo: { type: String, enum: ['master', 'gerente', 'recepcao', 'terapeuta', 'usuario'], default: 'usuario' },
-  data_criacao: { type: Date, default: Date.now }
-})
-usuarioSchema.plugin(uniqueValidator)
-const Usuario = mongoose.model("Usuario", usuarioSchema)
-
 const sessoesAtivas = {}
 
 app.get('/', (req, res) => {
   res.json({ mensagem: 'Sistema de atendimentos + autenticação funcionando!' })
 })
-
 
 app.post('/signup', async (req, res) => {
   try {
@@ -146,10 +57,7 @@ app.post('/signup', async (req, res) => {
     }
 
     console.log('Criptografando senha...')
-
-    // Criptografa a senha
     const senhaCriptografada = await bcrypt.hash(senha, 10)
-
     console.log('Senha criptografada com sucesso')
 
     const usuario = new Usuario({
@@ -160,7 +68,6 @@ app.post('/signup', async (req, res) => {
       tipo: tipo
     })
 
-    // Salva no banco
     const respostaMongo = await usuario.save()
     console.log('Usuário salvo no MongoDB:', respostaMongo._id)
 
@@ -198,14 +105,14 @@ app.post('/login', async (req, res) => {
     }
 
     const senhaValida = await bcrypt.compare(senha, usuario.senha)
-    
+
     if (!senhaValida) {
       return res.status(401).json({ erro: 'Senha incorreta' })
     }
-    
+
     const token = jwt.sign(
-      { email: email }, 
-      "chave-secreta", 
+      { email: email },
+      "chave-secreta",
       { expiresIn: "1h" }
     )
 
@@ -221,6 +128,7 @@ app.post('/login', async (req, res) => {
       sessaoId: sessaoId,
       token: token,
       usuario: {
+        _id: usuario._id,
         nome: usuario.nome,
         email: usuario.email,
         telefone: usuario.telefone,
@@ -234,8 +142,6 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ erro: 'Erro no servidor' })
   }
 })
-
-// Aqui é pra mexer nos clientes e unidades (função do gerente)
 
 // Criar unidade
 app.post('/unidades', async (req, res) => {
@@ -259,6 +165,19 @@ app.get('/unidades', async (req, res) => {
     res.status(500).json({ erro: erro.message })
   }
 })
+
+// Buscar serviços por unidade
+app.get('/servicos/unidade/:unidadeId', async (req, res) => {
+  try {
+    const servicos = await Servico.find({ 
+      unidade_id: req.params.unidadeId,
+      ativo: true 
+    });
+    res.json(servicos);
+  } catch (erro) {
+    res.status(500).json({ erro: erro.message });
+  }
+});
 
 // Criar cliente
 app.post('/clientes', async (req, res) => {
@@ -386,11 +305,99 @@ app.get('/pontos', async (req, res) => {
   }
 })
 
+// Criar agendamento
+app.post('/agendamentos', async (req, res) => {
+  try {
+    const { usuario_id, terapeuta_id, unidade_id, servico_id, data_agendamento, inicio_sessao,
+      fim_sessao, observacoes, valor } = req.body;
+
+     const conflito = await Agendamento.verificarConflito(terapeuta_id, inicio_sessao, fim_sessao);
+
+    if (conflito) {
+      return res.status(409).json({
+        erro: 'Horário indisponível',
+        detalhes: 'Já existe um agendamento para este horário'
+      });
+    }
+
+    const agendamento = new Agendamento({
+      usuario_id, 
+      terapeuta_id, 
+      unidade_id, 
+      servico_id,
+      data_agendamento: new Date(data_agendamento), 
+      inicio_sessao: new Date(inicio_sessao),
+      fim_sessao: new Date(fim_sessao), 
+      observacoes, 
+      valor,
+      criado_por: usuario_id
+    });
+
+    await agendamento.save();
+
+    res.status(201).json({
+      mensagem: 'Agendamento criado com sucesso!',
+      agendamento
+    });
+
+  } catch (erro) {
+    res.status(400).json({ erro: erro.message });
+  }
+});
+
+// Listar agendamentos
+app.get('/agendamentos', async (req, res) => {
+  try {
+    const agendamentos = await Agendamento.find()
+      .populate('usuario_id', 'nome email telefone')
+      .populate('terapeuta_id', 'nome_colaborador especialidades')
+      .populate('unidade_id', 'nome_unidade')
+      .populate('servico_id', 'nome_servico duracao_minutos valor_base')
+      .populate('criado_por', 'nome tipo')
+      .sort({ inicio_sessao: 1 });
+
+    res.json(agendamentos);
+  } catch (erro) {
+    res.status(500).json({ erro: erro.message });
+  }
+});
+
+// Cancelar agendamentos
+app.patch('/agendamentos/:id/cancelar', async (req, res) => {
+  try {
+    const agendamento = await Agendamento.findById(req.params.id);
+
+    if (!agendamento) {
+      return res.status(404).json({ erro: 'Agendamento não encontrado' });
+    }
+
+    if (agendamento.status === 'cancelado') {
+      return res.status(400).json({ erro: 'Agendamento já está cancelado' });
+    }
+
+    if (agendamento.inicio_sessao < new Date()) {
+      agendamento.status = 'nao_compareceu';
+    } else {
+      agendamento.status = 'cancelado';
+    }
+
+    await agendamento.save();
+
+    res.json({
+      mensagem: 'Agendamento cancelado com sucesso!',
+      agendamento
+    });
+
+  } catch (erro) {
+    res.status(400).json({ erro: erro.message });
+  }
+});
+
 app.listen(3000, () => {
   try {
     conectarAoMongoDB()
     console.log('server up & running & conexão ok')
-    console.log('📊 Sistema de atendimentos integrado!')
+    console.log('Sistema de agendamentos Rokuzen funcionando!')
   }
   catch (e) {
     console.log("erro:" + e)
