@@ -233,7 +233,18 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Cards Notícias */
+.missao-titulo {
+    font-size: 55px;
+    color: #1D1D1F;
+    margin-right: 40px;
+    white-space: nowrap;
+    text-align: center;
+    width: auto;
+    margin: 10px;
+    font-weight: 600;
+}
+
+/* Unidades cards */
 .titulo-secao {
     text-align: center; 
     font-size: 25px;
