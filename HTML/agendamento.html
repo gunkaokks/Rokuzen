@@ -322,6 +322,26 @@
         const progressoEtapas = document.querySelectorAll('.etapa-progresso');
 
         document.addEventListener('DOMContentLoaded', function () {
+            // Verifica se o usuario tá logado
+            const loggedIn = localStorage.getItem("loggedIn");
+            const token = localStorage.getItem("token");
+            const usuario = localStorage.getItem("usuario");
+
+            if (!loggedIn || loggedIn !== "true" || !token || !usuario) {
+                alert('Você precisa estar logado para fazer um agendamento!');
+                window.location.href = '../Login/login.html';
+                return;
+            }
+
+            console.log('Usuário logado:', usuarioLogado);
+
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('data').min = hoje;
+            carregarUnidades();
+            configurarEventListeners();
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
             const hoje = new Date().toISOString().split('T')[0];
             document.getElementById('data').min = hoje;
             carregarUnidades();
@@ -724,49 +744,44 @@
         // Confirmar agendamento
         async function confirmarAgendamento() {
             try {
-                const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
+                const token = localStorage.getItem("token");
 
-                if (!usuarioLogado) {
-                    alert('Você precisa estar logado para confirmar o agendamento!');
+                if (!token) {
+                    alert('Faça login novamente!');
                     window.location.href = '../Login/login.html';
                     return;
                 }
 
                 const dadosAgendamento = {
-                    usuario_id: usuarioLogado._id,
                     terapeuta_id: agendamento.terapeuta.id,
                     unidade_id: agendamento.unidade.id,
                     servico_id: agendamento.servico.id,
-                    data_agendamento: new Date().toISOString(),
                     inicio_sessao: new Date(`${agendamento.data}T${agendamento.hora}`).toISOString(),
                     fim_sessao: new Date(new Date(`${agendamento.data}T${agendamento.hora}`).getTime() + agendamento.duracao * 60000).toISOString(),
                     observacoes: `Agendamento online - ${agendamento.servico.nome} - ${agendamento.duracao}min`,
-                    valor: agendamento.valor,
-                    criado_por: usuarioLogado._id
+                    valor: agendamento.valor
                 };
-
-                console.log('Enviando agendamento:', dadosAgendamento);
 
                 const response = await fetch(`${API_URL}/agendamentos`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify(dadosAgendamento)
                 });
 
-                const resultado = await response.json();
-
                 if (response.ok) {
-                    alert(`Agendamento confirmado com sucesso!\n\nCódigo: ${resultado.agendamento._id}\n\nVocê receberá um e-mail de confirmação.`);
+                    alert('Agendamento confirmado!');
                     window.location.href = '../index.html';
                 } else {
-                    throw new Error(resultado.erro || 'Erro ao confirmar agendamento');
+                    const erro = await response.json();
+                    throw new Error(erro.erro || 'Erro no agendamento');
                 }
 
             } catch (error) {
-                console.error('Erro ao confirmar agendamento:', error);
-                alert(`Erro ao confirmar agendamento: ${error.message}`);
+                console.error('Erro:', error);
+                alert('Erro: ' + error.message);
             }
         }
     </script>

@@ -23,6 +23,22 @@ const stringConexaoBD = process.env.CONEXAO_BD
 async function conectarAoMongoDB() {
   await mongoose.connect(stringConexaoBD)
 }
+function autenticarToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ erro: 'Token de acesso requerido' });
+    }
+
+    jwt.verify(token, "chave-secreta", (err, usuario) => {
+        if (err) {
+            return res.status(403).json({ erro: 'Token inválido' });
+        }
+        req.usuario = usuario;
+        next();
+    });
+}
 
 const sessoesAtivas = {}
 
@@ -306,43 +322,49 @@ app.get('/pontos', async (req, res) => {
 })
 
 // Criar agendamento
-app.post('/agendamentos', async (req, res) => {
-  try {
-    const { usuario_id, terapeuta_id, unidade_id, servico_id, data_agendamento, inicio_sessao,
-      fim_sessao, observacoes, valor } = req.body;
+app.post('/agendamentos', autenticarToken, async (req, res) => {
+    try {
+        const usuarioEmail = req.usuario.email;
+        const usuario = await Usuario.findOne({ email: usuarioEmail });
+        
+        if (!usuario) {
+            return res.status(404).json({ erro: 'Usuário não encontrado' });
+        }
 
-     const conflito = await Agendamento.verificarConflito(terapeuta_id, inicio_sessao, fim_sessao);
+        const dadosAgendamento = {
+            usuario_id: usuario._id,
+            terapeuta_id: req.body.terapeuta_id,
+            unidade_id: req.body.unidade_id,
+            servico_id: req.body.servico_id,
+            data_agendamento: new Date(),
+            inicio_sessao: new Date(req.body.inicio_sessao),
+            fim_sessao: new Date(req.body.fim_sessao),
+            observacoes: req.body.observacoes,
+            valor: req.body.valor,
+            criado_por: usuario._id
+        };
 
-    if (conflito) {
-      return res.status(409).json({
-        erro: 'Horário indisponível',
-        detalhes: 'Já existe um agendamento para este horário'
-      });
+        const conflito = await Agendamento.verificarConflito(
+        dadosAgendamento.terapeuta_id, dadosAgendamento.inicio_sessao, dadosAgendamento.fim_sessao
+        );
+        
+        if (conflito) {
+            return res.status(409).json({
+                erro: 'Horário indisponível'
+            });
+        }
+
+        const agendamento = new Agendamento(dadosAgendamento);
+        await agendamento.save();
+
+        res.status(201).json({
+            mensagem: 'Agendamento criado com sucesso!',
+            agendamento
+        });
+
+    } catch (erro) {
+        res.status(400).json({ erro: erro.message });
     }
-
-    const agendamento = new Agendamento({
-      usuario_id, 
-      terapeuta_id, 
-      unidade_id, 
-      servico_id,
-      data_agendamento: new Date(data_agendamento), 
-      inicio_sessao: new Date(inicio_sessao),
-      fim_sessao: new Date(fim_sessao), 
-      observacoes, 
-      valor,
-      criado_por: usuario_id
-    });
-
-    await agendamento.save();
-
-    res.status(201).json({
-      mensagem: 'Agendamento criado com sucesso!',
-      agendamento
-    });
-
-  } catch (erro) {
-    res.status(400).json({ erro: erro.message });
-  }
 });
 
 // Listar agendamentos
