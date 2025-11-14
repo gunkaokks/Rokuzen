@@ -749,3 +749,12 @@ html {
     text-align: center; 
     width: 100%; /* Garante que o elemento ocupe toda a largura disponível */
 }
+
+.user-logged-in {
+    background-color: #9ABC74 !important;
+    color: white !important;
+}
+
+.user-logged-in:hover {
+    background-color: #7da35f !important;
+}

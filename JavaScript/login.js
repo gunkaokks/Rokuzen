@@ -43,7 +43,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         alert(data.mensagem);
                         console.log('Redirecionando para index.html');
-                        window.location.href = "../index.html";
+                        if (document.referrer && document.referrer.includes('index.html')) {
+                            window.location.href = document.referrer; // Volta para a página anterior (index)
+                        } else {
+                            window.location.href = "../index.html"; // Fallback
+                        }
 
                     } else if (data.erro) {
                         alert(data.erro);

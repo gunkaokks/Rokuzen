@@ -328,7 +328,6 @@
             const usuario = localStorage.getItem("usuario");
 
             if (!loggedIn || loggedIn !== "true" || !token || !usuario) {
-                alert('Você precisa estar logado para fazer um agendamento!');
                 window.location.href = '../Login/login.html';
                 return;
             }
@@ -747,7 +746,6 @@
                 const token = localStorage.getItem("token");
 
                 if (!token) {
-                    alert('Faça login novamente!');
                     window.location.href = '../Login/login.html';
                     return;
                 }

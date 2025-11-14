@@ -18,3 +18,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
     fadeIns.forEach((element) => observer.observe(element));
 });
+
+function atualizarLinkLoginPerfil() {
+    const loginProfileLink = document.getElementById('loginProfileLink');
+    const loggedIn = localStorage.getItem('loggedIn');
+
+    if (loginProfileLink) {
+        if (loggedIn === 'true') {
+            // Usuário está logado - vai para o perfil
+            loginProfileLink.href = '/HTML/perfil.html';
+            loginProfileLink.classList.add('user-logged-in');
+        } else {
+            // Usuário não está logado - vai para o login
+            loginProfileLink.href = '/Login/login.html';
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    atualizarLinkLoginPerfil();
+
+    window.addEventListener('storage', function (e) {
+        if (e.key === 'loggedIn') {
+            atualizarLinkLoginPerfil();
+        }
+    });
+});

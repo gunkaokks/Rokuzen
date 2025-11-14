@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - Rokuzen</title>
+    <link rel="stylesheet" href="../CSS/home.css">
+    <script src="https://kit.fontawesome.com/e64e449d7c.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div class="container mt-5 pt-5">
+        <h1>Meu Perfil</h1>
+        <div id="userInfo">
+        </div>
+        <button id="logoutBtn" class="btn btn-danger mt-3">Sair</button>
+    </div>
+
+    <script>
+        // Verificar se o usuário está logado
+        const loggedIn = localStorage.getItem('loggedIn');
+        const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+
+        if (loggedIn !== 'true') {
+            window.location.href = '/Login/login.html';
+        } else {
+            // Mostrar informações do usuário
+            document.getElementById('userInfo').innerHTML = `
+                <p><strong>Nome:</strong> ${usuario.nome || 'N/A'}</p>
+                <p><strong>Email:</strong> ${usuario.email || 'N/A'}</p>
+                <p><strong>Telefone:</strong> ${usuario.telefone || 'N/A'}</p>
+            `;
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            localStorage.removeItem('loggedIn');
+            localStorage.removeItem('sessaoId');
+            localStorage.removeItem('usuario');
+            localStorage.removeItem('nome');
+            localStorage.removeItem('email');
+            localStorage.removeItem('tipo');
+            window.location.href = '../index.html';
+        });
+    </script>
+</body>
+
+</html>
