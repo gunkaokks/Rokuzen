@@ -7,21 +7,18 @@
 
   <link rel="shortcut icon" href="../Imagens/LogoTopo.png" type="image/x-icon">
   <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="JavaScript/loginAdm.js">
   <script src="https://kit.fontawesome.com/a27cc7b249.js" crossorigin="anonymous"></script>
 
-  <!-- Estilos de override: garantir que o container use historia.jpg -->
   <style>
-    /* Colocar depois do login.css garante prioridade */
     .container {
       background-image: linear-gradient(rgba(0,50,0,0.72), rgba(0,20,0,0.8)), url("../Imagens/historia.jpg");
       background-position: center;
       background-size: cover;
       background-repeat: no-repeat;
-      /* caso seu login.css defina altura, isto mantém */
       min-height: 100vh;
     }
 
-    /* overlay levemente escuro (melhora legibilidade) */
     .container::before {
       content: "";
       position: absolute;
@@ -30,7 +27,6 @@
       pointer-events: none;
     }
 
-    /* garante que o conteúdo fique acima do ::before */
     .form-box {
       position: relative;
       z-index: 2;
@@ -61,19 +57,5 @@
       </form>
     </div>
   </div>
-
-  <script>
-    document.getElementById("loginFuncionarioForm").addEventListener("submit", function(e){
-      e.preventDefault();
-      const email = document.getElementById("email").value;
-      const senha = document.getElementById("senha").value;
-      if (email && senha) {
-        alert("Login efetuado (simulado)");
-        window.location.href = "/PainelFuncionario/dashboard.html";
-      } else {
-        alert("Preencha todos os campos.");
-      }
-    });
-  </script>
 </body>
 </html>

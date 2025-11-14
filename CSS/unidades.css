@@ -242,8 +242,9 @@ html {
     width: auto;
     margin: 10px;
     font-weight: 600;
+    margin-top: 120px;
+    margin-bottom: 50px;
 }
-
 /* Unidades cards */
 .titulo-secao {
     text-align: center; 

@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const loginForm = document.getElementById("loginForm");
     const signupForm = document.getElementById("signupForm");
 
-if (loginForm) {
+    if (loginForm) {
         loginForm.addEventListener("submit", function (event) {
             event.preventDefault();
 
@@ -21,44 +21,44 @@ if (loginForm) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     email: email,
-                    senha: senha 
+                    senha: senha
                 }),
             })
-            .then(response => {
-                console.log('Status da resposta:', response.status);
-                return response.json();
-            })
-            .then(data => {
-                console.log('Resposta completa do login:', data);
+                .then(response => {
+                    console.log('Status da resposta:', response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Resposta completa do login:', data);
 
-                if (data.mensagem && data.mensagem.includes('sucesso')) {
-                    localStorage.setItem("loggedIn", "true");
-                    localStorage.setItem("sessaoId", data.sessaoId);
-                    localStorage.setItem("usuario", JSON.stringify(data.usuario));
-                    localStorage.setItem("nome", data.usuario.nome);
-                    localStorage.setItem("email", data.usuario.email);
-                    localStorage.setItem("tipo", data.usuario.tipo);
+                    if (data.mensagem && data.mensagem.includes('sucesso')) {
+                        localStorage.setItem("loggedIn", "true");
+                        localStorage.setItem("sessaoId", data.sessaoId);
+                        localStorage.setItem("usuario", JSON.stringify(data.usuario));
+                        localStorage.setItem("nome", data.usuario.nome);
+                        localStorage.setItem("email", data.usuario.email);
+                        localStorage.setItem("tipo", data.usuario.tipo);
 
-                    alert(data.mensagem);
-                    console.log('Redirecionando para index.html');
-                    window.location.href = "../index.html";
-                    
-                } else if (data.erro) {
-                    alert(data.erro);
-                } else {
-                    alert("Erro: tente novamente mais tarde");
-                }
-            })
-            .catch(error => {
-                console.error("Erro ao fazer login:", error);
-                alert("Erro: tente novamente mais tarde.");
-            });
+                        alert(data.mensagem);
+                        console.log('Redirecionando para index.html');
+                        window.location.href = "../index.html";
+
+                    } else if (data.erro) {
+                        alert(data.erro);
+                    } else {
+                        alert("Erro: tente novamente mais tarde");
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao fazer login:", error);
+                    alert("Erro: tente novamente mais tarde.");
+                });
         });
     }
 
-// Cadastro
+    // Cadastro
 
     if (signupForm) {
         signupForm.addEventListener("submit", function (event) {
@@ -86,11 +86,11 @@ if (loginForm) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     nome: nome,
                     email: email,
                     telefone: telefone,
-                    senha: senha 
+                    senha: senha
                 }),
             })
                 .then(response => response.json())
@@ -103,7 +103,7 @@ if (loginForm) {
                         signupForm.style.display = 'none';
                         loginForm.style.display = 'block';
                         document.getElementById('title').innerHTML = 'Login';
-                        
+
                     } else {
                         alert((data.erro || "Cadastro falhou"));
                     }
@@ -131,3 +131,29 @@ if (loginForm) {
             });
     }
 });
+
+const signupForm = document.getElementById("signupForm");
+const loginForm = document.getElementById("loginForm");
+
+const signupBtn = document.getElementById("signupBtn");
+const signinBtn = document.getElementById("signinBtn");
+
+const signupBtn2 = document.getElementById("signupBtn2");
+const signinBtn2 = document.getElementById("signinBtn2");
+
+const title = document.getElementById("title");
+
+signupBtn.onclick = function () {
+    loginForm.style.display = "block";
+    signupForm.style.display = "none";
+    title.innerHTML = "Login";
+};
+
+signinBtn.onclick = function () {
+    signupForm.style.display = "block";
+    loginForm.style.display = "none";
+    title.innerHTML = "Cadastro";
+};
+
+signupBtn2.onclick = signupBtn.onclick;
+signinBtn2.onclick = signinBtn.onclick;

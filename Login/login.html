@@ -14,6 +14,7 @@
 <body>
     <div class="container">
         <a href="javascript:history.back()" class="back-button">&lt;</a>
+    
 
         <div class="form-box m-20">
             <h1 id="title">Login</h1>
@@ -76,36 +77,7 @@
         </div>
     </div>
 
-    <!-- 🔹 Link discreto para login de funcionário -->
     <a href="/Login/login-funcionario.html" class="staff-login-link">Acesso do Funcionário</a>
-
-    <script>
-        const signupForm = document.getElementById("signupForm");
-        const loginForm = document.getElementById("loginForm");
-
-        const signupBtn = document.getElementById("signupBtn");
-        const signinBtn = document.getElementById("signinBtn");
-
-        const signupBtn2 = document.getElementById("signupBtn2");
-        const signinBtn2 = document.getElementById("signinBtn2");
-
-        const title = document.getElementById("title");
-
-        signupBtn.onclick = function () {
-            loginForm.style.display = "block";
-            signupForm.style.display = "none";
-            title.innerHTML = "Login";
-        };
-
-        signinBtn.onclick = function () {
-            signupForm.style.display = "block";
-            loginForm.style.display = "none";
-            title.innerHTML = "Cadastro";
-        };
-
-        signupBtn2.onclick = signupBtn.onclick;
-        signinBtn2.onclick = signinBtn.onclick;
-    </script>
 
     <script src="../JavaScript/login.js"></script>
 </body>
