@@ -10,6 +10,5 @@ const usuarioSchema = mongoose.Schema({
 });
 
 const Usuario = mongoose.model("Usuario", usuarioSchema);
-const sessoesAtivas = {};
 
 module.exports = Usuario;

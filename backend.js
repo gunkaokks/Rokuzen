@@ -13,6 +13,8 @@ const Atendimento = require('./ModeloRelacional/atendimentos')
 const Escala = require('./ModeloRelacional/escalas')
 const PontoEletronico = require('./ModeloRelacional/ponto_eletronico')
 const Usuario = require('./ModeloRelacional/usuarios.js')
+const Funcionario = require('./ModeloRelacional/funcionarios')
+
 const app = express()
 app.use(express.json())
 app.use(cors())
@@ -23,6 +25,31 @@ const stringConexaoBD = process.env.CONEXAO_BD
 async function conectarAoMongoDB() {
   await mongoose.connect(stringConexaoBD)
 }
+
+// Middleware
+const authMiddleware = (req, res, next) => {
+    try {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+
+        if (!token) {
+            return res.status(401).json({ erro: 'Token não fornecido' });
+        }
+
+        const decoded = jwt.verify(token, "chave-secreta");
+        req.usuario = {
+            email: decoded.email,
+            userId: decoded.userId,
+            tipo: decoded.tipo
+        };
+        
+        next();
+    } catch (error) {
+        res.status(401).json({ erro: 'Token inválido' });
+    }
+};
+
+// autenticar token
 function autenticarToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -48,8 +75,6 @@ app.get('/', (req, res) => {
 
 app.post('/signup', async (req, res) => {
   try {
-    console.log('Dados recebidos no signup:', req.body)
-
     const nome = req.body.nome
     const email = req.body.email
     const senha = req.body.senha
@@ -72,9 +97,7 @@ app.post('/signup', async (req, res) => {
       return res.status(400).json({ erro: 'Telefone é obrigatório' })
     }
 
-    console.log('Criptografando senha...')
     const senhaCriptografada = await bcrypt.hash(senha, 10)
-    console.log('Senha criptografada com sucesso')
 
     const usuario = new Usuario({
       nome: nome,
@@ -85,7 +108,6 @@ app.post('/signup', async (req, res) => {
     })
 
     const respostaMongo = await usuario.save()
-    console.log('Usuário salvo no MongoDB:', respostaMongo._id)
 
     res.status(201).json({
       mensagem: 'Usuário criado com sucesso!',
@@ -99,8 +121,6 @@ app.post('/signup', async (req, res) => {
     })
   }
   catch (exception) {
-    console.log('Erro no cadastro:', exception.message)
-
     if (exception.code === 11000) {
       return res.status(409).json({ erro: 'Email já existe' })
     }
@@ -109,6 +129,7 @@ app.post('/signup', async (req, res) => {
   }
 })
 
+// Login
 app.post('/login', async (req, res) => {
   try {
     const email = req.body.email
@@ -126,8 +147,15 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ erro: 'Senha incorreta' })
     }
 
+    const tokenPayload = {
+      userId: usuario._id.toString(),
+      email: usuario.email,
+      nome: usuario.nome,
+      tipo: usuario.tipo
+    };
+
     const token = jwt.sign(
-      { email: email },
+      tokenPayload,
       "chave-secreta",
       { expiresIn: "1h" }
     )
@@ -154,10 +182,83 @@ app.post('/login', async (req, res) => {
     })
 
   } catch (erro) {
-    console.log(erro)
     res.status(500).json({ erro: 'Erro no servidor' })
   }
 })
+
+// Editar perfil
+app.put('/meu-perfil', authMiddleware, async (req, res) => {
+    try {
+        const { nome, email, telefone } = req.body;
+        
+        if (!req.usuario.userId) {
+            return res.status(401).json({ erro: 'ID do usuário não encontrado no token' });
+        }
+        
+        const usuario = await Usuario.findByIdAndUpdate(
+            req.usuario.userId,
+            {
+                nome: nome,
+                email: email,
+                telefone: telefone
+            },
+            { new: true, runValidators: true }
+        );
+
+        if (!usuario) {
+            return res.status(404).json({ erro: 'Usuário não encontrado' });
+        }
+        
+        res.json({ 
+            mensagem: 'Perfil atualizado com sucesso!',
+            usuario: {
+                _id: usuario._id,
+                nome: usuario.nome,
+                email: usuario.email,
+                telefone: usuario.telefone,
+                tipo: usuario.tipo,
+                data_criacao: usuario.data_criacao
+            }
+        });
+        
+    } catch (error) {
+        res.status(400).json({ erro: error.message });
+    }
+});
+
+// Pegar perfil MongoDB
+app.get('/meu-perfil', authMiddleware, async (req, res) => {
+    try {
+        const usuario = await Usuario.findById(req.usuario.userId);
+        
+        if (!usuario) {
+            return res.status(404).json({ erro: 'Usuário não encontrado' });
+        }
+
+        res.json({
+            usuario: {
+                _id: usuario._id,
+                nome: usuario.nome,
+                email: usuario.email,
+                telefone: usuario.telefone,
+                tipo: usuario.tipo,
+                data_criacao: usuario.data_criacao
+            }
+        });
+    } catch (error) {
+        res.status(400).json({ erro: error.message });
+    }
+});
+
+// Autenticação
+app.get('/debug-auth', authMiddleware, (req, res) => {
+    res.json({
+        success: true,
+        message: 'Token válido!',
+        usuario: req.usuario,
+        timestamp: new Date().toISOString()
+    });
+});
 
 // Criar unidade
 app.post('/unidades', async (req, res) => {
@@ -415,11 +516,20 @@ app.patch('/agendamentos/:id/cancelar', async (req, res) => {
   }
 });
 
+// Criar funcionario
+app.post('/funcionarios', async (req, res) => {
+  try {
+    const funcionario = new Funcionario(req.body)
+    await funcionario.save()
+    res.status(201).json(funcionario)
+  } catch (erro) {
+    res.status(400).json({ erro: erro.message })
+  }
+})
+
 app.listen(3000, () => {
   try {
     conectarAoMongoDB()
-    console.log('server up & running & conexão ok')
-    console.log('Sistema de agendamentos Rokuzen funcionando!')
   }
   catch (e) {
     console.log("erro:" + e)
