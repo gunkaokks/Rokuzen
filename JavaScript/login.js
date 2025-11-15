@@ -34,6 +34,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.log('Resposta completa do login:', data);
 
                     if (data.mensagem && data.mensagem.includes('sucesso')) {
+                        if (data.token) {
+                            localStorage.setItem("token", data.token);
+                        }
+                        
                         localStorage.setItem("loggedIn", "true");
                         localStorage.setItem("sessaoId", data.sessaoId);
                         localStorage.setItem("usuario", JSON.stringify(data.usuario));
@@ -44,9 +48,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         alert(data.mensagem);
                         console.log('Redirecionando para index.html');
                         if (document.referrer && document.referrer.includes('index.html')) {
-                            window.location.href = document.referrer; // Volta para a página anterior (index)
+                            window.location.href = document.referrer;
                         } else {
-                            window.location.href = "../index.html"; // Fallback
+                            window.location.href = "../index.html";
                         }
 
                     } else if (data.erro) {
@@ -62,8 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Cadastro
-
+    // Cadastro 
     if (signupForm) {
         signupForm.addEventListener("submit", function (event) {
             event.preventDefault();
@@ -102,11 +105,22 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.log('Resposta do cadastro:', data);
 
                     if (data.mensagem === 'Usuário criado com sucesso!') {
-                        alert(data.mensagem);
-                        signupForm.reset();
-                        signupForm.style.display = 'none';
-                        loginForm.style.display = 'block';
-                        document.getElementById('title').innerHTML = 'Login';
+                        if (data.token) {
+                            localStorage.setItem("token", data.token);
+                            localStorage.setItem("loggedIn", "true");
+                            localStorage.setItem("usuario", JSON.stringify(data.usuario));
+                            localStorage.setItem("nome", data.usuario.nome);
+                            localStorage.setItem("email", data.usuario.email);
+                            
+                            alert('Cadastro realizado e login automático!');
+                            window.location.href = "../index.html";
+                        } else {
+                            alert(data.mensagem);
+                            signupForm.reset();
+                            signupForm.style.display = 'none';
+                            loginForm.style.display = 'block';
+                            document.getElementById('title').innerHTML = 'Login';
+                        }
 
                     } else {
                         alert((data.erro || "Cadastro falhou"));
@@ -119,22 +133,41 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    const token = localStorage.getItem("token");
     const sessaoId = localStorage.getItem("sessaoId");
-    if (sessaoId) {
-        fetch(`http://localhost:3000/verificar-sessao/${sessaoId}`)
+    
+    if (token || sessaoId) {
+        const endpoint = token ? 
+            `http://localhost:3000/verificar-token` : 
+            `http://localhost:3000/verificar-sessao/${sessaoId}`;
+            
+        const options = token ? {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        } : {
+            method: "GET"
+        };
+
+        fetch(endpoint, options)
             .then(response => response.json())
             .then(data => {
-                if (data.logado) {
+                if (data.logado || data.valido) {
                     window.location.href = "/HTML/Administrador.html";
                 }
             })
             .catch(error => {
-                console.error("Erro ao verificar sessão:", error);
-                localStorage.removeItem("sessaoId");
+                console.error("Erro ao verificar autenticação:", error);
+                // Limpar dados inválidos
+                if (token) localStorage.removeItem("token");
+                if (sessaoId) localStorage.removeItem("sessaoId");
                 localStorage.removeItem("usuario");
             });
     }
 });
+
 
 const signupForm = document.getElementById("signupForm");
 const loginForm = document.getElementById("loginForm");

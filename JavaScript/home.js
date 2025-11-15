@@ -5,14 +5,14 @@ document.addEventListener("DOMContentLoaded", function () {
         (entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add("visible"); // Adiciona a classe ao entrar no viewport
+                    entry.target.classList.add("visible");
                 } else {
-                    entry.target.classList.remove("visible"); // Remove a classe ao sair do viewport
+                    entry.target.classList.remove("visible");
                 }
             });
         },
         {
-            threshold: 0.1, // Define a porcentagem do elemento que precisa estar visível
+            threshold: 0.1, 
         }
     );
 
@@ -44,3 +44,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+function atualizarLinkLoginPerfil() {
+    const loginProfileLinks = document.querySelectorAll('#loginProfileLink, .login-profile-link');
+    const loggedIn = localStorage.getItem('loggedIn');
+
+    loginProfileLinks.forEach(link => {
+        if (loggedIn === 'true') {
+            link.href = '/HTML/perfil.html';
+            link.classList.add('user-logged-in');
+        } else {
+            link.href = '/Login/login.html';
+            link.classList.remove('user-logged-in');
+        }
+    });
+}

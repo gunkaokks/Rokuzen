@@ -515,3 +515,12 @@ button:hover {
     margin: 0 auto;
     padding: 0 15px;
 }
+
+.user-logged-in {
+    background-color: #9ABC74 !important;
+    color: white !important;
+}
+
+.user-logged-in:hover {
+    background-color: #7da35f !important;
+}

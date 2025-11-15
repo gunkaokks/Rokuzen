@@ -245,3 +245,12 @@ html {
     margin-top: 120px;
     margin-bottom: 50px;
 }
+
+.user-logged-in {
+    background-color: #9ABC74 !important;
+    color: white !important;
+}
+
+.user-logged-in:hover {
+    background-color: #7da35f !important;
+}
