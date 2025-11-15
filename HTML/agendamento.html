@@ -21,7 +21,27 @@
 </head>
 
 <body>
-    <!-- Barra de navegação -->
+
+    <!-- Scripts Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+    <script src="/JavaScript/home.js"></script>
+
+    <!--Barra de navegação-->
     <nav class="navbar navbar-expand-xxl fixed-top">
         <div class="container-fluid box">
             <div class="logo">
@@ -41,20 +61,20 @@
                 </div>
                 <div class="offcanvas-body">
                     <ul class="navbar-nav mx-auto">
-                        <li class="nav-item"><a class="nav-link" href="quemSomos.html">Quem somos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="unidades.html">Unidades</a></li>
-                        <li class="nav-item"><a class="nav-link" href="noticia.html">Notícias</a></li>
-                        <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
-                        <li class="nav-item"><a class="nav-link" href="faleConosco.html">Fale conosco</a></li>
+
+                        <li class="nav-item"><a class="nav-link" href="/HTML/quemSomos.html">Quem somos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/HTML/unidades.html">Unidades</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/HTML/noticias.html">Notícias</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/HTML/servicos.html">Serviços</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/HTML/faleConosco.html">Fale conosco</a></li>
                         <li class="nav-item">
-                            <a href="Login/login.html" class="login-button login-button-rounded">
+                            <a href="#" id="loginProfileLink"
+                                class="login-button login-button-rounded login-profile-link">
                                 <i class="fa-solid fa-user"></i>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="agendamento.html" class="agende-button">
-                                <b>Agende um horário</b>
-                            </a>
+                        <li class="nav-item"><a href="/HTML/agendamento.html" class="agende-button"><b>Agende um
+                                    horário</b></a>
                         </li>
                     </ul>
                 </div>
@@ -62,243 +82,338 @@
         </div>
     </nav>
 
-    <div class="agendamento-container">
-        <div class="agendamento-header">
-            <h1>Agende sua sessão</h1>
-            <p>Siga os passos para agendar sua massagem terapêutica</p>
-        </div>
+    <div class="container-agendamento">
+        <div class="agendamento-container">
+            <div class="agendamento-header">
+                <h1>Agende sua sessão</h1>
+                <p>Siga os passos para agendar sua massagem terapêutica</p>
+            </div>
 
-        <div class="progresso-etapas">
-            <div class="etapa-progresso concluida" data-etapa="1">
-                <div class="etapa-bolha">1</div>
-                <div class="etapa-nome">Unidade</div>
-            </div>
-            <div class="etapa-progresso ativa" data-etapa="2">
-                <div class="etapa-bolha">2</div>
-                <div class="etapa-nome">Serviço</div>
-            </div>
-            <div class="etapa-progresso" data-etapa="3">
-                <div class="etapa-bolha">3</div>
-                <div class="etapa-nome">Duração</div>
-            </div>
-            <div class="etapa-progresso" data-etapa="4">
-                <div class="etapa-bolha">4</div>
-                <div class="etapa-nome">Data & Hora</div>
-            </div>
-            <div class="etapa-progresso" data-etapa="5">
-                <div class="etapa-bolha">5</div>
-                <div class="etapa-nome">Terapeuta</div>
-            </div>
-            <div class="etapa-progresso" data-etapa="6">
-                <div class="etapa-bolha">6</div>
-                <div class="etapa-nome">Pagamento</div>
-            </div>
-            <div class="etapa-progresso" data-etapa="7">
-                <div class="etapa-bolha">7</div>
-                <div class="etapa-nome">Confirmação</div>
-            </div>
-        </div>
-
-        <!-- Etapas -->
-        <div class="etapas-container">
-            <!-- 1 - Unidades -->
-            <div class="etapa ativa" id="etapa1">
-                <h2 class="etapa-titulo">Selecione a Unidade</h2>
-                <p class="etapa-descricao">Escolha onde você gostaria de ser atendido</p>
-
-                <div class="loading" id="loadingUnidades">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>Carregando unidades...</p>
+            <div class="progresso-etapas">
+                <div class="etapa-progresso concluida" data-etapa="1">
+                    <div class="etapa-bolha">1</div>
+                    <div class="etapa-nome">Unidade</div>
                 </div>
-
-                <div class="opcoes-grid" id="opcoesUnidades" style="display: none;">
+                <div class="etapa-progresso" data-etapa="2">
+                    <div class="etapa-bolha">2</div>
+                    <div class="etapa-nome">Serviço</div>
                 </div>
-
-                <div class="botoes-navegacao">
-                    <button type="button" class="btn btn-voltar" disabled>Voltar</button>
-                    <button type="button" class="btn btn-avancar" id="avancarEtapa1" disabled>Avançar</button>
+                <div class="etapa-progresso" data-etapa="3">
+                    <div class="etapa-bolha">3</div>
+                    <div class="etapa-nome">Duração</div>
+                </div>
+                <div class="etapa-progresso" data-etapa="4">
+                    <div class="etapa-bolha">4</div>
+                    <div class="etapa-nome">Data & Hora</div>
+                </div>
+                <div class="etapa-progresso" data-etapa="5">
+                    <div class="etapa-bolha">5</div>
+                    <div class="etapa-nome">Terapeuta</div>
+                </div>
+                <div class="etapa-progresso" data-etapa="6">
+                    <div class="etapa-bolha">6</div>
+                    <div class="etapa-nome">Pagamento</div>
+                </div>
+                <div class="etapa-progresso" data-etapa="7">
+                    <div class="etapa-bolha">7</div>
+                    <div class="etapa-nome">Confirmação</div>
                 </div>
             </div>
+            <!-- Etapas -->
+            <div class="etapas-container">
+                <!-- 1 - Unidades -->
+                <div class="etapa ativa" id="etapa1">
+                    <h2 class="etapa-titulo">Selecione a Unidade</h2>
+                    <p class="etapa-descricao">Escolha onde você gostaria de ser atendido</p>
 
-            <!-- 2 - Serviços -->
-            <div class="etapa" id="etapa2">
-                <h2 class="etapa-titulo">Selecione o Serviço</h2>
-                <p class="etapa-descricao">Escolha o tipo de massagem que deseja</p>
+                    <div class="loading" id="loadingUnidades">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Carregando unidades...</p>
+                    </div>
 
-                <div class="loading" id="loadingServicos">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>Carregando serviços...</p>
-                </div>
+                    <div class="opcoes-grid" id="opcoesUnidades" style="display: none;">
+                    </div>
 
-                <div class="opcoes-grid" id="opcoesServicos" style="display: none;">
-                </div>
-
-                <div class="botoes-navegacao">
-                    <button type="button" class="btn btn-voltar" id="voltarEtapa2">Voltar</button>
-                    <button type="button" class="btn btn-avancar" id="avancarEtapa2" disabled>Avançar</button>
-                </div>
-            </div>
-
-            <!-- 3 - Duração -->
-            <div class="etapa" id="etapa3">
-                <h2 class="etapa-titulo">Selecione a Duração</h2>
-                <p class="etapa-descricao">Escolha por quanto tempo deseja sua sessão</p>
-
-                <div class="form-group">
-                    <label for="duracao" class="form-label">Duração da sessão (minutos)</label>
-                    <input type="range" class="form-range" id="duracao" min="15" max="120" step="5" value="30">
-                    <div class="d-flex justify-content-between">
-                        <span id="duracaoMin">15 min</span>
-                        <span id="duracaoAtual">30 min</span>
-                        <span id="duracaoMax">120 min</span>
+                    <div class="botoes-navegacao">
+                        <button type="button" class="btn btn-voltar" disabled>Voltar</button>
+                        <button type="button" class="btn btn-avancar" id="avancarEtapa1" disabled>Avançar</button>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Opções de duração</label>
-                    <div class="horarios-grid" id="opcoesDuracao">
+                <!-- 2 - Serviços -->
+                <div class="etapa" id="etapa2">
+                    <h2 class="etapa-titulo">Selecione o Serviço</h2>
+                    <p class="etapa-descricao">Escolha o tipo de massagem que deseja</p>
+
+                    <div class="loading" id="loadingServicos">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Carregando serviços...</p>
+                    </div>
+
+                    <div class="opcoes-grid" id="opcoesServicos" style="display: none;">
+                    </div>
+
+                    <div class="botoes-navegacao">
+                        <button type="button" class="btn btn-voltar" id="voltarEtapa2">Voltar</button>
+                        <button type="button" class="btn btn-avancar" id="avancarEtapa2" disabled>Avançar</button>
                     </div>
                 </div>
 
-                <div class="botoes-navegacao">
-                    <button type="button" class="btn btn-voltar" id="voltarEtapa3">Voltar</button>
-                    <button type="button" class="btn btn-avancar" id="avancarEtapa3" disabled>Avançar</button>
-                </div>
-            </div>
+                <!-- 3 - Duração -->
+                <div class="etapa" id="etapa3">
+                    <h2 class="etapa-titulo">Selecione a Duração</h2>
+                    <p class="etapa-descricao">Escolha por quanto tempo deseja sua sessão</p>
 
-            <!-- 4 - Data e Hora -->
-            <div class="etapa" id="etapa4">
-                <h2 class="etapa-titulo">Selecione Data e Hora</h2>
-                <p class="etapa-descricao">Escolha quando deseja sua sessão</p>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="data" class="form-label">Data</label>
-                            <input type="date" class="form-control" id="data" min="">
+                    <div class="form-group">
+                        <label for="duracao" class="form-label">Duração da sessão (minutos)</label>
+                        <input type="range" class="form-range" id="duracao" min="15" max="120" step="5" value="30">
+                        <div class="d-flex justify-content-between">
+                            <span id="duracaoMin">15 min</span>
+                            <span id="duracaoAtual">30 min</span>
+                            <span id="duracaoMax">120 min</span>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="form-label">Horários disponíveis</label>
-                            <div class="loading" id="loadingHorarios">
-                                <i class="fas fa-spinner fa-spin"></i>
-                                <p>Carregando horários...</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Opções de duração</label>
+                        <div class="horarios-grid" id="opcoesDuracao">
+                        </div>
+                    </div>
+
+                    <div class="botoes-navegacao">
+                        <button type="button" class="btn btn-voltar" id="voltarEtapa3">Voltar</button>
+                        <button type="button" class="btn btn-avancar" id="avancarEtapa3" disabled>Avançar</button>
+                    </div>
+                </div>
+
+                <!-- 4 - Data e Hora -->
+                <div class="etapa" id="etapa4">
+                    <h2 class="etapa-titulo">Selecione Data e Hora</h2>
+                    <p class="etapa-descricao">Escolha quando deseja sua sessão</p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="data" class="form-label">Data</label>
+                                <input type="date" class="form-control" id="data" min="">
                             </div>
-                            <div class="horarios-grid" id="opcoesHorarios" style="display: none;">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Horários disponíveis</label>
+                                <div class="loading" id="loadingHorarios">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    <p>Carregando horários...</p>
+                                </div>
+                                <div class="horarios-grid" id="opcoesHorarios" style="display: none;">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="botoes-navegacao">
-                    <button type="button" class="btn btn-voltar" id="voltarEtapa4">Voltar</button>
-                    <button type="button" class="btn btn-avancar" id="avancarEtapa4" disabled>Avançar</button>
-                </div>
-            </div>
-
-            <!-- 5 - Terapeuta -->
-            <div class="etapa" id="etapa5">
-                <h2 class="etapa-titulo">Selecione o Terapeuta</h2>
-                <p class="etapa-descricao">Escolha o profissional que irá realizar sua sessão</p>
-
-                <div class="loading" id="loadingTerapeutas">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>Carregando terapeutas...</p>
-                </div>
-
-                <div class="opcoes-grid" id="opcoesTerapeutas" style="display: none;">
-                    <!-- Terapeutas serão carregados aqui via JavaScript -->
-                </div>
-
-                <div class="botoes-navegacao">
-                    <button type="button" class="btn btn-voltar" id="voltarEtapa5">Voltar</button>
-                    <button type="button" class="btn btn-avancar" id="avancarEtapa5" disabled>Avançar</button>
-                </div>
-            </div>
-
-            <!-- 6 - Método de Pagamento -->
-            <div class="etapa" id="etapa6">
-                <h2 class="etapa-titulo">Método de Pagamento</h2>
-                <p class="etapa-descricao">Escolha como deseja pagar pela sua sessão</p>
-
-                <div class="opcoes-grid">
-                    <div class="opcao-card" data-metodo="cartao">
-                        <i class="fa-solid fa-credit-card"></i>
-                        <h3>Cartão de Crédito</h3>
-                        <p>Pague em até 12x no cartão</p>
-                    </div>
-                    <div class="opcao-card" data-metodo="debito">
-                        <i class="fa-solid fa-money-bill"></i>
-                        <h3>Cartão de Débito</h3>
-                        <p>Pagamento à vista no débito</p>
-                    </div>
-                    <div class="opcao-card" data-metodo="pix">
-                        <i class="fa-solid fa-qrcode"></i>
-                        <h3>PIX</h3>
-                        <p>Pagamento instantâneo</p>
-                    </div>
-                    <div class="opcao-card" data-metodo="dinheiro">
-                        <i class="fa-solid fa-money-bill-wave"></i>
-                        <h3>Dinheiro</h3>
-                        <p>Pagamento em espécie</p>
+                    <div class="botoes-navegacao">
+                        <button type="button" class="btn btn-voltar" id="voltarEtapa4">Voltar</button>
+                        <button type="button" class="btn btn-avancar" id="avancarEtapa4" disabled>Avançar</button>
                     </div>
                 </div>
 
-                <div class="botoes-navegacao">
-                    <button type="button" class="btn btn-voltar" id="voltarEtapa6">Voltar</button>
-                    <button type="button" class="btn btn-avancar" id="avancarEtapa6" disabled>Avançar</button>
-                </div>
-            </div>
+                <!-- 5 - Terapeuta -->
+                <div class="etapa" id="etapa5">
+                    <h2 class="etapa-titulo">Selecione o Terapeuta</h2>
+                    <p class="etapa-descricao">Escolha o profissional que irá realizar sua sessão</p>
 
-            <!-- 7 - Confirmação -->
-            <div class="etapa" id="etapa7">
-                <h2 class="etapa-titulo">Confirmação do Agendamento</h2>
-                <p class="etapa-descricao">Revise as informações e confirme seu agendamento</p>
+                    <div class="loading" id="loadingTerapeutas">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Carregando terapeutas...</p>
+                    </div>
 
-                <div class="resumo-agendamento">
-                    <div class="resumo-item">
-                        <span>Unidade:</span>
-                        <strong id="resumoUnidade">-</strong>
+                    <div class="opcoes-grid" id="opcoesTerapeutas" style="display: none;">
+                        <!-- Terapeutas serão carregados aqui via JavaScript -->
                     </div>
-                    <div class="resumo-item">
-                        <span>Serviço:</span>
-                        <strong id="resumoServico">-</strong>
-                    </div>
-                    <div class="resumo-item">
-                        <span>Duração:</span>
-                        <strong id="resumoDuracao">-</strong>
-                    </div>
-                    <div class="resumo-item">
-                        <span>Data e Hora:</span>
-                        <strong id="resumoDataHora">-</strong>
-                    </div>
-                    <div class="resumo-item">
-                        <span>Terapeuta:</span>
-                        <strong id="resumoTerapeuta">-</strong>
-                    </div>
-                    <div class="resumo-item">
-                        <span>Método de Pagamento:</span>
-                        <strong id="resumoPagamento">-</strong>
-                    </div>
-                    <div class="resumo-item">
-                        <span>Valor Total:</span>
-                        <strong id="resumoValor">-</strong>
+
+                    <div class="botoes-navegacao">
+                        <button type="button" class="btn btn-voltar" id="voltarEtapa5">Voltar</button>
+                        <button type="button" class="btn btn-avancar" id="avancarEtapa5" disabled>Avançar</button>
                     </div>
                 </div>
 
-                <div class="botoes-navegacao">
-                    <button type="button" class="btn btn-voltar" id="voltarEtapa7">Voltar</button>
-                    <button type="button" class="btn btn-confirmar" id="confirmarAgendamento">Confirmar
-                        Agendamento</button>
+                <!-- 6 - Método de Pagamento -->
+                <div class="etapa" id="etapa6">
+                    <h2 class="etapa-titulo">Método de Pagamento</h2>
+                    <p class="etapa-descricao">Escolha como deseja pagar pela sua sessão</p>
+
+                    <div class="opcoes-grid">
+                        <div class="opcao-card" data-metodo="cartao">
+                            <i class="fa-solid fa-credit-card"></i>
+                            <h3>Cartão de Crédito</h3>
+                            <p>Pague em até 12x no cartão</p>
+                        </div>
+                        <div class="opcao-card" data-metodo="debito">
+                            <i class="fa-solid fa-money-bill"></i>
+                            <h3>Cartão de Débito</h3>
+                            <p>Pagamento à vista no débito</p>
+                        </div>
+                        <div class="opcao-card" data-metodo="pix">
+                            <i class="fa-solid fa-qrcode"></i>
+                            <h3>PIX</h3>
+                            <p>Pagamento instantâneo</p>
+                        </div>
+                        <div class="opcao-card" data-metodo="dinheiro">
+                            <i class="fa-solid fa-money-bill-wave"></i>
+                            <h3>Dinheiro</h3>
+                            <p>Pagamento em espécie</p>
+                        </div>
+                    </div>
+
+                    <div class="botoes-navegacao">
+                        <button type="button" class="btn btn-voltar" id="voltarEtapa6">Voltar</button>
+                        <button type="button" class="btn btn-avancar" id="avancarEtapa6" disabled>Avançar</button>
+                    </div>
+                </div>
+
+                <!-- 7 - Confirmação -->
+                <div class="etapa" id="etapa7">
+                    <h2 class="etapa-titulo">Confirmação do Agendamento</h2>
+                    <p class="etapa-descricao">Revise as informações e confirme seu agendamento</p>
+
+                    <div class="resumo-agendamento">
+                        <div class="resumo-item">
+                            <span>Unidade:</span>
+                            <strong id="resumoUnidade">-</strong>
+                        </div>
+                        <div class="resumo-item">
+                            <span>Serviço:</span>
+                            <strong id="resumoServico">-</strong>
+                        </div>
+                        <div class="resumo-item">
+                            <span>Duração:</span>
+                            <strong id="resumoDuracao">-</strong>
+                        </div>
+                        <div class="resumo-item">
+                            <span>Data e Hora:</span>
+                            <strong id="resumoDataHora">-</strong>
+                        </div>
+                        <div class="resumo-item">
+                            <span>Terapeuta:</span>
+                            <strong id="resumoTerapeuta">-</strong>
+                        </div>
+                        <div class="resumo-item">
+                            <span>Método de Pagamento:</span>
+                            <strong id="resumoPagamento">-</strong>
+                        </div>
+                        <div class="resumo-item">
+                            <span>Valor Total:</span>
+                            <strong id="resumoValor">-</strong>
+                        </div>
+                    </div>
+
+                    <div class="botoes-navegacao">
+                        <button type="button" class="btn btn-voltar" id="voltarEtapa7">Voltar</button>
+                        <button type="button" class="btn btn-confirmar" id="confirmarAgendamento">Confirmar
+                            Agendamento</button>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Scripts Bootstrap -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+            crossorigin="anonymous"></script>
+
+        <script src="../JavaScript/agendamento.js"></script>
     </div>
+    
+    <!-- Rodapé -->
+    <div class="container-fluid bloco">
+        <div class="footer">
+            <p class="text-center" style="font-size: 20px; color: white; font: weight 900px;">Rokuzen</p>
+            <div class="social-icons text-center ">
+                <a href="https://www.instagram.com/rokuzen.massagem/" target="_blank">
+                    <i class="fab fa-instagram fa-2x rounded-circle p-3 mx-2"></i>
+                </a>
+                <a href="https://www.facebook.com/rokuzen.massagem" target="_blank">
+                    <i class="fa-brands fa-facebook fa-2x rounded-circle p-3 mx-2"></i>
+                </a>
+                <a href="https://www.linkedin.com/company/rokuzen/?trk=top_nav_home " target="_blank">
+                    <i class="fa-brands fa-linkedin fa-2x rounded-circle p-3 mx-2"></i>
+                </a>
+                <a href="HTML/faleConosco.html" target="_blank">
+                    <i class="fa-solid fa-envelope fa-2x rounded-circle p-3 mx-2"></i>
+                </a>
+            </div>
+            <div class="row justify-content-center mt-4">
 
-    <!-- Scripts Bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
-        crossorigin="anonymous"></script>
+                <div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center mb-3">
+                    <a href="tel:+5511919427901" class="contato-item tel text-center">
+                        <i class="fa-solid fa-phone"></i>
+                        <p>+55 11 91942 7901</p>
+                    </a>
+                </div>
 
-    <script src="../JavaScript/agendamento.js"></script>
+                <div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center mb-3">
+                    <a href="mailto:contato@rokuzen.com.br?subject=Contato&body=Olá, gostaria de saber mais sobre..."
+                        class="contato-item text-center">
+                        <i class="fa-solid fa-envelope"></i>
+                        <p>contato@rokuzen.com.br</p>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-8 mx-auto">
+            <hr style="border-top: 1px solid #767676; margin-top:1.5%">
+        </div>
+        <div class="container">
+            <div class="row topicos">
+                <div class="col-sm-6 col-md-4 col-lg-1 mx-3">
+                    <h3 style="font-size: 15px; color: #9ABC74; font-weight: bold;">
+                        <a href="/index.html" style="text-decoration: none; color: inherit;">Rokuzen</a>
+                    </h3>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-1 mx-3">
+                    <h3 style="font-size: 15px; color: #9ABC74; font-weight: bold;">
+                        <a href="/HTML/quemSomos.html" style="text-decoration: none; color: inherit;">Quem Somos</a>
+                    </h3>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-1 mx-3">
+                    <h3 style="font-size: 15px; color: #9ABC74; font-weight: bold;">
+                        <a href="/HTML/unidades.html" style="text-decoration: none; color: inherit;">Unidades</a>
+                    </h3>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-1 mx-3">
+                    <h3 style="font-size: 15px; color: #9ABC74; font-weight: bold;">
+                        <a href="/HTML/noticias.html" style="text-decoration: none; color: inherit;">Notícias</a>
+                    </h3>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-1 mx-3">
+                    <h3 style="font-size: 15px; color: #9ABC74; font-weight: bold;">
+                        <a href="/HTML/servicos.html" style="text-decoration: none; color: inherit;">Serviços</a>
+                    </h3>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-1 mx-3">
+                    <h3 style="font-size: 15px; color: #9ABC74; font-weight: bold;">
+                        <a href="/HTML/faleConosco.html" style="text-decoration: none; color: inherit;">Fale Conosco</a>
+                    </h3>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-1 mx-3">
+                    <h3 style="font-size: 15px; color: #9ABC74; font-weight: bold;">
+                        <a href="/HTML/agendamento.html" style="text-decoration: none; color: inherit;">Agendamento</a>
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 mx-auto">
+            <hr style="border-top: 1px solid #767676; margin-top:1.5%">
+        </div>
+        <footer class="row text-center footer">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="copyright" style="color: #9ABC74; font-size:10px; ">
+                        Todos os direitos reservados ROKUZEN © 2025 | Ícones retirados de Font Awesome
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
