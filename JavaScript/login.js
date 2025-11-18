@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (data.token) {
                             localStorage.setItem("token", data.token);
                         }
-                        
+
                         localStorage.setItem("loggedIn", "true");
                         localStorage.setItem("sessaoId", data.sessaoId);
                         localStorage.setItem("usuario", JSON.stringify(data.usuario));
@@ -64,6 +64,43 @@ document.addEventListener("DOMContentLoaded", function () {
                     alert("Erro: tente novamente mais tarde.");
                 });
         });
+        if (data.mensagem && data.mensagem.includes('sucesso')) {
+            if (data.token) {
+                localStorage.setItem("token", data.token);
+            }
+
+            localStorage.setItem("loggedIn", "true");
+            localStorage.setItem("sessaoId", data.sessaoId);
+            localStorage.setItem("usuario", JSON.stringify(data.usuario));
+            localStorage.setItem("nome", data.usuario.nome);
+            localStorage.setItem("email", data.usuario.email);
+            localStorage.setItem("tipo", data.usuario.tipo);
+
+            alert(data.mensagem);
+            console.log('Redirecionando usuário...');
+
+
+            const tipoUsuario = data.usuario.tipo;
+
+            if (tipoUsuario === 'terapeuta') {
+                console.log('Redirecionando terapeuta para terapeuta.html');
+                window.location.href = "../terapeuta.html";
+            }
+            else if (tipoUsuario === 'master' || tipoUsuario === 'gerente') {
+                window.location.href = "../administrador.html";
+            }
+            else if (tipoUsuario === 'recepcao') {
+                window.location.href = "../recepcao.html";
+            }
+            else {
+                // Usuário comum
+                if (document.referrer && document.referrer.includes('index.html')) {
+                    window.location.href = document.referrer;
+                } else {
+                    window.location.href = "../index.html";
+                }
+            }
+        }
     }
 
     // Cadastro 
@@ -111,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             localStorage.setItem("usuario", JSON.stringify(data.usuario));
                             localStorage.setItem("nome", data.usuario.nome);
                             localStorage.setItem("email", data.usuario.email);
-                            
+
                             alert('Cadastro realizado e login automático!');
                             window.location.href = "../index.html";
                         } else {
@@ -135,12 +172,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const token = localStorage.getItem("token");
     const sessaoId = localStorage.getItem("sessaoId");
-    
+
     if (token || sessaoId) {
-        const endpoint = token ? 
-            `http://localhost:3000/verificar-token` : 
+        const endpoint = token ?
+            `http://localhost:3000/verificar-token` :
             `http://localhost:3000/verificar-sessao/${sessaoId}`;
-            
+
         const options = token ? {
             method: "GET",
             headers: {

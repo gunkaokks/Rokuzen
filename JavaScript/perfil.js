@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    console.log('👤 Usuário logado:', JSON.parse(usuario));
+    console.log(' Usuário logado:', JSON.parse(usuario));
 
     // Inicializar
     carregarInformacoesUsuario();
