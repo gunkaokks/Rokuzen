@@ -4,9 +4,6 @@ const API_URL = 'http://localhost:3000';
 async function descobrirRotasDaAPI() {
     try {
         const token = localStorage.getItem('token');
-        console.log('🔍 Explorando rotas da API...');
-        
-        // Testa várias rotas possíveis
         const rotasParaTestar = [
             '/meu-perfil',
             '/perfil',
@@ -15,7 +12,7 @@ async function descobrirRotasDaAPI() {
             '/users/me',
             '/auth/me'
         ];
-        
+
         for (const rota of rotasParaTestar) {
             try {
                 const response = await fetch(`${API_URL}${rota}`, {
@@ -33,24 +30,15 @@ async function descobrirRotasDaAPI() {
     }
 }
 
-// Chame esta função no DOMContentLoaded
-// descobrirRotasDaAPI();
-
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('✅ perfil.js carregado - DOM pronto');
+    console.log('perfil.js carregado - DOM pronto');
 
     // Verificação de login
     const loggedIn = localStorage.getItem("loggedIn");
     const token = localStorage.getItem("token");
     const usuario = localStorage.getItem("usuario");
 
-    console.log('📋 Dados do localStorage:');
-    console.log('- loggedIn:', loggedIn);
-    console.log('- token:', token ? '✔️ Presente' : '❌ Ausente');
-    console.log('- usuario:', usuario);
-
     if (!loggedIn || loggedIn !== "true" || !token || !usuario) {
-        console.log('❌ Usuário não logado, redirecionando...');
         window.location.href = '../Login/login.html';
         return;
     }
@@ -63,12 +51,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function carregarInformacoesUsuario() {
-    console.log('🔄 Carregando informações do usuário...');
-
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     const token = localStorage.getItem('token');
-
-    console.log('📊 Dados do usuário para exibir:', usuario);
 
     // Atualizar interface
     document.getElementById('userName').textContent = usuario.nome || 'Não informado';
@@ -87,19 +71,13 @@ function carregarInformacoesUsuario() {
     document.getElementById('editEmail').value = usuario.email || '';
     document.getElementById('editPhone').value = usuario.telefone || '';
 
-    console.log('✅ Informações básicas carregadas');
-
     // Carregar agendamentos
     carregarAgendamentos(token);
 }
 
 function carregarAgendamentos(token) {
-    console.log('📅 Tentando carregar agendamentos...');
-
     const appointmentsContainer = document.getElementById('userAppointments');
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-
-    console.log('👤 ID do usuário para filtro:', usuario._id);
 
     fetch(`${API_URL}/agendamentos`, {
         method: 'GET',
@@ -109,11 +87,10 @@ function carregarAgendamentos(token) {
         }
     })
         .then(response => {
-            console.log('📡 Resposta da API - Status:', response.status);
-
             if (response.status === 401) {
                 fazerLogout();
                 throw new Error('Token inválido');
+                window.location.href = '../Login/login.html';
             }
             if (!response.ok) {
                 throw new Error(`Erro HTTP: ${response.status}`);
@@ -121,25 +98,19 @@ function carregarAgendamentos(token) {
             return response.json();
         })
         .then(agendamentos => {
-            console.log('✅ Agendamentos recebidos:', agendamentos);
-
             if (!agendamentos || !Array.isArray(agendamentos)) {
                 throw new Error('Resposta inválida da API');
             }
 
             const usuarioId = JSON.parse(localStorage.getItem('usuario'))._id;
-            console.log('🔍 Filtrando agendamentos para usuário:', usuarioId);
 
             const meusAgendamentos = agendamentos.filter(ag =>
                 ag.usuario_id && ag.usuario_id._id === usuarioId
             );
 
-            console.log('📋 Meus agendamentos filtrados:', meusAgendamentos);
-
             if (meusAgendamentos.length > 0) {
                 let html = '';
                 meusAgendamentos.forEach(agendamento => {
-                    console.log('📝 Processando agendamento:', agendamento);
 
                     const dataAgendamento = agendamento.inicio_sessao ?
                         new Date(agendamento.inicio_sessao).toLocaleString('pt-BR') :
@@ -185,14 +156,11 @@ function carregarAgendamentos(token) {
                 `;
                 });
                 appointmentsContainer.innerHTML = html;
-                console.log('✅ Agendamentos exibidos com sucesso');
             } else {
                 appointmentsContainer.innerHTML = '<p class="text-muted">Nenhum agendamento encontrado.</p>';
-                console.log('ℹ️ Nenhum agendamento encontrado para este usuário');
             }
         })
         .catch(error => {
-            console.error('❌ Erro ao carregar agendamentos:', error);
             appointmentsContainer.innerHTML = `
             <p class="text-muted">Erro ao carregar agendamentos: ${error.message}</p>
             <button class="btn btn-sm btn-primary mt-2" onclick="carregarAgendamentos(localStorage.getItem('token'))">
@@ -242,10 +210,7 @@ async function salvarAlteracoesPerfil() {
         return;
     }
 
-    console.log('🔄 Tentando atualizar perfil...');
-
     try {
-        // Tenta a rota mais comum para edição de perfil
         const response = await fetch(`${API_URL}/meu-perfil`, {
             method: 'PUT',
             headers: {
@@ -259,11 +224,8 @@ async function salvarAlteracoesPerfil() {
             })
         });
 
-        console.log('📡 Status da resposta:', response.status);
-
         if (response.status === 404) {
-            // Se a rota não existe, salva apenas localmente
-            throw new Error('Rota de edição não implementada no backend');
+            throw new Error('Edição não implementada no backend');
         }
 
         if (!response.ok) {
@@ -272,7 +234,6 @@ async function salvarAlteracoesPerfil() {
         }
 
         const data = await response.json();
-        console.log('✅ Perfil atualizado no servidor:', data);
 
         // Atualiza localStorage com dados do servidor
         localStorage.setItem('usuario', JSON.stringify(data.usuario));
@@ -280,31 +241,14 @@ async function salvarAlteracoesPerfil() {
         localStorage.setItem('email', data.usuario.email);
 
         carregarInformacoesUsuario();
-        
+
         const editModal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
         editModal.hide();
 
-        alert('✅ Perfil atualizado com sucesso!');
+        alert('Perfil atualizado com sucesso!');
 
     } catch (error) {
-        console.error('❌ Erro ao atualizar perfil:', error);
-        
-        // FALLBACK: Salva apenas localmente
-        const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-        usuario.nome = novoNome;
-        usuario.email = novoEmail;
-        usuario.telefone = novoTelefone;
-        
-        localStorage.setItem('usuario', JSON.stringify(usuario));
-        localStorage.setItem('nome', novoNome);
-        localStorage.setItem('email', novoEmail);
-        
-        carregarInformacoesUsuario();
-        
-        const editModal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
-        editModal.hide();
-        
-        alert(`✅ Alterações salvas localmente!\n\n💡 Para salvar no servidor, é necessário:\n1. Criar a rota PUT /meu-perfil no backend\n2. Implementar middleware de autenticação\n3. Configurar a atualização no MongoDB\n\nErro técnico: ${error.message}`);
+        console.error('Erro ao atualizar perfil:', error);
     }
 }
 

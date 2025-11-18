@@ -24,47 +24,52 @@ const stringConexaoBD = process.env.CONEXAO_BD
 
 async function conectarAoMongoDB() {
   await mongoose.connect(stringConexaoBD)
+  app.listen(3000, () => console.log("servidor up and running"));
 }
 
 // Middleware
 const authMiddleware = (req, res, next) => {
-    try {
-        const authHeader = req.headers['authorization'];
-        const token = authHeader && authHeader.split(' ')[1];
-
-        if (!token) {
-            return res.status(401).json({ erro: 'Token não fornecido' });
-        }
-
-        const decoded = jwt.verify(token, "chave-secreta");
-        req.usuario = {
-            email: decoded.email,
-            userId: decoded.userId,
-            tipo: decoded.tipo
-        };
-        
-        next();
-    } catch (error) {
-        res.status(401).json({ erro: 'Token inválido' });
-    }
-};
-
-// autenticar token
-function autenticarToken(req, res, next) {
+  try {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ erro: 'Token de acesso requerido' });
+      return res.status(401).json({ erro: 'Token não fornecido' });
     }
 
-    jwt.verify(token, "chave-secreta", (err, usuario) => {
-        if (err) {
-            return res.status(403).json({ erro: 'Token inválido' });
-        }
-        req.usuario = usuario;
-        next();
-    });
+    const decoded = jwt.verify(token, "chave-secreta");
+    req.usuario = {
+      email: decoded.email,
+      userId: decoded.userId,
+      tipo: decoded.tipo
+    };
+
+    next();
+  } catch (error) {
+    res.status(401).json({ erro: 'Token inválido' });
+    fazerLogout();
+    window.location.href = '../Login/login.html';
+  }
+};
+
+// autenticar token
+function autenticarToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ erro: 'Token de acesso requerido' });
+  }
+
+  jwt.verify(token, "chave-secreta", (err, usuario) => {
+    if (err) {
+      fazerLogout();
+      window.location.href = '/Login/login.html';
+      return res.status(403).json({ erro: 'Token inválido' });
+    }
+    req.usuario = usuario;
+    next();
+  });
 }
 
 const sessoesAtivas = {}
@@ -157,7 +162,7 @@ app.post('/login', async (req, res) => {
     const token = jwt.sign(
       tokenPayload,
       "chave-secreta",
-      { expiresIn: "1h" }
+      { expiresIn: "168h" }
     )
 
     const sessaoId = Math.random().toString(36).substring(2)
@@ -188,76 +193,76 @@ app.post('/login', async (req, res) => {
 
 // Editar perfil
 app.put('/meu-perfil', authMiddleware, async (req, res) => {
-    try {
-        const { nome, email, telefone } = req.body;
-        
-        if (!req.usuario.userId) {
-            return res.status(401).json({ erro: 'ID do usuário não encontrado no token' });
-        }
-        
-        const usuario = await Usuario.findByIdAndUpdate(
-            req.usuario.userId,
-            {
-                nome: nome,
-                email: email,
-                telefone: telefone
-            },
-            { new: true, runValidators: true }
-        );
+  try {
+    const { nome, email, telefone } = req.body;
 
-        if (!usuario) {
-            return res.status(404).json({ erro: 'Usuário não encontrado' });
-        }
-        
-        res.json({ 
-            mensagem: 'Perfil atualizado com sucesso!',
-            usuario: {
-                _id: usuario._id,
-                nome: usuario.nome,
-                email: usuario.email,
-                telefone: usuario.telefone,
-                tipo: usuario.tipo,
-                data_criacao: usuario.data_criacao
-            }
-        });
-        
-    } catch (error) {
-        res.status(400).json({ erro: error.message });
+    if (!req.usuario.userId) {
+      return res.status(401).json({ erro: 'ID do usuário não encontrado no token' });
     }
+
+    const usuario = await Usuario.findByIdAndUpdate(
+      req.usuario.userId,
+      {
+        nome: nome,
+        email: email,
+        telefone: telefone
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!usuario) {
+      return res.status(404).json({ erro: 'Usuário não encontrado' });
+    }
+
+    res.json({
+      mensagem: 'Perfil atualizado com sucesso!',
+      usuario: {
+        _id: usuario._id,
+        nome: usuario.nome,
+        email: usuario.email,
+        telefone: usuario.telefone,
+        tipo: usuario.tipo,
+        data_criacao: usuario.data_criacao
+      }
+    });
+
+  } catch (error) {
+    res.status(400).json({ erro: error.message });
+  }
 });
 
 // Pegar perfil MongoDB
 app.get('/meu-perfil', authMiddleware, async (req, res) => {
-    try {
-        const usuario = await Usuario.findById(req.usuario.userId);
-        
-        if (!usuario) {
-            return res.status(404).json({ erro: 'Usuário não encontrado' });
-        }
+  try {
+    const usuario = await Usuario.findById(req.usuario.userId);
 
-        res.json({
-            usuario: {
-                _id: usuario._id,
-                nome: usuario.nome,
-                email: usuario.email,
-                telefone: usuario.telefone,
-                tipo: usuario.tipo,
-                data_criacao: usuario.data_criacao
-            }
-        });
-    } catch (error) {
-        res.status(400).json({ erro: error.message });
+    if (!usuario) {
+      return res.status(404).json({ erro: 'Usuário não encontrado' });
     }
+
+    res.json({
+      usuario: {
+        _id: usuario._id,
+        nome: usuario.nome,
+        email: usuario.email,
+        telefone: usuario.telefone,
+        tipo: usuario.tipo,
+        data_criacao: usuario.data_criacao
+      }
+    });
+  } catch (error) {
+    res.status(400).json({ erro: error.message });
+  }
 });
 
 // Autenticação
 app.get('/debug-auth', authMiddleware, (req, res) => {
-    res.json({
-        success: true,
-        message: 'Token válido!',
-        usuario: req.usuario,
-        timestamp: new Date().toISOString()
-    });
+  res.json({
+    success: true,
+    message: 'Token válido!',
+    usuario: req.usuario,
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Criar unidade
@@ -286,9 +291,9 @@ app.get('/unidades', async (req, res) => {
 // Buscar serviços por unidade
 app.get('/servicos/unidade/:unidadeId', async (req, res) => {
   try {
-    const servicos = await Servico.find({ 
+    const servicos = await Servico.find({
       unidade_id: req.params.unidadeId,
-      ativo: true 
+      ativo: true
     });
     res.json(servicos);
   } catch (erro) {
@@ -424,48 +429,48 @@ app.get('/pontos', async (req, res) => {
 
 // Criar agendamento
 app.post('/agendamentos', autenticarToken, async (req, res) => {
-    try {
-        const usuarioEmail = req.usuario.email;
-        const usuario = await Usuario.findOne({ email: usuarioEmail });
-        
-        if (!usuario) {
-            return res.status(404).json({ erro: 'Usuário não encontrado' });
-        }
+  try {
+    const usuarioEmail = req.usuario.email;
+    const usuario = await Usuario.findOne({ email: usuarioEmail });
 
-        const dadosAgendamento = {
-            usuario_id: usuario._id,
-            terapeuta_id: req.body.terapeuta_id,
-            unidade_id: req.body.unidade_id,
-            servico_id: req.body.servico_id,
-            data_agendamento: new Date(),
-            inicio_sessao: new Date(req.body.inicio_sessao),
-            fim_sessao: new Date(req.body.fim_sessao),
-            observacoes: req.body.observacoes,
-            valor: req.body.valor,
-            criado_por: usuario._id
-        };
-
-        const conflito = await Agendamento.verificarConflito(
-        dadosAgendamento.terapeuta_id, dadosAgendamento.inicio_sessao, dadosAgendamento.fim_sessao
-        );
-        
-        if (conflito) {
-            return res.status(409).json({
-                erro: 'Horário indisponível'
-            });
-        }
-
-        const agendamento = new Agendamento(dadosAgendamento);
-        await agendamento.save();
-
-        res.status(201).json({
-            mensagem: 'Agendamento criado com sucesso!',
-            agendamento
-        });
-
-    } catch (erro) {
-        res.status(400).json({ erro: erro.message });
+    if (!usuario) {
+      return res.status(404).json({ erro: 'Usuário não encontrado' });
     }
+
+    const dadosAgendamento = {
+      usuario_id: usuario._id,
+      terapeuta_id: req.body.terapeuta_id,
+      unidade_id: req.body.unidade_id,
+      servico_id: req.body.servico_id,
+      data_agendamento: new Date(),
+      inicio_sessao: new Date(req.body.inicio_sessao),
+      fim_sessao: new Date(req.body.fim_sessao),
+      observacoes: req.body.observacoes,
+      valor: req.body.valor,
+      criado_por: usuario._id
+    };
+
+    const conflito = await Agendamento.verificarConflito(
+      dadosAgendamento.terapeuta_id, dadosAgendamento.inicio_sessao, dadosAgendamento.fim_sessao
+    );
+
+    if (conflito) {
+      return res.status(409).json({
+        erro: 'Horário indisponível'
+      });
+    }
+
+    const agendamento = new Agendamento(dadosAgendamento);
+    await agendamento.save();
+
+    res.status(201).json({
+      mensagem: 'Agendamento criado com sucesso!',
+      agendamento
+    });
+
+  } catch (erro) {
+    res.status(400).json({ erro: erro.message });
+  }
 });
 
 // Listar agendamentos
