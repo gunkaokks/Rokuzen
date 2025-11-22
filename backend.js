@@ -13,7 +13,6 @@ const Atendimento = require('./ModeloRelacional/atendimentos')
 const Escala = require('./ModeloRelacional/escalas')
 const PontoEletronico = require('./ModeloRelacional/ponto_eletronico')
 const Usuario = require('./ModeloRelacional/usuarios.js')
-const Funcionario = require('./ModeloRelacional/funcionarios')
 
 const app = express()
 app.use(express.json())
@@ -78,6 +77,7 @@ app.get('/', (req, res) => {
   res.json({ mensagem: 'Sistema de atendimentos + autenticação funcionando!' })
 })
 
+// Cadastro
 app.post('/signup', async (req, res) => {
   try {
     const nome = req.body.nome
@@ -325,23 +325,78 @@ app.get('/clientes', async (req, res) => {
 // Criar colaborador
 app.post('/colaboradores', async (req, res) => {
   try {
-    const colaborador = new Colaborador(req.body)
-    await colaborador.save()
-    res.status(201).json(colaborador)
+    const { nome, email, senha, tipo, especialidades, ...outrosDados } = req.body;
+
+    // senha padrão 123456
+    const senhaFinal = senha || "123456";
+    const senhaCriptografada = await bcrypt.hash(senhaFinal, 10);
+
+    const colaborador = new Colaborador({
+      nome,
+      email,
+      senha: senhaCriptografada,
+      tipo,
+      especialidades,
+      ...outrosDados
+    });
+
+    await colaborador.save();
+    res.status(201).json(colaborador);
   } catch (erro) {
-    res.status(400).json({ erro: erro.message })
+    res.status(400).json({ erro: erro.message });
   }
-})
+});
 
 // Listar colaboradores
 app.get('/colaboradores', async (req, res) => {
   try {
     const colaboradores = await Colaborador.find()
-    res.json(colaboradores)
+      .populate('unidade_id', 'nome_unidade');
+    res.json(colaboradores);
   } catch (erro) {
-    res.status(500).json({ erro: erro.message })
+    res.status(500).json({ erro: erro.message });
   }
-})
+});
+
+// Login do colaborador
+app.post('/colaboradores/login', async (req, res) => {
+  try {
+    const { email, senha } = req.body;
+    const colaborador = await Colaborador.findOne({ email });
+    
+    if (!colaborador) {
+      return res.status(401).json({ erro: 'Colaborador não encontrado' });
+    }
+
+    const senhaValida = await bcrypt.compare(senha, colaborador.senha);
+
+    if (!senhaValida) {
+      return res.status(401).json({ erro: 'Senha incorreta' });
+    }
+
+    const token = jwt.sign({ 
+      id: colaborador._id,
+      tipo_colaborador: colaborador.tipo_colaborador,
+      email: colaborador.email
+    }, 'chave-secreta', { expiresIn: '168h' });
+
+    res.json({
+      mensagem: 'Login realizado com sucesso',
+      token: token,
+      sessaoId: 'sessao_' + Date.now(),
+      usuario: {
+        id: colaborador._id,
+        nome: colaborador.nome_colaborador,
+        email: colaborador.email,
+        tipo: colaborador.tipo_colaborador
+      }
+    });
+
+  } catch (erro) {
+    console.error('Erro no login:', erro);
+    res.status(500).json({ erro: 'Erro interno do servidor: ' + erro.message });
+  }
+});
 
 // Criar serviço
 app.post('/servicos', async (req, res) => {
@@ -521,16 +576,46 @@ app.patch('/agendamentos/:id/cancelar', async (req, res) => {
   }
 });
 
-// Criar funcionario
-app.post('/funcionarios', async (req, res) => {
-  try {
-    const funcionario = new Funcionario(req.body)
-    await funcionario.save()
-    res.status(201).json(funcionario)
-  } catch (erro) {
-    res.status(400).json({ erro: erro.message })
-  }
-})
+// Listar terapeuta
+app.get('/agendamentos/terapeuta/:terapeutaId', async (req, res) => {
+    try {
+        const { terapeutaId } = req.params;
+        const { data } = req.query;
+        
+        console.log('📅 Buscando agendamentos para terapeuta:', terapeutaId, 'data:', data);
+
+        // Construir query
+        const query = { 
+            terapeuta_id: terapeutaId,
+            status: 'agendado'
+        };
+        
+        // Se data for fornecida, filtrar por data
+        if (data) {
+            const dataInicio = new Date(`${data}T00:00:00`);
+            const dataFim = new Date(`${data}T23:59:59`);
+            
+            query.inicio_sessao = {
+                $gte: dataInicio,
+                $lte: dataFim
+            };
+        }
+        
+        const agendamentos = await Agendamento.find(query)
+            .populate('usuario_id', 'nome email')
+            .populate('servico_id', 'nome_servico')
+            .populate('unidade_id', 'nome_unidade')
+            .populate('terapeuta_id', 'nome_colaborador')
+            .sort({ inicio_sessao: 1 });
+
+        console.log(`✅ Encontrados ${agendamentos.length} agendamentos`);
+        res.json(agendamentos);
+        
+    } catch (error) {
+        console.error('❌ Erro ao buscar agendamentos:', error);
+        res.status(500).json({ erro: error.message });
+    }
+});
 
 app.listen(3000, () => {
   try {

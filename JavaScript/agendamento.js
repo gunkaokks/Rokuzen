@@ -360,11 +360,13 @@ async function carregarTerapeutas() {
 
         const todosColaboradores = await response.json();
         const terapeutas = todosColaboradores.filter(colaborador =>
-            colaborador.unidade_id === agendamento.unidade.id && 
+            colaborador.unidade_id._id.toString() === agendamento.unidade.id && 
             colaborador.ativo !== false &&
             colaborador.tipo_colaborador === 4
         );
 
+        console.log('Todos colaboradores:', todosColaboradores);
+        console.log('Unidade selecionada:', agendamento.unidade.id);
         console.log('Terapeutas filtrados:', terapeutas);
 
         const container = document.getElementById('opcoesTerapeutas');
@@ -374,6 +376,7 @@ async function carregarTerapeutas() {
 
         if (terapeutas.length === 0) {
             container.innerHTML = '<p class="text-center">Nenhum terapeuta disponível nesta unidade.</p>';
+            console.log('Nenhum terapeuta encontrado para a unidade:', agendamento.unidade.id);
         } else {
             terapeutas.forEach(terapeuta => {
                 const card = document.createElement('div');

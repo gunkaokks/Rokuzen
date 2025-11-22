@@ -24,8 +24,16 @@ const colaboradorSchema = new mongoose.Schema({
     default: 3
   },
   especialidades: [String],
-  email: String,
-  telefone: String
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  telefone: String,
+  senha: {
+    type: String,
+    required: true
+  }
 }, {
   timestamps: true
 });

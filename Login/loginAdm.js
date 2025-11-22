@@ -8,15 +8,11 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    console.log("Formulário encontrado, adicionando event listener...");
-
     loginForm.addEventListener("submit", async function (e) {
         e.preventDefault();
 
         const email = document.getElementById("email").value;
         const senha = document.getElementById("senha").value;
-
-        console.log("Tentando login com:", { email, senha });
 
         if (!email || !senha) {
             alert("Preencha todos os campos.");
@@ -24,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const response = await fetch("http://localhost:3000/login", {
+            const response = await fetch("http://localhost:3000/colaboradores/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -39,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('Resposta do servidor:', data);
 
             if (data.mensagem && data.mensagem.includes('sucesso')) {
-                // Salvar dados no localStorage
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("loggedIn", "true");
                 localStorage.setItem("sessaoId", data.sessaoId);
@@ -50,26 +45,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 alert(data.mensagem);
 
-                const tipoUsuario = data.usuario.tipo;
+                const tipoUsuario = data.usuario.tipo; // ← NÚMERO (1, 2, 3, 4)
                 console.log('Tipo do funcionário:', tipoUsuario);
 
                 switch (tipoUsuario) {
-                    case 'terapeuta':
-                        console.log('Redirecionando terapeuta para terapeuta.html');
-                        window.location.href = "../HTML/terapeuta.html";
-                        break;
-
-                    case 'gerente':
-                    case 'master':
-                        console.log('Redirecionando gerente/master para administrador.html');
+                    case 1:
                         window.location.href = "../HTML/administrador.html";
                         break;
-
-                    case 'recepcao':
-                        console.log('Redirecionando recepcionista para recepcao.html');
+                    case 2:
+                    case 3:
                         window.location.href = "../HTML/recepcao.html";
                         break;
-
+                    case 4:
+                        window.location.href = "../HTML/terapeuta.html";
+                        break;
                     default:
                         alert('Tipo de usuário não permitido para esta área.');
                         break;

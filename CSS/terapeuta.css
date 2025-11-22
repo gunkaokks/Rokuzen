@@ -1,0 +1,105 @@
+.container-terapeuta {
+    max-width: 1200px;
+    margin: 100px auto 50px;
+    padding: 20px;
+}
+
+.agendamento-card {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.agendamento-card:hover {
+    border-color: #9ABC74;
+    transform: translateY(-2px);
+}
+
+.agendamento-card.selecionado {
+    border-color: #9ABC74;
+    background-color: #f8fff8;
+}
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status-agendado {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-andamento {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-finalizado {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.timer-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.timer-display {
+    font-size: 4rem;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    margin: 20px 0;
+}
+
+.btn-sessao {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 10px;
+    margin: 10px;
+    min-width: 200px;
+}
+
+.btn-iniciar {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-finalizar {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-pausa {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+}
+
+.info-box {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
