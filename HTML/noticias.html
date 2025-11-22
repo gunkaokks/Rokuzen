@@ -9,11 +9,13 @@
 
     <script src="/JavaScript/home.js"></script>
     <link href="../CSS/faleConosco.css" rel="stylesheet">
-    <!--Bootstrap-->
+   
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"-->
+    
+    
+    <link href="../CSS/noticias.css" rel="stylesheet">
+    
     <!--Ícones da página-->
     <script src="https://kit.fontawesome.com/e64e449d7c.js" crossorigin="anonymous"></script>
     <!--Plugin de acessibilidade-->
@@ -83,9 +85,60 @@
     </nav>
 
     <div class="container-missao fade-in ">
-        <div class="missao-titulo">Noticias</div>
+        <div class="missao-titulo">Notícias</div>
 
         <!--Divisória-->
         <div class="col-md-8 mx-auto fade-in">
             <hr style="border-top: 1px solid #c1c1c1; margin-top:1.5%">
         </div>
+        <!-- Conteúdo das Notícias -->
+        <div class="container-news fade-in">
+            <div class="row justify-content-center">
+               <!-- Notícia 1 -->
+<div class="col-lg-4 col-md-6 mb-4">
+    <div class="news-card" onclick="location.href='sensacao.html'">
+        <div class="news-image">
+            <img src="../Imagens/riacho.png" alt="Riacho símbolo de bem-estar" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="news-content">
+            <span class="news-date">20 Jan 2020</span>
+            <h3 class="news-title">Sensação de Bem-estar para Você Também!</h3>
+            <p class="news-excerpt">Descubra como alcançar uma sensação de bem-estar através de técnicas simples de relaxamento e meditação.</p>
+            <a href="sensacao.html" class="read-more">Ler mais →</a>
+        </div>
+    </div>
+</div>
+                <!-- Notícia 2 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="news-card" onclick="location.href='noticiaMusica.html'">
+                        <div class="news-image">
+                            <img src="../Imagens/folha.png" alt="Folha símbolo de relaxamento" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="news-content">
+                            <span class="news-date">17 Jan 2020</span>
+                            <h3 class="news-title">Músicas para Dormir e Relaxar a Mente</h3>
+                            <p class="news-excerpt">Conheça nossa playlist especial com músicas instrumentais relaxantes que ajudam na meditação e no sono.</p>
+                            <a href="noticiaMusica.html" class="read-more">Ler mais →</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Notícia 3 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="news-card" onclick="location.href='#'">
+                        <div class="news-image">
+                            <img src="../Imagens/aurico.png" alt="Folha símbolo de relaxamento" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="news-content">
+                            <span class="news-date">15 Jan 2020</span>
+                            <h3 class="news-title">Aliviando ou Acabando com a Dor de Cabeça Através da Meditação</h3>
+                            <p class="news-excerpt">Técnicas de meditação que podem ajudar a aliviar ou eliminar dores de cabeça tensionais.</p>
+                            <a href="#" class="read-more">Ler mais →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
