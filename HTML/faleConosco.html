@@ -4,90 +4,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rokuzen</title>
+    <title>Rokuzen - Contato</title>
     <link rel="shortcut icon" href="../Imagens/LogoTopo.png" type="image/x-icon">
-
-    <script src="/JavaScript/home.js"></script>
-    <link href="../CSS/faleConosco.css" rel="stylesheet">
-    <!--Bootstrap-->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"-->
-    <!--Ícones da página-->
+    
+  
+    
+    <link href="CSS/faleConosco.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/e64e449d7c.js" crossorigin="anonymous"></script>
-    <!--Plugin de acessibilidade-->
-    <!--<script src="https://cdn.userway.org/widget.js" data-account="9AycmX4hek"></script>-->
+    <script src="JavaScript/home.js"></script>
 </head>
 
 <body>
 
-    <!-- Scripts Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
         crossorigin="anonymous"></script>
 
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
-
-    <script src="/JavaScript/home.js"></script>
-
-    <!--Barra de navegação-->
     <nav class="navbar navbar-expand-xxl fixed-top">
         <div class="container-fluid box">
+
             <div class="logo">
                 <a href="../index.html"><img src="../Imagens/logo-rokuzen.png" width="160px" alt="Logo Rokuzen"></a>
             </div>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuMobile"
+                aria-controls="menuMobile" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="menuMobile" aria-labelledby="menuMobileLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    <h5 class="offcanvas-title" id="menuMobileLabel">Menu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
                 </div>
+
                 <div class="offcanvas-body">
                     <ul class="navbar-nav mx-auto">
+                        <li class="nav-item"><a class="nav-link" href="quemSomos.html">Quem somos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="unidades.html">Unidades</a></li>
+                        <li class="nav-item"><a class="nav-link" href="noticias.html">Notícias</a></li>
+                        <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
+                        <li class="nav-item"><a class="nav-link" href="faleConosco.html">Fale conosco</a></li>
 
-                        <li class="nav-item"><a class="nav-link" href="/HTML/quemSomos.html">Quem somos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/HTML/unidades.html">Unidades</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/HTML/noticias.html">Notícias</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/HTML/servicos.html">Serviços</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/HTML/faleConosco.html">Fale conosco</a></li>
                         <li class="nav-item">
-                            <a href="#" id="loginProfileLink"
+                            <a href="../Login/login.html" id="loginProfileLink"
                                 class="login-button login-button-rounded login-profile-link">
                                 <i class="fa-solid fa-user"></i>
                             </a>
                         </li>
-                        <li class="nav-item"><a href="/HTML/agendamento.html" class="agende-button"><b>Agende um
-                                    horário</b></a>
+
+                        <li class="nav-item">
+                            <a href="agendamento.html" class="agende-button"><b>Agende um horário</b></a>
                         </li>
                     </ul>
                 </div>
+
             </div>
         </div>
     </nav>
 
-    <div class="container-missao fade-in ">
-        <div class="missao-titulo">Fale Conosco</div>
+    <div class="container-missao fade-in">
+        <div class="missao-titulo">Contato</div>
 
-        <!--Divisória-->
         <div class="col-md-8 mx-auto fade-in">
             <hr style="border-top: 1px solid #c1c1c1; margin-top:1.5%">
         </div>
 
-        
+        <div class="col-md-8 mx-auto">
+            <div class="text-start mb-4" style="font-size: 14px; color: #4a4a4a;">
+                <a href="../index.html" class="text-success text-decoration-none">Início</a> » Contato
+            </div>
+        </div>
+
+        <div class="col-md-8 mx-auto">
+
+            <h3 class="setor-titulo">Golden Square Shopping</h3>
+            <p><i class="fa-solid fa-house-chimney"></i>
+                Av. Kennedy, 700 | Piso 1 – Jardim do Mar | São Bernardo do Campo – SP | CEP: 09726-253
+            </p>
+            <p><i class="fa-brands fa-whatsapp"></i>
+                WhatsApp: <a href="https://wa.me/5511947495306" class="text-success">+55 11 9 4749 5306</a>
+            </p>
+            <hr>
+
+            <h3 class="setor-titulo">Mooca Plaza Shopping</h3>
+            <p><i class="fa-solid fa-house-chimney"></i>
+                Rua Capitão Pacheco e Chaves, 313 | Piso 1 – Mooca | São Paulo – SP | CEP: 03126-000
+            </p>
+            <p><i class="fa-brands fa-whatsapp"></i>
+                WhatsApp: <a href="https://wa.me/5511950841087" class="text-success">+55 11 9 5084 1087</a>
+            </p>
+            <hr>
+
+            <h3 class="setor-titulo">Grand Plaza Shopping</h3>
+            <p><i class="fa-solid fa-house-chimney"></i>
+                Av. Industrial, 600 | Centro – Santo André – SP | CEP: 09080-510
+            </p>
+            <p><i class="fa-brands fa-whatsapp"></i>
+                WhatsApp: <a href="https://wa.me/551196657900" class="text-success">+55 11 9 1665 7900</a>
+            </p>
+            <hr>
+
+            <h3 class="setor-titulo">Shopping West Plaza</h3>
+            <p><i class="fa-solid fa-house-chimney"></i>
+                Avenida Antártica, 380 | 2º Piso | Bloco A | Loja 3102 – Água Branca | São Paulo – SP | CEP: 01326-000
+            </p>
+            <p><i class="fa-brands fa-whatsapp"></i>
+                WhatsApp: <a href="https://wa.me/551194927901" class="text-success">+55 11 9 4927 7901</a>
+            </p>
+
+            <p class="mt-4">
+                <i class="fa-solid fa-envelope"></i>
+                e-mail: <a href="mailto:contato@rokuzen.com.br" class="text-success">contato@rokuzen.com.br</a>
+            </p>
+        </div>
+
+    </div>
+
+    <footer class="footer text-center mt-5 p-4">
+        <img src="../Imagens/logo-rokuzen.png" width="140" alt="Logo Rokuzen">
+        <p class="mt-3">© Rokuzen 2025 — Todos os direitos reservados.</p>
+    </footer>
+
+</body>
+
+</html>

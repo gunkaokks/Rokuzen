@@ -1,4 +1,4 @@
-/*Cabecalho*/
+
 .navbar {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     height: 80px;
@@ -20,27 +20,36 @@
     margin-top: 5px;
 }
 
+
 .agende-button {
     background-color: #69a625;
     color: #fff;
     font-size: 15px;
-    padding: 4px 15px;
-    padding-top: 40px;
-    padding-bottom: 10px;
-    border-radius: 0px 0px 5px 5px;
-    margin-right: 3.7%;
+    padding: 10px 20px;
+    border-radius: 5px;
     text-decoration: none;
     transition: 0.3s background-color;
     text-align: center;
-    position: fixed;
-    top: -9px;
-    right: 9%;
-    z-index: 1000;
+    display: inline-block;
 }
 
 .agende-button:hover {
     background-color: #487218;
     color: #fff;
+}
+
+
+.offcanvas-body .agende-button {
+    margin: 10px 0;
+    display: block;
+    width: auto;
+    text-align: center;
+}
+
+
+.navbar-nav .agende-button {
+    margin-left: 20px;
+    align-self: center;
 }
 
 .navbar-toggler {
@@ -194,7 +203,7 @@
     display: none;
 }
 
-/* Ajuste de espaçamento dentro do hambúrguer */
+
 .nav-item {
     display: flex;
     justify-content: center;
@@ -217,7 +226,7 @@
 }
 
 .nav-item.dropdown .nav-link {
-    margin-top: 10px;/
+    margin-top: 10px;
 }
 
 .nav-item .dropdown-menu {
@@ -253,4 +262,42 @@ html {
 
 .user-logged-in:hover {
     background-color: #7da35f !important;
+}
+
+.agende-button {
+    background-color: #69a625;
+    color: #fff;
+    font-size: 15px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: 0.3s background-color;
+    display: inline-block;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.agende-button:hover {
+    background-color: #487218;
+    color: #fff;
+}
+
+.offcanvas-body .agende-button {
+    margin: 10px 0;
+    display: block;
+    width: 100%;
+}
+
+.navbar-nav .nav-item:last-child {
+    margin-top: 10px;
+}
+
+@media (min-width: 1200px) {
+    .navbar-nav .agende-button {
+        margin-left: 15px;
+        margin-top: 0;
+    }
+    .navbar-nav .nav-item:last-child {
+        margin-top: 0;
+    }
 }
