@@ -358,13 +358,14 @@ async function carregarTerapeutas() {
             throw new Error(`Erro HTTP: ${response.status}`);
         }
 
-        const colaboradores = await response.json();
-
-        const terapeutas = colaboradores.filter(colab =>
-            colab.tipo_colaborador === 4 && colab.ativo !== false
+        const todosColaboradores = await response.json();
+        const terapeutas = todosColaboradores.filter(colaborador =>
+            colaborador.unidade_id === agendamento.unidade.id && 
+            colaborador.ativo !== false &&
+            colaborador.tipo_colaborador === 4
         );
 
-        console.log('Terapeutas carregados:', terapeutas);
+        console.log('Terapeutas filtrados:', terapeutas);
 
         const container = document.getElementById('opcoesTerapeutas');
         const loading = document.getElementById('loadingTerapeutas');
@@ -372,17 +373,18 @@ async function carregarTerapeutas() {
         container.innerHTML = '';
 
         if (terapeutas.length === 0) {
-            container.innerHTML = '<p class="text-center">Nenhum terapeuta disponível.</p>';
+            container.innerHTML = '<p class="text-center">Nenhum terapeuta disponível nesta unidade.</p>';
         } else {
             terapeutas.forEach(terapeuta => {
                 const card = document.createElement('div');
                 card.className = 'opcao-card';
                 card.setAttribute('data-terapeuta-id', terapeuta._id);
+                
                 card.innerHTML = `
-                        <i class="fa-solid fa-user-md"></i>
-                        <h3>${terapeuta.nome_colaborador}</h3>
-                        <p>${terapeuta.especialidades?.join(', ') || 'Massoterapeuta'}</p>
-                    `;
+                    <i class="fa-solid fa-user-md"></i>
+                    <h3>${terapeuta.nome_colaborador}</h3>
+                    <p>${terapeuta.especialidades?.join(', ') || 'Massoterapeuta'}</p>
+                `;
 
                 card.addEventListener('click', function () {
                     document.querySelectorAll('#opcoesTerapeutas .opcao-card').forEach(c => c.classList.remove('selecionada'));
@@ -392,6 +394,7 @@ async function carregarTerapeutas() {
                         nome: terapeuta.nome_colaborador
                     };
                     document.getElementById('avancarEtapa5').disabled = false;
+                    console.log('Terapeuta selecionado:', agendamento.terapeuta);
                 });
 
                 container.appendChild(card);
@@ -404,10 +407,10 @@ async function carregarTerapeutas() {
         console.error('Erro ao carregar terapeutas:', error);
         const loading = document.getElementById('loadingTerapeutas');
         loading.innerHTML = `
-                <i class="fas fa-exclamation-triangle"></i>
-                <p>Erro ao carregar terapeutas: ${error.message}</p>
-                <button class="btn btn-primary mt-2" onclick="carregarTerapeutas()">Tentar Novamente</button>
-            `;
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>Erro ao carregar terapeutas: ${error.message}</p>
+            <button class="btn btn-primary mt-2" onclick="carregarTerapeutas()">Tentar Novamente</button>
+        `;
     }
 }
 
