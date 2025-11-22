@@ -4,7 +4,7 @@ const escalaSchema = new mongoose.Schema({
   colaborador_id: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Colaborador', 
-    required: true 
+    required: true
   },
   unidade_id: { 
     type: mongoose.Schema.Types.ObjectId, 
@@ -20,11 +20,6 @@ const escalaSchema = new mongoose.Schema({
     required: true 
   },
   dia_semana: String,
-  tipo_escala: { 
-    type: String, 
-    enum: ['normal', 'extra', 'feriado'], 
-    default: 'normal' 
-  }
 }, { 
   timestamps: true 
 });

@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM carregado - procurando formulário...");
 
     const loginForm = document.getElementById("loginFuncionarioForm");
 
@@ -45,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 alert(data.mensagem);
 
-                const tipoUsuario = data.usuario.tipo; // ← NÚMERO (1, 2, 3, 4)
+                const tipoUsuario = data.usuario.tipo;
                 console.log('Tipo do funcionário:', tipoUsuario);
 
                 switch (tipoUsuario) {
@@ -53,6 +52,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         window.location.href = "../HTML/administrador.html";
                         break;
                     case 2:
+                        window.location.href = "../HTML/gerente.html";
+                        break;
                     case 3:
                         window.location.href = "../HTML/recepcao.html";
                         break;

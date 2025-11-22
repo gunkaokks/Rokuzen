@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rokuzen</title>
+    <link rel="shortcut icon" href="../Imagens/LogoTopo.png" type="image/x-icon">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Ícones -->
+    <script src="https://kit.fontawesome.com/e64e449d7c.js" crossorigin="anonymous"></script>
+    <link href="../CSS/gerente.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Barra de navegação -->
+    <nav class="navbar navbar-expand-xxl fixed-top">
+        <div class="container-fluid box">
+            <div class="logo">
+                <a href="../index.html"><img src="../Imagens/logo-rokuzen.png" width="160px" alt="Logo Rokuzen"></a>
+            </div>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item"><a class="nav-link" href="/HTML/gerenteAgendamentos.html">Agendamentos</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/HTML/gerenteFuncionarios.html">Funcionários</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/HTML/gerenteUsuarios.html">Usuários</a></li>
+                        <li class="nav-item">
+                            <a href="/HTML/perfilGerente.html" id="loginProfileLink"
+                                class="login-button login-button-rounded login-profile-link">
+                                <i class="fa-solid fa-user"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Painel de Agendamentos -->
+    <div class="container mt-5 pt-40">
+        <div class="card shadow">
+            <div class="card-header gerente-card text-white d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0">Gerenciar Agendamentos</h1>
+                    <p class="mb-0">Visualize e edite todos os agendamentos do sistema</p>
+                </div>
+                <a href="gerenteIndex.html" class="btn btn-light">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
+            </div>
+
+            <div class="card-body">
+                <!-- Barra de Pesquisa -->
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="pesquisa-agendamentos"
+                                placeholder="Pesquisar agendamentos...">
+                            <span class="input-group-text">
+                                <i class="fas fa-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabela de Agendamentos -->
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="tabela-agendamentos">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Cliente</th>
+                                <th>Serviço</th>
+                                <th>Data</th>
+                                <th>Horário</th>
+                                <th>Terapeuta</th>
+                                <th>Unidade</th>
+                                <th>Status</th>
+                                <th>Criado em</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpo-tabela-agendamentos">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Edição -->
+    <div class="modal fade" id="modalEdicaoAgendamento" tabindex="-1" aria-labelledby="modalEdicaoAgendamentoLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="modalEdicaoAgendamentoLabel">Editar Agendamento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalEdicaoAgendamentoCorpo">
+                    <!-- Conteúdo será carregado via JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="salvarEdicaoAgendamento">Salvar
+                        Alterações</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../JavaScript/gerenteAgendamentos.js"></script>
+</body>
+
+</html>

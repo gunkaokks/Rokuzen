@@ -23,8 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const token = localStorage.getItem("token");
     const usuarioRaw = localStorage.getItem("usuario");
 
-    console.log('Dados do localStorage:', { loggedIn, token, usuario: usuarioRaw });
-
     // Verificando login do terapeuta
     if (!loggedIn || loggedIn !== "true" || !token || !usuarioRaw) {
         window.location.href = '../Login/login-funcionario.html';
@@ -325,5 +323,5 @@ async function agendamentoFinalizado() {
 
 function sair() {
     localStorage.clear();
-    window.location.href = '../Login/login.html';
+    window.location.href = '../Login/login-funcionario.html';
 }

@@ -581,16 +581,13 @@ app.get('/agendamentos/terapeuta/:terapeutaId', async (req, res) => {
     try {
         const { terapeutaId } = req.params;
         const { data } = req.query;
-        
-        console.log('📅 Buscando agendamentos para terapeuta:', terapeutaId, 'data:', data);
 
         // Construir query
         const query = { 
             terapeuta_id: terapeutaId,
             status: 'agendado'
         };
-        
-        // Se data for fornecida, filtrar por data
+
         if (data) {
             const dataInicio = new Date(`${data}T00:00:00`);
             const dataFim = new Date(`${data}T23:59:59`);
@@ -608,11 +605,9 @@ app.get('/agendamentos/terapeuta/:terapeutaId', async (req, res) => {
             .populate('terapeuta_id', 'nome_colaborador')
             .sort({ inicio_sessao: 1 });
 
-        console.log(`✅ Encontrados ${agendamentos.length} agendamentos`);
         res.json(agendamentos);
         
     } catch (error) {
-        console.error('❌ Erro ao buscar agendamentos:', error);
         res.status(500).json({ erro: error.message });
     }
 });
@@ -622,6 +617,5 @@ app.listen(3000, () => {
     conectarAoMongoDB()
   }
   catch (e) {
-    console.log("erro:" + e)
   }
 })
