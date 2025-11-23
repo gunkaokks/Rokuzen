@@ -555,7 +555,6 @@ app.patch('/agendamentos/:id/cancelar', autenticarToken, async (req, res) => {
       return res.status(404).json({ erro: 'Agendamento não encontrado' });
     }
 
-    // Verificar se o usuário é o dono do agendamento ou admin
     const usuario = await Usuario.findOne({ email: req.usuario.email });
     const isDono = agendamento.usuario_id._id.toString() === usuario._id.toString();
     const isAdmin = usuario.tipo === 'admin';
@@ -573,7 +572,6 @@ app.patch('/agendamentos/:id/cancelar', autenticarToken, async (req, res) => {
       return res.status(400).json({ erro: 'Não é possível cancelar um agendamento que já passou' });
     }
 
-    // Verificar política de cancelamento (AGORA: 1 hora de antecedência)
     const horasAntecedencia = 1;
     const agora = new Date();
     const diferencaMs = agendamento.inicio_sessao - agora;
@@ -655,3 +653,34 @@ app.listen(3000, () => {
   catch (e) {
   }
 })
+
+app.put('/alterar-senha', authMiddleware, async (req, res) => {
+  try {
+    const { senhaAtual, novaSenha } = req.body;
+    const usuarioId = req.usuario.userId;
+
+    if (!senhaAtual || !novaSenha) {
+      return res.status(400).json({ erro: 'Senha atual e nova senha são obrigatórias' });
+    }
+
+    const usuario = await Usuario.findById(usuarioId);
+    if (!usuario) {
+      return res.status(404).json({ erro: 'Usuário não encontrado' });
+    }
+
+    const senhaAtualValida = await bcrypt.compare(senhaAtual, usuario.senha);
+    if (!senhaAtualValida) {
+      return res.status(401).json({ erro: 'Senha atual incorreta' });
+    }
+
+    const novaSenhaCriptografada = await bcrypt.hash(novaSenha, 10);
+
+    usuario.senha = novaSenhaCriptografada;
+    await usuario.save();
+
+    res.json({ mensagem: 'Senha alterada com sucesso!' });
+
+  } catch (error) {
+    res.status(400).json({ erro: error.message });
+  }
+});
