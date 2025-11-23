@@ -21,12 +21,9 @@ function verificarAutenticacao() {
 }
 
 function configurarEventos() {
-    // Pesquisa
     document.getElementById('pesquisa-usuarios').addEventListener('input', function() {
         filtrarTabela('corpo-tabela-usuarios', this.value.toLowerCase());
     });
-    
-    // Salvar edição
     document.getElementById('salvarEdicaoUsuario').addEventListener('click', salvarEdicaoUsuario);
 }
 
@@ -50,7 +47,7 @@ async function carregarUsuarios() {
                 <td>${usuario.nome || 'N/A'}</td>
                 <td>${usuario.email || 'N/A'}</td>
                 <td>${usuario.telefone || 'N/A'}</td>
-                <td>${usuario.tipo || 'Cliente'}</td>
+                <td>${usuario.tipo || 'usuario'}</td>
                 <td>${formatarDataHora(usuario.createdAt)}</td>
                 <td>
                     <button class="btn btn-gerente-card-roxo btn-sm" onclick="editarUsuario('${usuario._id}')">
@@ -104,6 +101,16 @@ async function editarUsuario(id) {
                     <label for="telefone" class="form-label">Telefone</label>
                     <input type="tel" class="form-control" id="telefone" value="${usuario.telefone || ''}" required>
                 </div>
+                <div class="mb-3">
+                    <label for="tipo" class="form-label">Tipo</label>
+                    <select class="form-control" id="tipo" required>
+                        <option value="usuario" ${usuario.tipo === 'usuario' ? 'selected' : ''}>Usuário</option>
+                        <option value="terapeuta" ${usuario.tipo === 'terapeuta' ? 'selected' : ''}>Terapeuta</option>
+                        <option value="recepcao" ${usuario.tipo === 'recepcao' ? 'selected' : ''}>Recepção</option>
+                        <option value="gerente" ${usuario.tipo === 'gerente' ? 'selected' : ''}>Gerente</option>
+                        <option value="master" ${usuario.tipo === 'master' ? 'selected' : ''}>Master</option>
+                    </select>
+                </div>
             </form>
         `;
         
@@ -122,10 +129,11 @@ async function salvarEdicaoUsuario() {
         const dados = {
             nome: document.getElementById('nome').value,
             email: document.getElementById('email').value,
-            telefone: document.getElementById('telefone').value
+            telefone: document.getElementById('telefone').value,
+            tipo: document.getElementById('tipo').value
         };
         
-        const response = await fetch(`${API_BASE}/clientes/${usuarioEditando._id}`, {
+        const response = await fetch(`${API_BASE}/usuarios/${usuarioEditando._id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -134,19 +142,22 @@ async function salvarEdicaoUsuario() {
             body: JSON.stringify(dados)
         });
         
-        if (!response.ok) throw new Error('Erro ao salvar alterações');
+        if (!response.ok) {
+            const erro = await response.json();
+            throw new Error(erro.erro || 'Erro ao salvar alterações');
+        }
         
-        carregarUsuarios();
+        await carregarUsuarios();
         modalEdicaoUsuario.hide();
         mostrarSucesso('Alterações salvas com sucesso!');
         
     } catch (error) {
         console.error('Erro:', error);
-        mostrarErro('Erro ao salvar alterações');
+        mostrarErro(error.message);
     }
 }
 
-// Funções auxiliares (reutilizadas do arquivo anterior)
+// Funções auxiliares
 function filtrarTabela(idCorpoTabela, termo) {
     const linhas = document.querySelectorAll(`#${idCorpoTabela} tr`);
     

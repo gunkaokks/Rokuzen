@@ -8,7 +8,6 @@ const Unidade = require('./ModeloRelacional/unidades')
 const Colaborador = require('./ModeloRelacional/colaboradores')
 const Servico = require('./ModeloRelacional/servicos')
 const Agendamento = require('./ModeloRelacional/agendamento')
-const Atendimento = require('./ModeloRelacional/atendimentos')
 const Escala = require('./ModeloRelacional/escalas')
 const PontoEletronico = require('./ModeloRelacional/ponto_eletronico')
 const Usuario = require('./ModeloRelacional/usuarios.js')
@@ -119,8 +118,7 @@ app.post('/signup', async (req, res) => {
         nome: nome,
         email: email,
         telefone: telefone,
-        tipo: tipo,
-        data_criacao: respostaMongo.data_criacao
+        tipo: tipo
       }
     })
   }
@@ -180,8 +178,7 @@ app.post('/login', async (req, res) => {
         nome: usuario.nome,
         email: usuario.email,
         telefone: usuario.telefone,
-        tipo: usuario.tipo,
-        data_criacao: usuario.data_criacao
+        tipo: usuario.tipo
       }
     })
 
@@ -189,6 +186,46 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ erro: 'Erro no servidor' })
   }
 })
+
+// Editar usuário (sómente gerente)
+app.put('/usuarios/:id', authMiddleware, async (req, res) => {
+  try {
+    // Verificar se usuário tem permissão (master, gerente)
+    const usuarioAutenticado = await Usuario.findById(req.usuario.userId);
+    if (!['master', 'gerente'].includes(usuarioAutenticado.tipo)) {
+      return res.status(403).json({ erro: 'Sem permissão para editar usuários' });
+    }
+
+    const { nome, email, telefone, tipo } = req.body;
+    const usuarioId = req.params.id;
+
+    const usuario = await Usuario.findByIdAndUpdate(
+      usuarioId,
+      {
+        nome: nome,
+        email: email,
+        telefone: telefone,
+        tipo: tipo
+      },
+      { new: true, runValidators: true }
+    ).select('-senha');
+
+    if (!usuario) {
+      return res.status(404).json({ erro: 'Usuário não encontrado' });
+    }
+
+    res.json({
+      mensagem: 'Usuário atualizado com sucesso!',
+      usuario: usuario
+    });
+
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ erro: 'Email ou telefone já existe' });
+    }
+    res.status(400).json({ erro: error.message });
+  }
+});
 
 // Editar perfil
 app.put('/meu-perfil', authMiddleware, async (req, res) => {
@@ -220,8 +257,7 @@ app.put('/meu-perfil', authMiddleware, async (req, res) => {
         nome: usuario.nome,
         email: usuario.email,
         telefone: usuario.telefone,
-        tipo: usuario.tipo,
-        data_criacao: usuario.data_criacao
+        tipo: usuario.tipo
       }
     });
 
@@ -245,8 +281,7 @@ app.get('/meu-perfil', authMiddleware, async (req, res) => {
         nome: usuario.nome,
         email: usuario.email,
         telefone: usuario.telefone,
-        tipo: usuario.tipo,
-        data_criacao: usuario.data_criacao
+        tipo: usuario.tipo
       }
     });
   } catch (error) {
