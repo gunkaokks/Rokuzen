@@ -283,3 +283,209 @@ function limparLocalStorage() {
     localStorage.removeItem('email');
     localStorage.removeItem('tipo');
 }
+
+async function cancelarAgendamento(agendamentoId) {
+    if (!confirm('Tem certeza que deseja cancelar este agendamento?')) {
+        return;
+    }
+
+    const token = localStorage.getItem('token');
+
+    try {
+        const response = await fetch(`${API_URL}/agendamentos/${agendamentoId}/cancelar`, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const erro = await response.json();
+            throw new Error(erro.erro || `Erro HTTP: ${response.status}`);
+        }
+
+        const resultado = await response.json();
+
+        alert('Agendamento cancelado com sucesso!');
+
+        carregarAgendamentos(token);
+
+    } catch (error) {
+        console.error('Erro ao cancelar agendamento:', error);
+        alert(`Erro ao cancelar agendamento: ${error.message}`);
+    }
+}
+
+function carregarAgendamentos(token) {
+    const appointmentsContainer = document.getElementById('userAppointments');
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+
+    fetch(`${API_URL}/agendamentos`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.status === 401) {
+                fazerLogout();
+                throw new Error('Token inválido');
+            }
+            if (!response.ok) {
+                throw new Error(`Erro HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(agendamentos => {
+            if (!agendamentos || !Array.isArray(agendamentos)) {
+                throw new Error('Resposta inválida da API');
+            }
+
+            const usuarioId = JSON.parse(localStorage.getItem('usuario'))._id;
+            const meusAgendamentos = agendamentos.filter(ag =>
+                ag.usuario_id && ag.usuario_id._id === usuarioId
+            );
+
+            if (meusAgendamentos.length > 0) {
+                let html = '';
+                meusAgendamentos.forEach(agendamento => {
+                    const dataAgendamento = agendamento.inicio_sessao ?
+                        new Date(agendamento.inicio_sessao).toLocaleString('pt-BR') :
+                        'Não definida';
+
+                    // Verificar se o agendamento pode ser cancelado
+                    const podeCancelar = (agendamento.status === 'agendado' || agendamento.status === 'confirmado');
+                    const dataSessao = agendamento.inicio_sessao ? new Date(agendamento.inicio_sessao) : null;
+                    const agora = new Date();
+                    const horasAntecedencia = 1; // AGORA: 1 hora de antecedência
+                    const dentroDoPrazo = dataSessao && (dataSessao - agora) > (horasAntecedencia * 60 * 60 * 1000);
+                    const tempoRestante = dataSessao ? calcularTempoRestante(dataSessao) : '';
+
+                    html += `
+                <div class="appointment-item mb-3 p-3 border rounded">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Serviço:</strong> ${agendamento.servico_id?.nome_servico || 'Massagem'}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Data:</strong> ${dataAgendamento}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <strong>Unidade:</strong> ${agendamento.unidade_id?.nome_unidade || 'Não definida'}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Status:</strong> 
+                            <span class="badge bg-${getBadgeColor(agendamento.status)}">
+                                ${formatarStatus(agendamento.status)}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <strong>Terapeuta:</strong> ${agendamento.terapeuta_id?.nome_colaborador || 'Não definido'}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Valor:</strong> R$ ${agendamento.valor?.toFixed(2) || '0,00'}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <strong>Tempo restante:</strong> ${tempoRestante}
+                        </div>
+                    </div>
+                    ${agendamento.observacoes ? `
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <strong>Observações:</strong> ${agendamento.observacoes}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <!-- Botão de Cancelar -->
+                    ${podeCancelar && dentroDoPrazo ? `
+                    <div class="row mt-3">
+                        <div class="col-12 text-end">
+                            <button class="btn btn-sm btn-outline-danger" 
+                                    onclick="cancelarAgendamento('${agendamento._id}')"
+                                    title="Cancelar agendamento">
+                                <i class="fa-solid fa-xmark me-1"></i>Cancelar Agendamento
+                            </button>
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    ${podeCancelar && !dentroDoPrazo && dataSessao > agora ? `
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <small class="text-warning">
+                                <i class="fa-solid fa-clock me-1"></i>
+                                Cancelamento permitido até 1 hora antes do horário marcado
+                            </small>
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    ${dataSessao && dataSessao <= agora ? `
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <small class="text-muted">
+                                <i class="fa-solid fa-ban me-1"></i>
+                                Este agendamento já foi realizado ou está em andamento
+                            </small>
+                        </div>
+                    </div>
+                    ` : ''}
+                </div>
+                `;
+                });
+                appointmentsContainer.innerHTML = html;
+            } else {
+                appointmentsContainer.innerHTML = '<p class="text-muted">Nenhum agendamento encontrado.</p>';
+            }
+        })
+        .catch(error => {
+            appointmentsContainer.innerHTML = `
+            <p class="text-muted">Erro ao carregar agendamentos: ${error.message}</p>
+            <button class="btn btn-sm btn-primary mt-2" onclick="carregarAgendamentos(localStorage.getItem('token'))">
+                Tentar Novamente
+            </button>
+        `;
+        });
+}
+
+// Função para calcular tempo restante
+function calcularTempoRestante(dataAgendamento) {
+    const agora = new Date();
+    const diferencaMs = dataAgendamento - agora;
+
+    if (diferencaMs < 0) {
+        return 'Já passou';
+    }
+
+    const diferencaMinutos = Math.floor(diferencaMs / (1000 * 60));
+    const diferencaHoras = Math.floor(diferencaMinutos / 60);
+    const minutosRestantes = diferencaMinutos % 60;
+
+    if (diferencaHoras > 0) {
+        return `${diferencaHoras}h ${minutosRestantes}min`;
+    } else {
+        return `${minutosRestantes} minutos`;
+    }
+}
+
+// Função auxiliar para formatar o status em português
+function formatarStatus(status) {
+    const statusMap = {
+        'agendado': 'Agendado',
+        'confirmado': 'Confirmado',
+        'cancelado': 'Cancelado',
+        'concluído': 'Concluído',
+        'realizado': 'Realizado',
+        'nao_compareceu': 'Não Compareceu'
+    };
+    return statusMap[status] || status;
+}

@@ -363,7 +363,7 @@ app.post('/colaboradores/login', async (req, res) => {
   try {
     const { email, senha } = req.body;
     const colaborador = await Colaborador.findOne({ email });
-    
+
     if (!colaborador) {
       return res.status(401).json({ erro: 'Colaborador não encontrado' });
     }
@@ -374,7 +374,7 @@ app.post('/colaboradores/login', async (req, res) => {
       return res.status(401).json({ erro: 'Senha incorreta' });
     }
 
-    const token = jwt.sign({ 
+    const token = jwt.sign({
       id: colaborador._id,
       tipo_colaborador: colaborador.tipo_colaborador,
       email: colaborador.email
@@ -546,70 +546,106 @@ app.get('/agendamentos', async (req, res) => {
 });
 
 // Cancelar agendamentos
-app.patch('/agendamentos/:id/cancelar', async (req, res) => {
+app.patch('/agendamentos/:id/cancelar', autenticarToken, async (req, res) => {
   try {
-    const agendamento = await Agendamento.findById(req.params.id);
+    const agendamento = await Agendamento.findById(req.params.id)
+      .populate('usuario_id', 'nome email');
 
     if (!agendamento) {
       return res.status(404).json({ erro: 'Agendamento não encontrado' });
+    }
+
+    // Verificar se o usuário é o dono do agendamento ou admin
+    const usuario = await Usuario.findOne({ email: req.usuario.email });
+    const isDono = agendamento.usuario_id._id.toString() === usuario._id.toString();
+    const isAdmin = usuario.tipo === 'admin';
+
+    if (!isDono && !isAdmin) {
+      return res.status(403).json({ erro: 'Você não tem permissão para cancelar este agendamento' });
     }
 
     if (agendamento.status === 'cancelado') {
       return res.status(400).json({ erro: 'Agendamento já está cancelado' });
     }
 
+    // Verificar se já passou do horário
     if (agendamento.inicio_sessao < new Date()) {
-      agendamento.status = 'nao_compareceu';
-    } else {
-      agendamento.status = 'cancelado';
+      return res.status(400).json({ erro: 'Não é possível cancelar um agendamento que já passou' });
     }
+
+    // Verificar política de cancelamento (AGORA: 1 hora de antecedência)
+    const horasAntecedencia = 1;
+    const agora = new Date();
+    const diferencaMs = agendamento.inicio_sessao - agora;
+    const diferencaMinutos = diferencaMs / (1000 * 60);
+
+    if (diferencaMinutos < (horasAntecedencia * 60)) {
+      const minutosRestantes = Math.floor(diferencaMinutos);
+      if (minutosRestantes <= 0) {
+        return res.status(400).json({
+          erro: 'Não é possível cancelar um agendamento que já começou ou está muito próximo do horário'
+        });
+      }
+      return res.status(400).json({
+        erro: `Cancelamento permitido apenas com mais de ${horasAntecedencia} hora de antecedência. Faltam apenas ${minutosRestantes} minutos para o agendamento.`
+      });
+    }
+
+    agendamento.status = 'cancelado';
+    agendamento.cancelado_em = new Date();
+    agendamento.cancelado_por = usuario._id;
 
     await agendamento.save();
 
     res.json({
       mensagem: 'Agendamento cancelado com sucesso!',
-      agendamento
+      agendamento: {
+        _id: agendamento._id,
+        status: agendamento.status,
+        cancelado_em: agendamento.cancelado_em
+      }
     });
 
   } catch (erro) {
+    console.error('Erro ao cancelar agendamento:', erro);
     res.status(400).json({ erro: erro.message });
   }
 });
 
 // Listar terapeuta
 app.get('/agendamentos/terapeuta/:terapeutaId', async (req, res) => {
-    try {
-        const { terapeutaId } = req.params;
-        const { data } = req.query;
+  try {
+    const { terapeutaId } = req.params;
+    const { data } = req.query;
 
-        // Construir query
-        const query = { 
-            terapeuta_id: terapeutaId,
-            status: 'agendado'
-        };
+    // Construir query
+    const query = {
+      terapeuta_id: terapeutaId,
+      status: 'agendado'
+    };
 
-        if (data) {
-            const dataInicio = new Date(`${data}T00:00:00`);
-            const dataFim = new Date(`${data}T23:59:59`);
-            
-            query.inicio_sessao = {
-                $gte: dataInicio,
-                $lte: dataFim
-            };
-        }
-        
-        const agendamentos = await Agendamento.find(query)
-            .populate('usuario_id', 'nome email')
-            .populate('servico_id', 'nome_servico')
-            .populate('unidade_id', 'nome_unidade')
-            .populate('terapeuta_id', 'nome_colaborador')
-            .sort({ inicio_sessao: 1 });
+    if (data) {
+      const dataInicio = new Date(`${data}T00:00:00`);
+      const dataFim = new Date(`${data}T23:59:59`);
 
-        res.json(agendamentos);
-        
-    } catch (error) {
-        res.status(500).json({ erro: error.message });
+      query.inicio_sessao = {
+        $gte: dataInicio,
+        $lte: dataFim
+      };
     }
+
+    const agendamentos = await Agendamento.find(query)
+      .populate('usuario_id', 'nome email')
+      .populate('servico_id', 'nome_servico')
+      .populate('unidade_id', 'nome_unidade')
+      .populate('terapeuta_id', 'nome_colaborador')
+      .sort({ inicio_sessao: 1 });
+
+    res.json(agendamentos);
+
+  } catch (error) {
+    res.status(500).json({ erro: error.message });
+  }
 });
 
 app.listen(3000, () => {
