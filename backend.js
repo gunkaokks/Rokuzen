@@ -5,7 +5,6 @@ const dotenv = require('dotenv')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const Unidade = require('./ModeloRelacional/unidades')
-const Cliente = require('./ModeloRelacional/clientes')
 const Colaborador = require('./ModeloRelacional/colaboradores')
 const Servico = require('./ModeloRelacional/servicos')
 const Agendamento = require('./ModeloRelacional/agendamento')
@@ -301,26 +300,17 @@ app.get('/servicos/unidade/:unidadeId', async (req, res) => {
   }
 });
 
-// Criar cliente
-app.post('/clientes', async (req, res) => {
+// Listar usuários
+app.get('/usuarios', async (req, res) => {
   try {
-    const cliente = new Cliente(req.body)
-    await cliente.save()
-    res.status(201).json(cliente)
+    const usuarios = await Usuario.find()
+      .select('-senha')
+      .sort({ data_criacao: -1 });
+    res.json(usuarios);
   } catch (erro) {
-    res.status(400).json({ erro: erro.message })
+    res.status(500).json({ erro: erro.message });
   }
-})
-
-// Listar clientes
-app.get('/clientes', async (req, res) => {
-  try {
-    const clientes = await Cliente.find()
-    res.json(clientes)
-  } catch (erro) {
-    res.status(500).json({ erro: erro.message })
-  }
-})
+});
 
 // Criar colaborador
 app.post('/colaboradores', async (req, res) => {

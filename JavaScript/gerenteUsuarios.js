@@ -32,7 +32,7 @@ function configurarEventos() {
 
 async function carregarUsuarios() {
     try {
-        const response = await fetch(`${API_BASE}/clientes`, {
+        const response = await fetch(`${API_BASE}/usuarios`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -47,14 +47,13 @@ async function carregarUsuarios() {
         usuarios.forEach(usuario => {
             const linha = document.createElement('tr');
             linha.innerHTML = `
-                <td>${usuario._id}</td>
                 <td>${usuario.nome || 'N/A'}</td>
                 <td>${usuario.email || 'N/A'}</td>
                 <td>${usuario.telefone || 'N/A'}</td>
                 <td>${usuario.tipo || 'Cliente'}</td>
                 <td>${formatarDataHora(usuario.createdAt)}</td>
                 <td>
-                    <button class="btn btn-warning btn-sm" onclick="editarUsuario('${usuario._id}')">
+                    <button class="btn btn-gerente-card-roxo btn-sm" onclick="editarUsuario('${usuario._id}')">
                         <i class="fas fa-edit"></i> Editar
                     </button>
                 </td>
@@ -70,7 +69,7 @@ async function carregarUsuarios() {
 
 async function editarUsuario(id) {
     try {
-        const response = await fetch(`${API_BASE}/clientes`, {
+        const response = await fetch(`${API_BASE}/usuarios`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

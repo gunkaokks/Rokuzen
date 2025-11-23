@@ -47,17 +47,16 @@ async function carregarAgendamentos() {
         agendamentos.forEach(agendamento => {
             const linha = document.createElement('tr');
             linha.innerHTML = `
-                <td>${agendamento._id}</td>
                 <td>${agendamento.usuario_id?.nome || 'N/A'}</td>
                 <td>${agendamento.servico_id?.nome_servico || 'N/A'}</td>
                 <td>${formatarData(agendamento.inicio_sessao)}</td>
                 <td>${formatarHora(agendamento.inicio_sessao)}</td>
                 <td>${agendamento.terapeuta_id?.nome_colaborador || 'N/A'}</td>
                 <td>${agendamento.unidade_id?.nome_unidade || 'N/A'}</td>
-                <td><span class="badge bg-${getStatusBadge(agendamento.status)}">${agendamento.status}</span></td>
+                <td><span class="badge ${getStatusBadge(agendamento.status)}">${agendamento.status}</span></td>
                 <td>${formatarDataHora(agendamento.createdAt)}</td>
                 <td>
-                    <button class="btn gerente-icon-bg-roxo btn-sm" onclick="editarAgendamento('${agendamento._id}')">
+                    <button class="btn btn-gerente-card-roxo btn-sm" onclick="editarAgendamento('${agendamento._id}')">
                         <i class="fas fa-edit"></i> Editar
                     </button>
                 </td>
@@ -211,10 +210,10 @@ function formatarHoraInput(dataString) {
 
 function getStatusBadge(status) {
     switch(status) {
-        case 'agendado': return 'primary';
-        case 'confirmado': return 'success';
-        case 'cancelado': return 'danger';
-        case 'finalizado': return 'secondary';
+        case 'agendado': return 'gerente-card';
+        case 'confirmado': return 'bg-success';
+        case 'cancelado': return 'bg-danger';
+        case 'finalizado': return 'bg-secondary';
         default: return 'light';
     }
 }

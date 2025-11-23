@@ -340,13 +340,61 @@ tr:hover {
 }
 
 .gerente-card {
+    color: white;
     background-color: #69a625 !important;
 }
 
-.gerente-icon-roxo {
-    color: rgb(148, 45, 207)
+.btn-gerente-card {
+    color: white;
+    background-color: #69a625 !important;
 }
 
-.gerente-icon-bg-roxo {
-    background-color: rgb(174, 106, 214)
+.btn-gerente-card:hover {
+    background-color: #74c716 !important;
+    border-color: #487218;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-gerente-icon-roxo {
+    color: rgb(148, 45, 207);
+}
+
+.btn-gerente-icon-roxo:hover {
+    color: rgb(162, 0, 255);
+}
+
+.btn-gerente-card-roxo {
+    background-color: rgb(174, 106, 214);
+    color: white;
+}
+
+.btn-gerente-card-roxo:hover {
+    background-color: rgb(137, 39, 230) !important;
+    color: white !important;
+}
+
+.login-button {
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    color: #69a625;
+    border-radius: 50%;
+    font-size: 20px;
+    display: block;
+    justify-content: center;
+    align-items: right;
+    text-decoration: none;
+    padding: 5px;
+    margin-top: 0px;
+    margin-left: 700px;
+    border: 2px solid #69a625;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #69a625;
+    color: white;
 }

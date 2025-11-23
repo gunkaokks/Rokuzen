@@ -47,7 +47,6 @@ async function carregarFuncionarios() {
         funcionarios.forEach(funcionario => {
             const linha = document.createElement('tr');
             linha.innerHTML = `
-                <td>${funcionario._id}</td>
                 <td>${funcionario.nome || funcionario.nome_colaborador || 'N/A'}</td>
                 <td>${funcionario.email || 'N/A'}</td>
                 <td>${funcionario.telefone || 'N/A'}</td>
@@ -55,7 +54,7 @@ async function carregarFuncionarios() {
                 <td>${funcionario.unidade_id?.nome_unidade || 'N/A'}</td>
                 <td>${formatarDataHora(funcionario.createdAt)}</td>
                 <td>
-                    <button class="btn btn-warning btn-sm" onclick="editarFuncionario('${funcionario._id}')">
+                    <button class="btn btn-gerente-card-roxo btn-sm" onclick="editarFuncionario('${funcionario._id}')">
                         <i class="fas fa-edit"></i> Editar
                     </button>
                 </td>
