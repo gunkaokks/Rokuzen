@@ -2,7 +2,9 @@
 .container-news {
     padding: 40px 0;
 }
-
+.container-fluid {
+    padding: 40px;
+}
 .news-card {
     background: white;
     border-radius: 10px;
