@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rokuzen - Relatórios</title>
+    <link rel="shortcut icon" href="../Imagens/LogoTopo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../CSS/terapeuta.css">
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <!--Ícones da página-->
+    <script src="https://kit.fontawesome.com/e64e449d7c.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-xxl fixed-top">
+        <div class="container-fluid box">
+            <div class="logo">
+                <a href="terapeuta.html"><img src="../Imagens/logo-rokuzen.png" width="160px" alt="Logo Rokuzen"></a>
+            </div>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item"><a class="nav-link" href="/HTML/gerenteAgendamentos.html">Agendamentos</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/HTML/gerenteFuncionarios.html">Funcionários</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/HTML/gerenteUsuarios.html">Usuários</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/HTML/gerenteRelatorios.html">Relatórios</a></li>
+                        <li class="nav-item">
+                            <a href="#" id="loginProfileLink" class="login-button login-button-rounded">
+                                <i class="fa-solid fa-user"></i>
+                            </a>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-missao fade-in">
+        <div class="missao-titulo">Relatórios de Atendimento</div>
+
+        <!--Divisória-->
+        <div class="col-md-8 mx-auto fade-in">
+            <hr style="border-top: 1px solid #c1c1c1; margin-top:1.5%">
+        </div>
+
+        <!-- Barra de Pesquisa -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-search"></i>
+                            </span>
+                            <input type="text" class="form-control" id="barraPesquisa"
+                                placeholder="Pesquisar por nome do terapeuta ou cliente...">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-grid">
+                            <button class="btn btn-primary" id="btnPesquisar">
+                                <i class="fa-solid fa-search me-2"></i>Pesquisar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Relatórios -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fa-solid fa-list me-2"></i>
+                    Todos os Relatórios
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="loading" id="loadingRelatorios">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p>Carregando relatórios...</p>
+                </div>
+
+                <div id="listaRelatorios" style="display: none;">
+                    <!-- Relatórios serão carregados aqui -->
+                </div>
+
+                <div id="semRelatorios" class="empty-state" style="display: none;">
+                    <i class="fa-solid fa-file-excel fa-3x mb-3"></i>
+                    <p>Nenhum relatório encontrado</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes -->
+    <div class="modal fade" id="modalDetalhes" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalhes do Relatório</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="detalhesRelatorio">
+                    <!-- Detalhes serão carregados aqui -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../JavaScript/gerenteRelatorios.js"></script>
+</body>
+
+</html>

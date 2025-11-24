@@ -538,64 +538,64 @@ app.put('/colaboradores/alterar-senha', authMiddleware, async (req, res) => {
 
 // Listar colaboradores por id
 app.get('/colaboradores/:id', authMiddleware, async (req, res) => {
-    try {
-        const colaborador = await Colaborador.findById(req.params.id);
-        
-        if (!colaborador) {
-            return res.status(404).json({ erro: 'Colaborador não encontrado' });
-        }
+  try {
+    const colaborador = await Colaborador.findById(req.params.id);
 
-        res.json({
-            _id: colaborador._id,
-            nome: colaborador.nome_colaborador,
-            email: colaborador.email,
-            telefone: colaborador.telefone,
-            tipo: colaborador.tipo_colaborador,
-            especialidades: colaborador.especialidades,
-            unidade_id: colaborador.unidade_id
-        });
-    } catch (error) {
-        res.status(400).json({ erro: error.message });
+    if (!colaborador) {
+      return res.status(404).json({ erro: 'Colaborador não encontrado' });
     }
+
+    res.json({
+      _id: colaborador._id,
+      nome: colaborador.nome_colaborador,
+      email: colaborador.email,
+      telefone: colaborador.telefone,
+      tipo: colaborador.tipo_colaborador,
+      especialidades: colaborador.especialidades,
+      unidade_id: colaborador.unidade_id
+    });
+  } catch (error) {
+    res.status(400).json({ erro: error.message });
+  }
 });
 
 // Editar colaborador
 app.put('/colaboradores/:id', authMiddleware, async (req, res) => {
-    try {
-        const { nome, email, telefone } = req.body;
-        const colaboradorId = req.params.id;
+  try {
+    const { nome, email, telefone } = req.body;
+    const colaboradorId = req.params.id;
 
-        const colaborador = await Colaborador.findByIdAndUpdate(
-            colaboradorId,
-            {
-                nome_colaborador: nome,
-                email: email,
-                telefone: telefone
-            },
-            { new: true, runValidators: true }
-        );
+    const colaborador = await Colaborador.findByIdAndUpdate(
+      colaboradorId,
+      {
+        nome_colaborador: nome,
+        email: email,
+        telefone: telefone
+      },
+      { new: true, runValidators: true }
+    );
 
-        if (!colaborador) {
-            return res.status(404).json({ erro: 'Colaborador não encontrado' });
-        }
-
-        res.json({
-            mensagem: 'Colaborador atualizado com sucesso!',
-            colaborador: {
-                _id: colaborador._id,
-                nome: colaborador.nome_colaborador,
-                email: colaborador.email,
-                telefone: colaborador.telefone,
-                tipo: colaborador.tipo_colaborador
-            }
-        });
-
-    } catch (error) {
-        if (error.code === 11000) {
-            return res.status(409).json({ erro: 'Email já existe' });
-        }
-        res.status(400).json({ erro: error.message });
+    if (!colaborador) {
+      return res.status(404).json({ erro: 'Colaborador não encontrado' });
     }
+
+    res.json({
+      mensagem: 'Colaborador atualizado com sucesso!',
+      colaborador: {
+        _id: colaborador._id,
+        nome: colaborador.nome_colaborador,
+        email: colaborador.email,
+        telefone: colaborador.telefone,
+        tipo: colaborador.tipo_colaborador
+      }
+    });
+
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ erro: 'Email já existe' });
+    }
+    res.status(400).json({ erro: error.message });
+  }
 });
 
 // Criar serviço
@@ -971,5 +971,44 @@ app.put('/relatorios/:id', authMiddleware, async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({ erro: error.message });
+  }
+});
+
+// Adicionar esta rota para relatórios com filtros
+app.get('/relatorios', authMiddleware, async (req, res) => {
+  try {
+    const { dataInicio, dataFim, terapeutaId, unidadeId } = req.query;
+
+    let query = {};
+
+    // Filtro por data
+    if (dataInicio && dataFim) {
+      query.inicio_atendimento = {
+        $gte: new Date(`${dataInicio}T00:00:00`),
+        $lte: new Date(`${dataFim}T23:59:59`)
+      };
+    }
+
+    // Filtro por terapeuta
+    if (terapeutaId) {
+      query.colaborador_id = terapeutaId;
+    }
+
+    // Filtro por unidade
+    if (unidadeId) {
+      query.unidade_id = unidadeId;
+    }
+
+    const relatorios = await Relatorio.find(query)
+      .populate('cliente_id', 'nome email telefone')
+      .populate('servico_id', 'nome_servico')
+      .populate('unidade_id', 'nome_unidade')
+      .populate('colaborador_id', 'nome_colaborador especialidades')
+      .populate('parceiro_id', 'nome')
+      .sort({ inicio_atendimento: -1 });
+
+    res.json(relatorios);
+  } catch (error) {
+    res.status(500).json({ erro: error.message });
   }
 });
