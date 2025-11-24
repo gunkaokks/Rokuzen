@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Inicializar
     carregarInformacoesUsuario();
+    carregarDadosUsuarioDoServidor();
     configurarEventos();
 });
 
@@ -54,7 +55,6 @@ function carregarInformacoesUsuario() {
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     const token = localStorage.getItem('token');
 
-    // Atualizar interface
     document.getElementById('userName').textContent = usuario.nome || 'Não informado';
     document.getElementById('userEmail').textContent = usuario.email || 'Não informado';
     document.getElementById('userPhone').textContent = usuario.telefone || 'Não informado';
@@ -62,16 +62,16 @@ function carregarInformacoesUsuario() {
     if (usuario.data_criacao) {
         const data = new Date(usuario.data_criacao);
         document.getElementById('userSince').textContent = data.toLocaleDateString('pt-BR');
+    } else if (usuario.createdAt) {
+        const data = new Date(usuario.createdAt);
+        document.getElementById('userSince').textContent = data.toLocaleDateString('pt-BR');
     } else {
         document.getElementById('userSince').textContent = 'Data não disponível';
     }
 
-    // Preencher formulário de edição
     document.getElementById('editName').value = usuario.nome || '';
     document.getElementById('editEmail').value = usuario.email || '';
     document.getElementById('editPhone').value = usuario.telefone || '';
-
-    // Carregar agendamentos
     carregarAgendamentos(token);
 }
 
@@ -234,11 +234,15 @@ async function salvarAlteracoesPerfil() {
         }
 
         const data = await response.json();
+        const usuarioAntigo = JSON.parse(localStorage.getItem('usuario') || '{}');
+        const usuarioAtualizado = {
+            ...data.usuario,
+            data_criacao: usuarioAntigo.data_criacao || usuarioAntigo.createdAt || data.usuario.data_criacao
+        };
 
-        // Atualiza localStorage com dados do servidor
-        localStorage.setItem('usuario', JSON.stringify(data.usuario));
-        localStorage.setItem('nome', data.usuario.nome);
-        localStorage.setItem('email', data.usuario.email);
+        localStorage.setItem('usuario', JSON.stringify(usuarioAtualizado));
+        localStorage.setItem('nome', usuarioAtualizado.nome);
+        localStorage.setItem('email', usuarioAtualizado.email);
 
         carregarInformacoesUsuario();
 
@@ -251,6 +255,42 @@ async function salvarAlteracoesPerfil() {
         console.error('Erro ao atualizar perfil:', error);
     }
 }
+
+async function carregarDadosUsuarioDoServidor() {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/meu-perfil`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem('usuario', JSON.stringify(data.usuario));
+            carregarInformacoesUsuario();
+        }
+    } catch (error) {
+        console.error('Erro ao carregar dados do servidor:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('perfil.js carregado - DOM pronto');
+
+    const loggedIn = localStorage.getItem("loggedIn");
+    const token = localStorage.getItem("token");
+    const usuario = localStorage.getItem("usuario");
+
+    if (!loggedIn || loggedIn !== "true" || !token || !usuario) {
+        window.location.href = '../Login/login.html';
+        return;
+    }
+
+    carregarInformacoesUsuario();
+    carregarDadosUsuarioDoServidor();
+    configurarEventos();
+});
 
 function fazerLogout() {
     if (confirm('Tem certeza que deseja sair?')) {

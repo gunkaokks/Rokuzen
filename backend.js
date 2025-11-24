@@ -282,7 +282,8 @@ app.get('/meu-perfil', authMiddleware, async (req, res) => {
         nome: usuario.nome,
         email: usuario.email,
         telefone: usuario.telefone,
-        tipo: usuario.tipo
+        tipo: usuario.tipo,
+        data_criacao: usuario.createdAt // ADICIONE ESTA LINHA
       }
     });
   } catch (error) {
