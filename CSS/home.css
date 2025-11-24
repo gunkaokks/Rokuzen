@@ -502,10 +502,7 @@ html {
     text-align: center;
 }
 
-.secao4-div-card1:hover {
-    transform: scale(1.05);
-    z-index: 1;
-}
+
 
 @media (max-width: 768px) {
     .secao4-div-card1 {
@@ -545,13 +542,6 @@ html {
     font-size: 50px;
     margin-bottom: 16px;
     color: #69A625;
-}
-
-.content:hover {
-    background-color: #f0f0f0;
-    transform: translateY(-5px);
-    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
-    color: initial;
 }
 
 .content h2 {

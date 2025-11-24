@@ -35,7 +35,7 @@ const agendamentoSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['agendado', 'cancelado', 'nao_compareceu'],
+    enum: ['agendado', 'cancelado', 'nao_compareceu', 'finalizado'],
     default: 'agendado'
   },
   valor: {

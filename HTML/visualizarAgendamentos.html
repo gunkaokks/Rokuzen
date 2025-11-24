@@ -78,7 +78,6 @@
                             <p>Carregando agendamentos...</p>
                         </div>
                         <div id="listaAgendamentos" style="display: none;">
-                            <!-- Aqui serão carregados os agendamentos via JavaScript -->
                         </div>
                     </div>
                 </div>
@@ -119,36 +118,57 @@
                     </div>
                 </div>
 
-                <!-- Timer (inciar sessão etc) -->
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="mb-0">
-                            <i class="fa-solid fa-stopwatch me-2"></i>
-                            Controle de Sessão
-                        </h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="timer-container">
-                            <h4 id="timerTitulo">Pronto para iniciar</h4>
-                            <div class="timer-display" id="timerDisplay">
-                                00:00
-                            </div>
-                            <div class="timer-botoes">
-                                <button id="btnIniciar" class="btn btn-sessao btn-iniciar" disabled>
-                                    <i class="fa-solid fa-play me-2"></i>Iniciar Sessão
-                                </button>
-                                <button id="btnFinalizar" class="btn btn-sessao btn-finalizar" disabled>
-                                    <i class="fa-solid fa-stop me-2"></i>Finalizar Sessão
-                                </button>
-                                <button id="btnPausa" class="btn btn-sessao btn-pausa" style="display: none;">
-                                    <i class="fa-solid fa-clock me-2"></i>Pausa: <span id="timerPausa">10:00</span>
-                                </button>
+                <!-- Selecionar o posto -->
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4 class="mb-0">
+                                <i class="fa-solid fa-couch me-2"></i>
+                                Selecionar Posto de Atendimento
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="selectPosto" class="form-label">Posto Disponível:</label>
+                                <select id="selectPosto" class="form-select">
+                                    <option value="">Selecione um posto...</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Timer (inciar sessão etc) -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fa-solid fa-stopwatch me-2"></i>
+                        Controle de Sessão
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="timer-container">
+                        <h4 id="timerTitulo">Pronto para iniciar</h4>
+                        <div class="timer-display" id="timerDisplay">
+                            00:00
+                        </div>
+                        <div class="timer-botoes">
+                            <button id="btnIniciar" class="btn btn-sessao btn-iniciar" disabled>
+                                <i class="fa-solid fa-play me-2"></i>Iniciar Sessão
+                            </button>
+                            <button id="btnFinalizar" class="btn btn-sessao btn-finalizar" disabled>
+                                <i class="fa-solid fa-stop me-2"></i>Finalizar Sessão
+                            </button>
+                            <button id="btnPausa" class="btn btn-sessao btn-pausa" style="display: none;">
+                                <i class="fa-solid fa-clock me-2"></i>Pausa: <span id="timerPausa">10:00</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
     </div>
 
     <!-- Scripts -->

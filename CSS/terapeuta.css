@@ -290,16 +290,12 @@
       margin-bottom: 25px;
   }
 
-  .card:hover {
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-      transform: translateY(-5px);
-  }
-
   .card-header {
       background-color: var(--branco);
       border-bottom: 1px solid var(--cinza-medio);
       padding: 20px;
       border-radius: 12px 12px 0 0 !important;
+      
   }
 
   .card-header h4 {

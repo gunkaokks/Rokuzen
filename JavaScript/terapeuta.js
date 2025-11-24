@@ -10,15 +10,17 @@ const estado = {
     tempoRestantePausa: 600,
     sessaoEmAndamento: false,
     pausaEmAndamento: false,
-    terapeutaId: null
+    terapeutaId: null,
+    postoSelecionado: null,
+    postosDisponiveis: [],
+    unidadeId: null
 };
 
 // DOM
 let elementos = {};
 
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('=== INICIANDO PAINEL TERAPEUTA ===');
-    
+
     const loggedIn = localStorage.getItem("loggedIn");
     const token = localStorage.getItem("token");
     const usuarioRaw = localStorage.getItem("usuario");
@@ -42,11 +44,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 'usuario': 5
             };
             tipoUsuario = mapeamentoTipo[usuario.tipo];
-            
+
         } else {
             tipoUsuario = usuario.tipo;
         }
-        
+
         if (tipoUsuario !== 4) {
             window.location.href = '../Login/login-funcionario.html';
             return;
@@ -58,10 +60,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         estado.terapeutaId = usuario.id || usuario._id;
-        
+
         inicializarElementos();
         carregarAgendamentos();
         configurarEventListeners();
+        carregarPostosDisponiveis();
 
     } catch (error) {
         window.location.href = '../Login/login-funcionario.html';
@@ -90,6 +93,87 @@ function inicializarElementos() {
 function configurarEventListeners() {
     elementos.btnIniciar.addEventListener('click', iniciarSessao);
     elementos.btnFinalizar.addEventListener('click', finalizarSessao);
+    elementos.selectPosto = document.getElementById('selectPosto');
+    elementos.infoPosto = document.getElementById('infoPosto');
+    elementos.infoPostoNome = document.getElementById('infoPostoNome');
+    elementos.infoPostoTipo = document.getElementById('infoPostoTipo');
+    elementos.infoPostoStatus = document.getElementById('infoPostoStatus');
+}
+
+async function carregarPostosDisponiveis() {
+    try {
+        const token = localStorage.getItem("token");
+        const perfilResponse = await fetch(`${API_URL}/meu-perfil-colaborador`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (perfilResponse.ok) {
+            const perfil = await perfilResponse.json();
+            estado.unidadeId = perfil.colaborador.unidade_id;
+
+            const response = await fetch(`${API_URL}/postos/unidade/${estado.unidadeId}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                estado.postosDisponiveis = await response.json();
+                atualizarSelectPostos();
+            }
+        }
+    } catch (error) {
+        console.error('Erro ao carregar postos:', error);
+    }
+}
+
+function atualizarSelectPostos() {
+    elementos.selectPosto.innerHTML = '<option value="">Selecione um posto...</option>';
+
+    const postosLivres = estado.postosDisponiveis.filter(posto => 
+        posto.status === 'livre'
+    );
+
+    postosLivres.forEach(posto => {
+        const option = document.createElement('option');
+        option.value = posto._id;
+        option.textContent = `${posto.nome_posto} (${posto.tipo_posto}) - ${posto.status === 'livre' ? 'Livre' : 'Agendado'}`;
+        elementos.selectPosto.appendChild(option);
+    });
+
+    elementos.selectPosto.addEventListener('change', function () {
+        const postoId = this.value;
+        if (postoId) {
+            estado.postoSelecionado = estado.postosDisponiveis.find(p => p._id === postoId);
+            atualizarInfoPosto();
+            verificarHabilitacaoBotoes();
+        } else {
+            estado.postoSelecionado = null;
+            elementos.infoPosto.style.display = 'none';
+        }
+    });
+}
+
+function verificarHabilitacaoBotoes() {
+    const podeIniciar = estado.agendamentoSelecionado && estado.postoSelecionado;
+    elementos.btnIniciar.disabled = !podeIniciar;
+}
+
+function atualizarInfoPosto() {
+    const posto = estado.postoSelecionado;
+    elementos.infoPostoNome.textContent = posto.nome_posto;
+
+    const statusConfig = {
+        'livre': { classe: 'bg-success', texto: 'Livre' },
+        'ocupado': { classe: 'bg-danger', texto: 'Ocupado' },
+        'agendado': { classe: 'bg-warning', texto: 'Agendado' },
+        'intervalo': { classe: 'bg-info', texto: 'Intervalo' },
+        'manutencao': { classe: 'bg-secondary', texto: 'Manutenção' }
+    };
+
+    const config = statusConfig[posto.status];
+    elementos.infoPostoStatus.className = `badge ${config.classe}`;
+    elementos.infoPostoStatus.textContent = config.texto;
+
+    elementos.infoPosto.style.display = 'block';
 }
 
 // Carregar agendamentos do terapeuta
@@ -161,7 +245,7 @@ function exibirAgendamentos(agendamentos) {
     `).join('');
 
     document.querySelectorAll('.agendamento-card').forEach(card => {
-        card.addEventListener('click', function() {
+        card.addEventListener('click', function () {
             selecionarAgendamento(this, agendamentos);
         });
     });
@@ -186,7 +270,7 @@ function selecionarAgendamento(card, agendamentos) {
 
 function atualizarInformacoesAgendamento() {
     const agendamento = estado.agendamentoSelecionado;
-    
+
     elementos.infoCliente.textContent = agendamento.cliente_nome || 'Cliente';
     elementos.infoServico.textContent = agendamento.servico_nome;
     elementos.infoHorario.textContent = formatarHorario(agendamento.inicio_sessao);
@@ -200,34 +284,76 @@ function atualizarInformacoesAgendamento() {
     atualizarTimerDisplay();
 }
 
-// Timer da Sessão
-function iniciarSessao() {
-    if (!estado.agendamentoSelecionado || estado.sessaoEmAndamento) return;
+// Iniciar sessão
+async function iniciarSessao() {
+    if (!estado.agendamentoSelecionado || !estado.postoSelecionado || estado.sessaoEmAndamento) return;
 
-    estado.sessaoEmAndamento = true;
-    elementos.btnIniciar.disabled = true;
-    elementos.btnFinalizar.disabled = false;
-    elementos.timerTitulo.textContent = 'Sessão em Andamento';
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(`${API_URL}/postos/${estado.postoSelecionado._id}/status`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                status: 'ocupado',
+            })
+        });
 
-    estado.timerSessao = setInterval(() => {
-        estado.tempoRestanteSessao--;
-        atualizarTimerDisplay();
-
-        if (estado.tempoRestanteSessao <= 0) {
-            finalizarSessao();
+        if (!response.ok) {
+            throw new Error('Erro ao ocupar posto');
         }
-    }, 1000);
+
+        estado.sessaoEmAndamento = true;
+        elementos.btnIniciar.disabled = true;
+        elementos.btnFinalizar.disabled = false;
+        elementos.timerTitulo.textContent = 'Sessão em Andamento';
+        elementos.selectPosto.disabled = true;
+
+        estado.timerSessao = setInterval(() => {
+            estado.tempoRestanteSessao--;
+            atualizarTimerDisplay();
+
+            if (estado.tempoRestanteSessao <= 0) {
+                finalizarSessao();
+            }
+        }, 1000);
+
+    } catch (error) {
+        console.error('Erro ao iniciar sessão:', error);
+        alert('Erro ao iniciar sessão. Tente novamente.');
+    }
 }
 
-function finalizarSessao() {
+async function finalizarSessao() {
     if (estado.timerSessao) {
         clearInterval(estado.timerSessao);
         estado.timerSessao = null;
     }
 
+    try {
+        if (estado.postoSelecionado) {
+            const token = localStorage.getItem("token");
+            await fetch(`${API_URL}/postos/${estado.postoSelecionado._id}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    status: 'intervalo',
+                })
+            });
+        }
+    } catch (error) {
+        console.error('Erro ao liberar posto:', error);
+    }
+
     estado.sessaoEmAndamento = false;
     elementos.btnFinalizar.disabled = true;
     elementos.timerTitulo.textContent = 'Sessão Finalizada';
+    elementos.selectPosto.disabled = false;
 
     iniciarPausa();
     agendamentoFinalizado();
@@ -249,10 +375,30 @@ function iniciarPausa() {
     }, 1000);
 }
 
-function finalizarPausa() {
+async function finalizarPausa() {
     if (estado.timerPausa) {
         clearInterval(estado.timerPausa);
         estado.timerPausa = null;
+    }
+
+    try {
+        if (estado.postoSelecionado) {
+            const token = localStorage.getItem("token");
+            await fetch(`${API_URL}/postos/${estado.postoSelecionado._id}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    status: 'livre'
+                })
+            });
+            
+            console.log('Posto liberado após pausa:', estado.postoSelecionado.nome_posto);
+        }
+    } catch (error) {
+        console.error('Erro ao liberar posto após pausa:', error);
     }
 
     estado.pausaEmAndamento = false;
@@ -260,31 +406,35 @@ function finalizarPausa() {
     elementos.timerTitulo.textContent = 'Pronto para Nova Sessão';
     elementos.timerDisplay.textContent = '00:00';
     estado.agendamentoSelecionado = null;
+    estado.postoSelecionado = null;
     elementos.infoAgendamento.style.display = 'none';
     elementos.infoVazia.style.display = 'block';
+    elementos.infoPosto.style.display = 'none';
+
     carregarAgendamentos();
+    carregarPostosDisponiveis();
 }
 
 // Funções
 function atualizarTimerDisplay() {
     const minutos = Math.floor(estado.tempoRestanteSessao / 60);
     const segundos = estado.tempoRestanteSessao % 60;
-    elementos.timerDisplay.textContent = 
+    elementos.timerDisplay.textContent =
         `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
 }
 
 function atualizarTimerPausa() {
     const minutos = Math.floor(estado.tempoRestantePausa / 60);
     const segundos = estado.tempoRestantePausa % 60;
-    elementos.timerPausa.textContent = 
+    elementos.timerPausa.textContent =
         `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
 }
 
 function formatarHorario(dataISO) {
     const data = new Date(dataISO);
-    return data.toLocaleTimeString('pt-BR', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
+    return data.toLocaleTimeString('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit'
     });
 }
 
@@ -297,7 +447,7 @@ function calcularDuracao(inicio, fim) {
 async function agendamentoFinalizado() {
     try {
         const token = localStorage.getItem("token");
-        
+
         const response = await fetch(`${API_URL}/agendamentos/${estado.agendamentoSelecionado._id}/finalizar`, {
             method: 'PUT',
             headers: {

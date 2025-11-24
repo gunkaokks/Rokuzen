@@ -24,6 +24,15 @@ const colaboradorSchema = new mongoose.Schema({
     default: 3
   },
   especialidades: [String],
+  disponivel: {
+    type: Boolean,
+    default: true
+  },
+  posto_atual: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Posto',
+    default: null
+  },
   email: {
     type: String,
     required: true,

@@ -9,7 +9,8 @@ const Colaborador = require('./ModeloRelacional/colaboradores')
 const Relatorio = require('./ModeloRelacional/relatorios')
 const Servico = require('./ModeloRelacional/servicos')
 const Agendamento = require('./ModeloRelacional/agendamento')
-const Escala = require('./ModeloRelacional/escalas')
+const Posto = require('./ModeloRelacional/postos');
+const Escala = require('./ModeloRelacional/escalas');
 const PontoEletronico = require('./ModeloRelacional/ponto_eletronico')
 const Usuario = require('./ModeloRelacional/usuarios.js')
 
@@ -1079,4 +1080,116 @@ app.post('/agendamentos/recepcao', async (req, res) => {
     console.error('Erro ao criar agendamento pela recepção:', erro);
     res.status(400).json({ erro: erro.message });
   }
-});
+  });
+  
+  // Rotas para Postos
+  app.post('/postos', async (req, res) => {
+    try {
+      const posto = new Posto(req.body);
+      await posto.save();
+      res.status(201).json(posto);
+    } catch (erro) {
+      res.status(400).json({ erro: erro.message });
+    }
+  });
+
+  // Listar postos por unidade
+  app.get('/postos/unidade/:unidadeId', async (req, res) => {
+    try {
+      const postos = await Posto.find({ unidade_id: req.params.unidadeId });
+      res.json(postos);
+    } catch (erro) {
+      console.error('Erro ao buscar postos:', erro);
+      res.status(500).json({ erro: erro.message });
+    }
+  });
+
+  // Atualizar status do posto
+  app.put('/postos/:id/status', authMiddleware, async (req, res) => {
+    try {
+      const { status } = req.body;
+
+      const posto = await Posto.findByIdAndUpdate(
+        req.params.id,
+        { status },
+        { new: true }
+      );
+
+      if (!posto) {
+        return res.status(404).json({ erro: 'Posto não encontrado' });
+      }
+
+      res.json({
+        mensagem: 'Status do posto atualizado com sucesso!',
+        posto
+      });
+    } catch (error) {
+      res.status(400).json({ erro: error.message });
+    }
+  });
+
+  // Rotas para Escalas
+  app.post('/escalas', async (req, res) => {
+    try {
+      const escala = new Escala(req.body);
+      await escala.save();
+
+      // Popular para retornar dados completos
+      await escala.populate('colaborador_id', 'nome_colaborador');
+      await escala.populate('unidade_id', 'nome_unidade');
+
+      res.status(201).json(escala);
+    } catch (erro) {
+      res.status(400).json({ erro: erro.message });
+    }
+  });
+
+  // Listar escalas por colaborador e data
+  app.get('/escalas/colaborador/:colaboradorId', async (req, res) => {
+    try {
+      const { data } = req.query;
+      let query = { colaborador_id: req.params.colaboradorId };
+
+      if (data) {
+        const dataBusca = new Date(data);
+        query.data_escala = {
+          $gte: new Date(dataBusca.setHours(0, 0, 0, 0)),
+          $lte: new Date(dataBusca.setHours(23, 59, 59, 999))
+        };
+      }
+
+      const escalas = await Escala.find(query)
+        .populate('unidade_id', 'nome_unidade')
+        .sort({ data_escala: 1, hora_inicio: 1 });
+
+      res.json(escalas);
+    } catch (erro) {
+      res.status(500).json({ erro: erro.message });
+    }
+  });
+
+  // Verificar disponibilidade em tempo real
+  app.get('/disponibilidade/unidade/:unidadeId', async (req, res) => {
+    try {
+      const { data } = req.query;
+      const dataBusca = data ? new Date(data) : new Date();
+      const postos = await Posto.find({ unidade_id: req.params.unidadeId });
+      const inicioDia = new Date(dataBusca.setHours(0, 0, 0, 0));
+      const fimDia = new Date(dataBusca.setHours(23, 59, 59, 999));
+
+      const escalas = await Escala.find({
+        unidade_id: req.params.unidadeId,
+        data_escala: { $gte: inicioDia, $lte: fimDia },
+        ativo: true
+      }).populate('colaborador_id', 'nome_colaborador tipo_colaborador especialidades');
+
+      res.json({
+        postos,
+        escalas,
+        horario_consulta: new Date()
+      });
+    } catch (error) {
+      console.error('Erro na disponibilidade:', error);
+      res.status(500).json({ erro: error.message });
+    }
+  });
