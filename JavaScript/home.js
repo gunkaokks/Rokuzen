@@ -22,14 +22,20 @@ document.addEventListener("DOMContentLoaded", function () {
 function atualizarLinkLoginPerfil() {
     const loginProfileLink = document.getElementById('loginProfileLink');
     const loggedIn = localStorage.getItem('loggedIn');
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
 
     if (loginProfileLink) {
         if (loggedIn === 'true') {
-            // Usuário está logado - vai para o perfil
-            loginProfileLink.href = '/HTML/perfil.html';
+            const tiposFuncionarios = [1, 2, 3, 4];
+
+            if (tiposFuncionarios.includes(usuario.tipo) || 
+                ['master', 'gerente', 'recepcao', 'terapeuta'].includes(usuario.tipo)) {
+                loginProfileLink.href = '/HTML/perfilColaborador.html';
+            } else {
+                loginProfileLink.href = '/HTML/perfil.html';
+            }
             loginProfileLink.classList.add('user-logged-in');
         } else {
-            // Usuário não está logado - vai para o login
             loginProfileLink.href = '/Login/login.html';
         }
     }
@@ -44,18 +50,3 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-
-function atualizarLinkLoginPerfil() {
-    const loginProfileLinks = document.querySelectorAll('#loginProfileLink, .login-profile-link');
-    const loggedIn = localStorage.getItem('loggedIn');
-
-    loginProfileLinks.forEach(link => {
-        if (loggedIn === 'true') {
-            link.href = '/HTML/perfil.html';
-            link.classList.add('user-logged-in');
-        } else {
-            link.href = '/Login/login.html';
-            link.classList.remove('user-logged-in');
-        }
-    });
-}
