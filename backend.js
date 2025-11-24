@@ -1014,3 +1014,69 @@ app.get('/relatorios', authMiddleware, async (req, res) => {
     res.status(500).json({ erro: error.message });
   }
 });
+
+// Rota específica para criação de agendamento pela recepção
+app.post('/agendamentos/recepcao', async (req, res) => {
+  try {
+    const { nome, email, telefone, servico_id, terapeuta_id, unidade_id, inicio_sessao, fim_sessao, observacoes } = req.body;
+
+    // Verificar se o usuário existe, se não, criar
+    let usuario = await Usuario.findOne({ email: email });
+
+    if (!usuario) {
+      // Criar novo usuário
+      const senhaCriptografada = await bcrypt.hash('123456', 10);
+      usuario = new Usuario({
+        nome: nome,
+        email: email,
+        senha: senhaCriptografada,
+        telefone: telefone,
+        tipo: 'usuario'
+      });
+      await usuario.save();
+    }
+
+    // Verificar conflito de horário
+    const conflito = await Agendamento.verificarConflito(
+      terapeuta_id, inicio_sessao, fim_sessao
+    );
+
+    if (conflito) {
+      return res.status(409).json({
+        erro: 'Horário indisponível'
+      });
+    }
+
+    // Criar agendamento
+    const agendamento = new Agendamento({
+      usuario_id: usuario._id,
+      terapeuta_id: terapeuta_id,
+      unidade_id: unidade_id,
+      servico_id: servico_id,
+      data_agendamento: new Date(),
+      inicio_sessao: new Date(inicio_sessao),
+      fim_sessao: new Date(fim_sessao),
+      observacoes: observacoes,
+      valor: 0,
+      criado_por: usuario._id
+    });
+
+    await agendamento.save();
+
+    // Popular os dados para retorno
+    const agendamentoPopulado = await Agendamento.findById(agendamento._id)
+      .populate('usuario_id', 'nome email telefone')
+      .populate('terapeuta_id', 'nome_colaborador')
+      .populate('unidade_id', 'nome_unidade')
+      .populate('servico_id', 'nome_servico');
+
+    res.status(201).json({
+      mensagem: 'Agendamento criado com sucesso!',
+      agendamento: agendamentoPopulado
+    });
+
+  } catch (erro) {
+    console.error('Erro ao criar agendamento pela recepção:', erro);
+    res.status(400).json({ erro: erro.message });
+  }
+});

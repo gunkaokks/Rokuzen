@@ -14,6 +14,29 @@
       font-family: "Roboto", sans-serif;
   }
 
+  /* Botão de voltar */
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #69a625;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: bold;
+    margin-top: 5%;
+}
+
+.back-button:hover {
+    background-color: #3b5f13;
+    color: #fff;
+}
+
+
   body {
       background-color: #f9f9f9;
       color: #333;
@@ -215,9 +238,9 @@
       margin-top: 10px;
   }
 
-  .btn-primary:hover {
-      background-color: var(--verde-secundario);
-      border-color: var(--verde-secundario);
+ .btn-primary:hover {
+      background-color: var(--verde-secundario) !important;
+      border-color: var(--verde-secundario) !important;
       transform: translateY(-2px);
   }
 
