@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const Unidade = require('./ModeloRelacional/unidades')
 const Colaborador = require('./ModeloRelacional/colaboradores')
+const Relatorio = require('./ModeloRelacional/relatorios')
 const Servico = require('./ModeloRelacional/servicos')
 const Agendamento = require('./ModeloRelacional/agendamento')
 const Escala = require('./ModeloRelacional/escalas')
@@ -502,6 +503,38 @@ app.post('/colaboradores/login', async (req, res) => {
   }
 });
 
+// Alterar senha do colaborador
+app.put('/colaboradores/alterar-senha', authMiddleware, async (req, res) => {
+  try {
+    const { senhaAtual, novaSenha } = req.body;
+    const colaboradorId = req.usuario.userId;
+
+    if (!senhaAtual || !novaSenha) {
+      return res.status(400).json({ erro: 'Senha atual e nova senha são obrigatórias' });
+    }
+
+    const colaborador = await Colaborador.findById(colaboradorId);
+    if (!colaborador) {
+      return res.status(404).json({ erro: 'Colaborador não encontrado' });
+    }
+
+    const senhaAtualValida = await bcrypt.compare(senhaAtual, colaborador.senha);
+    if (!senhaAtualValida) {
+      return res.status(401).json({ erro: 'Senha atual incorreta' });
+    }
+
+    const novaSenhaCriptografada = await bcrypt.hash(novaSenha, 10);
+    colaborador.senha = novaSenhaCriptografada;
+    await colaborador.save();
+
+    res.json({ mensagem: 'Senha alterada com sucesso!' });
+
+  } catch (error) {
+    console.error('Erro ao alterar senha do colaborador:', error);
+    res.status(400).json({ erro: error.message });
+  }
+});
+
 // Listar colaboradores por id
 app.get('/colaboradores/:id', authMiddleware, async (req, res) => {
     try {
@@ -820,6 +853,7 @@ app.listen(3000, () => {
   }
 })
 
+// Alterar senha
 app.put('/alterar-senha', authMiddleware, async (req, res) => {
   try {
     const { senhaAtual, novaSenha } = req.body;
@@ -850,10 +884,6 @@ app.put('/alterar-senha', authMiddleware, async (req, res) => {
     res.status(400).json({ erro: error.message });
   }
 });
-
-const Relatorio = require('./ModeloRelacional/relatorios')
-
-// E substituir todas as rotas de /atendimentos para /relatorios:
 
 // Criar relatório
 app.post('/relatorios', async (req, res) => {

@@ -193,7 +193,7 @@ async function alterarSenha(event) {
             throw new Error('A senha deve ter pelo menos 6 caracteres');
         }
 
-        const response = await fetch(`${API_BASE}/alterar-senha`, {
+        let response = await fetch(`${API_BASE}/colaboradores/alterar-senha`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -205,13 +205,27 @@ async function alterarSenha(event) {
             })
         });
 
+        if (response.status === 404) {
+            response = await fetch(`${API_BASE}/alterar-senha`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    senhaAtual: senhaAtual,
+                    novaSenha: novaSenha
+                })
+            });
+        }
+
         if (!response.ok) {
             const erroData = await response.json();
             throw new Error(erroData.erro || 'Erro ao alterar senha');
         }
 
         const resultado = await response.json();
-
+        
         document.getElementById('formAlterarSenha').reset();
         mostrarAlerta('Senha alterada com sucesso!', 'success');
 
