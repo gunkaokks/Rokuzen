@@ -14,43 +14,94 @@ function verificarAutenticacao() {
         window.location.href = '/Login/login-funcionario.html';
         return;
     }
+    console.log('Token encontrado:', token);
+    console.log('Usuário no localStorage:', localStorage.getItem('usuario'));
 }
 
 function configurarEventos() {
-    // Formulário de informações pessoais
     document.getElementById('formInformacoesPessoais').addEventListener('submit', salvarInformacoesPessoais);
-
-    // Formulário de alterar senha
     document.getElementById('formAlterarSenha').addEventListener('submit', alterarSenha);
 }
 
 async function carregarDadosPerfil() {
     try {
         mostrarLoading(true);
+        console.log('Iniciando carregamento do perfil...');
 
-        const response = await fetch(`${API_BASE}/meu-perfil`, {
+        const usuarioData = JSON.parse(localStorage.getItem('usuario'));
+        if (!usuarioData || !usuarioData.id) {
+            throw new Error('Dados do usuário não encontrados');
+        }
+
+        const userId = usuarioData.id;
+        console.log('UserID:', userId);
+
+        let response = await fetch(`${API_BASE}/colaboradores/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
 
-        if (!response.ok) throw new Error('Erro ao carregar perfil');
+        console.log('Resposta do perfil colaborador:', response.status);
+
+        if (!response.ok) {
+            console.log('Buscando na lista geral de colaboradores...');
+            await carregarDadosAlternativo(usuarioData);
+            return;
+        }
 
         const data = await response.json();
-        preencherDadosPerfil(data.usuario);
+        console.log('Dados recebidos:', data);
+
+        preencherDadosPerfil(data);
         mostrarLoading(false);
 
     } catch (error) {
-        console.error('Erro:', error);
-        mostrarAlerta('Erro ao carregar dados do perfil', 'error');
+        console.error('Erro detalhado:', error);
+        mostrarAlerta('Erro ao carregar dados do perfil: ' + error.message, 'error');
         mostrarLoading(false);
     }
 }
 
-function preencherDadosPerfil(usuario) {
-    document.getElementById('inputNome').value = usuario.nome || '';
-    document.getElementById('inputEmail').value = usuario.email || '';
-    document.getElementById('inputTelefone').value = usuario.telefone || '';
+async function carregarDadosAlternativo(usuarioData) {
+    try {
+        const response = await fetch(`${API_BASE}/colaboradores`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Não foi possível carregar os dados dos colaboradores');
+        }
+
+        const colaboradores = await response.json();
+        console.log('Lista de colaboradores:', colaboradores);
+
+        const colaborador = colaboradores.find(col => 
+            col._id === usuarioData.id || col.email === usuarioData.email
+        );
+
+        if (colaborador) {
+            console.log('Colaborador encontrado:', colaborador);
+            preencherDadosPerfil(colaborador);
+        } else {
+            throw new Error('Colaborador não encontrado na lista');
+        }
+
+        mostrarLoading(false);
+    } catch (error) {
+        console.error('Erro no método alternativo:', error);
+        mostrarAlerta('Erro ao carregar dados: ' + error.message, 'error');
+        mostrarLoading(false);
+    }
+}
+
+function preencherDadosPerfil(dados) {
+    console.log('Preenchendo dados:', dados);
+    document.getElementById('inputNome').value = dados.nome_colaborador || dados.nome || '';
+    document.getElementById('inputEmail').value = dados.email || '';
+    document.getElementById('inputTelefone').value = dados.telefone || '';
 }
 
 async function salvarInformacoesPessoais(event) {
@@ -67,12 +118,20 @@ async function salvarInformacoesPessoais(event) {
             telefone: document.getElementById('inputTelefone').value
         };
 
-        // Validação básica
+        console.log('Enviando dados:', dados);
+
         if (!dados.nome || !dados.email) {
             throw new Error('Nome e e-mail são obrigatórios');
         }
 
-        const response = await fetch(`${API_BASE}/meu-perfil`, {
+        const usuarioData = JSON.parse(localStorage.getItem('usuario'));
+        const userId = usuarioData.id;
+
+        if (!userId) {
+            throw new Error('ID do usuário não encontrado');
+        }
+
+        const response = await fetch(`${API_BASE}/colaboradores/${userId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -81,16 +140,26 @@ async function salvarInformacoesPessoais(event) {
             body: JSON.stringify(dados)
         });
 
+        console.log('Resposta salvar colaborador:', response.status);
+
         if (!response.ok) {
             const erroData = await response.json();
             throw new Error(erroData.erro || 'Erro ao salvar alterações');
         }
 
         const resultado = await response.json();
+        console.log('Salvou com sucesso:', resultado);
+
+        if (usuarioData) {
+            usuarioData.nome = dados.nome;
+            usuarioData.email = dados.email;
+            localStorage.setItem('usuario', JSON.stringify(usuarioData));
+        }
+        
         mostrarAlerta('Informações salvas com sucesso!', 'success');
 
     } catch (error) {
-        console.error('Erro:', error);
+        console.error('Erro ao salvar:', error);
         mostrarAlerta(error.message, 'error');
     } finally {
         const btnSalvar = document.getElementById('btnSalvarInfo');
@@ -98,6 +167,78 @@ async function salvarInformacoesPessoais(event) {
         btnSalvar.innerHTML = '<i class="fas fa-save me-2"></i>Salvar Alterações';
     }
 }
+
+function preencherDadosPerfil(dados) {
+    console.log('Preenchendo dados:', dados);
+    document.getElementById('inputNome').value = dados.nome || '';
+    document.getElementById('inputEmail').value = dados.email || '';
+    document.getElementById('inputTelefone').value = dados.telefone || '';
+}
+
+async function salvarInformacoesPessoais(event) {
+    event.preventDefault();
+
+    try {
+        const btnSalvar = document.getElementById('btnSalvarInfo');
+        btnSalvar.disabled = true;
+        btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
+
+        const dados = {
+            nome: document.getElementById('inputNome').value,
+            email: document.getElementById('inputEmail').value,
+            telefone: document.getElementById('inputTelefone').value
+        };
+
+        console.log('Enviando dados:', dados);
+
+        if (!dados.nome || !dados.email) {
+            throw new Error('Nome e e-mail são obrigatórios');
+        }
+
+        // Tenta primeiro salvar como colaborador
+        let response = await fetch(`${API_BASE}/meu-perfil-colaborador`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(dados)
+        });
+
+        console.log('Resposta salvar colaborador:', response.status);
+
+        if (response.status === 404) {
+            // Se não encontrar endpoint de colaborador, tenta o normal
+            response = await fetch(`${API_BASE}/meu-perfil`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(dados)
+            });
+            console.log('Resposta salvar usuário:', response.status);
+        }
+
+        if (!response.ok) {
+            const erroData = await response.json();
+            throw new Error(erroData.erro || 'Erro ao salvar alterações');
+        }
+
+        const resultado = await response.json();
+        console.log('Salvou com sucesso:', resultado);
+        mostrarAlerta('Informações salvas com sucesso!', 'success');
+
+    } catch (error) {
+        console.error('Erro ao salvar:', error);
+        mostrarAlerta(error.message, 'error');
+    } finally {
+        const btnSalvar = document.getElementById('btnSalvarInfo');
+        btnSalvar.disabled = false;
+        btnSalvar.innerHTML = '<i class="fas fa-save me-2"></i>Salvar Alterações';
+    }
+}
+
 async function alterarSenha(event) {
     event.preventDefault();
     
@@ -110,7 +251,6 @@ async function alterarSenha(event) {
         const novaSenha = document.getElementById('inputNovaSenha').value;
         const confirmarSenha = document.getElementById('inputConfirmarSenha').value;
 
-        // Validações
         if (!senhaAtual) {
             throw new Error('Digite a senha atual');
         }
@@ -146,7 +286,6 @@ async function alterarSenha(event) {
 
         const resultado = await response.json();
         
-        // Limpar formulário
         document.getElementById('formAlterarSenha').reset();
         mostrarAlerta('Senha alterada com sucesso!', 'success');
 
@@ -162,21 +301,23 @@ async function alterarSenha(event) {
 
 function mostrarAlerta(mensagem, tipo) {
     const alertContainer = document.getElementById('alertContainer');
-    const alertClass = tipo === 'success' ? 'alert-success' : 'alert-error';
+    const alertClass = tipo === 'success' ? 'alert-success' : 'alert-danger';
     const icon = tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle';
 
     const alertDiv = document.createElement('div');
-    alertDiv.className = `alert ${alertClass} fade-in`;
+    alertDiv.className = `alert ${alertClass} alert-dismissible fade show`;
     alertDiv.innerHTML = `
-                <i class="fas ${icon} me-2"></i>
-                ${mensagem}
-            `;
+        <i class="fas ${icon} me-2"></i>
+        ${mensagem}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
 
     alertContainer.appendChild(alertDiv);
 
-    // Remover alerta após 5 segundos
     setTimeout(() => {
-        alertDiv.remove();
+        if (alertDiv.parentNode) {
+            alertDiv.remove();
+        }
     }, 5000);
 }
 
@@ -187,8 +328,24 @@ function mostrarLoading(mostrar) {
     if (mostrar) {
         btnSalvar.disabled = true;
         btnAlterar.disabled = true;
+        btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Carregando...';
     } else {
         btnSalvar.disabled = false;
         btnAlterar.disabled = false;
+        btnSalvar.innerHTML = '<i class="fas fa-save me-2"></i>Salvar Alterações';
+    }
+}
+
+function fazerLogout() {
+    if (confirm('Deseja realmente sair?')) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('loggedIn');
+        localStorage.removeItem('sessaoId');
+        localStorage.removeItem('usuario');
+        localStorage.removeItem('nome');
+        localStorage.removeItem('email');
+        localStorage.removeItem('tipo');
+        localStorage.removeItem('userId');
+        window.location.href = '/Login/login-funcionario.html';
     }
 }

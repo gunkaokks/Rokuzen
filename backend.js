@@ -289,6 +289,71 @@ app.get('/meu-perfil', authMiddleware, async (req, res) => {
   }
 });
 
+// Listar perfil do colaborador
+app.get('/meu-perfil-colaborador', authMiddleware, async (req, res) => {
+  try {
+    const colaborador = await Colaborador.findById(req.usuario.userId);
+
+    if (!colaborador) {
+      return res.status(404).json({ erro: 'Colaborador não encontrado' });
+    }
+
+    res.json({
+      colaborador: {
+        _id: colaborador._id,
+        nome: colaborador.nome_colaborador,
+        email: colaborador.email,
+        telefone: colaborador.telefone,
+        tipo: colaborador.tipo_colaborador,
+        especialidades: colaborador.especialidades,
+        unidade_id: colaborador.unidade_id
+      }
+    });
+  } catch (error) {
+    res.status(400).json({ erro: error.message });
+  }
+});
+
+// Editar perfil do colaborador
+app.put('/meu-perfil-colaborador', authMiddleware, async (req, res) => {
+  try {
+    const { nome, email, telefone } = req.body;
+
+    if (!req.usuario.userId) {
+      return res.status(401).json({ erro: 'ID do colaborador não encontrado no token' });
+    }
+
+    const colaborador = await Colaborador.findByIdAndUpdate(
+      req.usuario.userId,
+      {
+        nome_colaborador: nome,
+        email: email,
+        telefone: telefone
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!colaborador) {
+      return res.status(404).json({ erro: 'Colaborador não encontrado' });
+    }
+
+    res.json({
+      mensagem: 'Perfil atualizado com sucesso!',
+      colaborador: {
+        _id: colaborador._id,
+        nome: colaborador.nome_colaborador,
+        email: colaborador.email,
+        telefone: colaborador.telefone,
+        tipo: colaborador.tipo_colaborador,
+        especialidades: colaborador.especialidades
+      }
+    });
+
+  } catch (error) {
+    res.status(400).json({ erro: error.message });
+  }
+});
+
 // Autenticação
 app.get('/debug-auth', authMiddleware, (req, res) => {
   res.json({
@@ -421,6 +486,67 @@ app.post('/colaboradores/login', async (req, res) => {
     console.error('Erro no login:', erro);
     res.status(500).json({ erro: 'Erro interno do servidor: ' + erro.message });
   }
+});
+
+app.get('/colaboradores/:id', authMiddleware, async (req, res) => {
+    try {
+        const colaborador = await Colaborador.findById(req.params.id);
+        
+        if (!colaborador) {
+            return res.status(404).json({ erro: 'Colaborador não encontrado' });
+        }
+
+        res.json({
+            _id: colaborador._id,
+            nome: colaborador.nome_colaborador,
+            email: colaborador.email,
+            telefone: colaborador.telefone,
+            tipo: colaborador.tipo_colaborador,
+            especialidades: colaborador.especialidades,
+            unidade_id: colaborador.unidade_id
+        });
+    } catch (error) {
+        res.status(400).json({ erro: error.message });
+    }
+});
+
+// Editar colaborador
+app.put('/colaboradores/:id', authMiddleware, async (req, res) => {
+    try {
+        const { nome, email, telefone } = req.body;
+        const colaboradorId = req.params.id;
+
+        const colaborador = await Colaborador.findByIdAndUpdate(
+            colaboradorId,
+            {
+                nome_colaborador: nome,
+                email: email,
+                telefone: telefone
+            },
+            { new: true, runValidators: true }
+        );
+
+        if (!colaborador) {
+            return res.status(404).json({ erro: 'Colaborador não encontrado' });
+        }
+
+        res.json({
+            mensagem: 'Colaborador atualizado com sucesso!',
+            colaborador: {
+                _id: colaborador._id,
+                nome: colaborador.nome_colaborador,
+                email: colaborador.email,
+                telefone: colaborador.telefone,
+                tipo: colaborador.tipo_colaborador
+            }
+        });
+
+    } catch (error) {
+        if (error.code === 11000) {
+            return res.status(409).json({ erro: 'Email já existe' });
+        }
+        res.status(400).json({ erro: error.message });
+    }
 });
 
 // Criar serviço

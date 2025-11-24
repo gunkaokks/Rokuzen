@@ -34,13 +34,17 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('Resposta do servidor:', data);
 
             if (data.mensagem && data.mensagem.includes('sucesso')) {
+                const tokenPayload = {
+                    userId: data.usuario.id,
+                    email: data.usuario.email,
+                    nome: data.usuario.nome,
+                    tipo: data.usuario.tipo
+                };
+
                 localStorage.setItem("token", data.token);
+                localStorage.setItem("userId", data.usuario.id);
                 localStorage.setItem("loggedIn", "true");
-                localStorage.setItem("sessaoId", data.sessaoId);
                 localStorage.setItem("usuario", JSON.stringify(data.usuario));
-                localStorage.setItem("nome", data.usuario.nome);
-                localStorage.setItem("email", data.usuario.email);
-                localStorage.setItem("tipo", data.usuario.tipo);
 
                 alert(data.mensagem);
 
