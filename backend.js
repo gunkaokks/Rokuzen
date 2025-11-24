@@ -188,7 +188,7 @@ app.post('/login', async (req, res) => {
   }
 })
 
-// Editar usuário (sómente gerente)
+// Editar usuário (somente gerente)
 app.put('/usuarios/:id', authMiddleware, async (req, res) => {
   try {
     // Verificar se usuário tem permissão (master, gerente)
@@ -562,7 +562,7 @@ app.get('/colaboradores/:id', authMiddleware, async (req, res) => {
 // Editar colaborador
 app.put('/colaboradores/:id', authMiddleware, async (req, res) => {
   try {
-    const { nome, email, telefone } = req.body;
+    const { nome, email, telefone, especialidades } = req.body;
     const colaboradorId = req.params.id;
 
     const colaborador = await Colaborador.findByIdAndUpdate(
@@ -570,7 +570,8 @@ app.put('/colaboradores/:id', authMiddleware, async (req, res) => {
       {
         nome_colaborador: nome,
         email: email,
-        telefone: telefone
+        telefone: telefone,
+        especialidades: especialidades
       },
       { new: true, runValidators: true }
     );
@@ -586,7 +587,8 @@ app.put('/colaboradores/:id', authMiddleware, async (req, res) => {
         nome: colaborador.nome_colaborador,
         email: colaborador.email,
         telefone: colaborador.telefone,
-        tipo: colaborador.tipo_colaborador
+        tipo: colaborador.tipo_colaborador,
+        especialidades: colaborador.especialidades
       }
     });
 

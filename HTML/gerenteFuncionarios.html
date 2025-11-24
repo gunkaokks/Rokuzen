@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rokuzen - Gerenciar Funcionários</title>
+    <title>Rokuzen</title>
     <link rel="shortcut icon" href="../Imagens/LogoTopo.png" type="image/x-icon">
 
     <!-- Bootstrap -->
@@ -61,12 +61,15 @@
         </div>
 
         <!-- Painel de Funcionários -->
-        <div class="container mt-5 pt-40">
+        <div class="container mt-5 mb-5">
             <div class="card shadow">
                 <div class="card-header gerente-card text-white d-flex justify-content-between align-items-center">
                     <a href="gerente.html" class="btn btn-light">
                         <i class="fas fa-arrow-left"></i> Voltar
                     </a>
+                    <button class="btn btn-light" onclick="abrirModalCadastro()">
+                        <i class="fas fa-plus"></i> Novo Funcionário
+                    </button>
                 </div>
 
                 <div class="card-body">
@@ -91,6 +94,7 @@
                                     <th>Nome</th>
                                     <th>Email</th>
                                     <th>Telefone</th>
+                                    <th>Ocupação</th>
                                     <th>Especialidade</th>
                                     <th>Unidade</th>
                                     <th>Criado em</th>
@@ -101,6 +105,61 @@
                                 <!-- Dados serão carregados via JavaScript -->
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para Cadastro -->
+        <div class="modal fade" id="modalCadastroFuncionario" tabindex="-1"
+            aria-labelledby="modalCadastroFuncionarioLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header gerente-card text-white">
+                        <h5 class="modal-title" id="modalCadastroFuncionarioLabel">Cadastrar Novo Funcionário</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form-cadastro-funcionario">
+                            <div class="mb-3">
+                                <label for="nome-cadastro" class="form-label">Nome *</label>
+                                <input type="text" class="form-control" id="nome-cadastro" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email-cadastro" class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="email-cadastro" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="telefone-cadastro" class="form-label">Telefone *</label>
+                                <input type="tel" class="form-control" id="telefone-cadastro" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="tipo-cadastro" class="form-label">Tipo *</label>
+                                <select class="form-control" id="tipo-cadastro" required>
+                                    <option value="">Selecione o tipo</option>
+                                    <option value="recepcionista">Recepcionista</option>
+                                    <option value="terapeuta">Terapeuta</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="especialidades-cadastro" class="form-label">Especialidades</label>
+                                <input type="text" class="form-control" id="especialidades-cadastro"
+                                    placeholder="Separe por vírgula (ex: Massagem, Acupuntura)">
+                            </div>
+                            <div class="mb-3">
+                                <label for="unidade-cadastro" class="form-label">Unidade</label>
+                                <select class="form-control" id="unidade-cadastro">
+                                    <option value="">Selecione a unidade</option>
+                                    <!-- Unidades serão carregadas via JavaScript -->
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-gerente-card"
+                            id="salvarCadastroFuncionario">Cadastrar</button>
                     </div>
                 </div>
             </div>
