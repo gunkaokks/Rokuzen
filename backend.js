@@ -709,3 +709,95 @@ app.put('/alterar-senha', authMiddleware, async (req, res) => {
     res.status(400).json({ erro: error.message });
   }
 });
+
+const Relatorio = require('./ModeloRelacional/relatorios')
+
+// E substituir todas as rotas de /atendimentos para /relatorios:
+
+// Criar relatório
+app.post('/relatorios', async (req, res) => {
+  try {
+    const relatorio = new Relatorio(req.body)
+    await relatorio.save()
+    res.status(201).json(relatorio)
+  } catch (erro) {
+    res.status(400).json({ erro: erro.message })
+  }
+})
+
+// Listar relatórios
+app.get('/relatorios', async (req, res) => {
+  try {
+    const relatorios = await Relatorio.find()
+      .populate('cliente_id', 'nome email telefone')
+      .populate('servico_id', 'nome_servico')
+      .populate('unidade_id', 'nome_unidade')
+      .populate('colaborador_id', 'nome_colaborador especialidades')
+      .populate('parceiro_id', 'nome')
+    res.json(relatorios)
+  } catch (erro) {
+    res.status(500).json({ erro: erro.message })
+  }
+})
+
+// Buscar relatórios por terapeuta
+app.get('/relatorios/terapeuta/:terapeutaId', authMiddleware, async (req, res) => {
+  try {
+    const { terapeutaId } = req.params;
+
+    const relatorios = await Relatorio.find({ colaborador_id: terapeutaId })
+      .populate('cliente_id', 'nome email telefone')
+      .populate('servico_id', 'nome_servico')
+      .populate('unidade_id', 'nome_unidade')
+      .populate('colaborador_id', 'nome_colaborador especialidades')
+      .sort({ createdAt: -1 });
+
+    res.json(relatorios);
+  } catch (error) {
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+// Buscar relatório específico
+app.get('/relatorios/:id', authMiddleware, async (req, res) => {
+  try {
+    const relatorio = await Relatorio.findById(req.params.id)
+      .populate('cliente_id', 'nome email telefone')
+      .populate('servico_id', 'nome_servico')
+      .populate('unidade_id', 'nome_unidade')
+      .populate('colaborador_id', 'nome_colaborador especialidades');
+
+    if (!relatorio) {
+      return res.status(404).json({ erro: 'Relatório não encontrado' });
+    }
+
+    res.json(relatorio);
+  } catch (error) {
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+// Atualizar relatório
+app.put('/relatorios/:id', authMiddleware, async (req, res) => {
+  try {
+    const relatorio = await Relatorio.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    ).populate('cliente_id', 'nome email telefone')
+      .populate('servico_id', 'nome_servico')
+      .populate('unidade_id', 'nome_unidade')
+      .populate('colaborador_id', 'nome_colaborador especialidades');
+
+    if (!relatorio) {
+      return res.status(404).json({ erro: 'Relatório não encontrado' });
+    }
+
+    res.json({
+      mensagem: 'Relatório atualizado com sucesso!',
+      relatorio
+    });
+  } catch (error) {
+    res.status(400).json({ erro: error.message });
+  }
+});
