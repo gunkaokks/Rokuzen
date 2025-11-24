@@ -448,7 +448,7 @@ app.get('/colaboradores', async (req, res) => {
   }
 });
 
-// Login do colaborador
+// Login do colaboradores
 app.post('/colaboradores/login', async (req, res) => {
   try {
     const { email, senha } = req.body;
@@ -464,16 +464,30 @@ app.post('/colaboradores/login', async (req, res) => {
       return res.status(401).json({ erro: 'Senha incorreta' });
     }
 
-    const token = jwt.sign({
-      id: colaborador._id,
-      tipo_colaborador: colaborador.tipo_colaborador,
-      email: colaborador.email
-    }, 'chave-secreta', { expiresIn: '168h' });
+    const tokenPayload = {
+      userId: colaborador._id.toString(),
+      email: colaborador.email,
+      nome: colaborador.nome_colaborador,
+      tipo: colaborador.tipo_colaborador || 'colaborador'
+    };
+
+    const token = jwt.sign(
+      tokenPayload,
+      "chave-secreta",
+      { expiresIn: "168h" }
+    );
+
+    const sessaoId = Math.random().toString(36).substring(2);
+    sessoesAtivas[sessaoId] = {
+      usuarioId: colaborador._id,
+      email: colaborador.email,
+      tipo: colaborador.tipo_colaborador
+    };
 
     res.json({
       mensagem: 'Login realizado com sucesso',
       token: token,
-      sessaoId: 'sessao_' + Date.now(),
+      sessaoId: sessaoId,
       usuario: {
         id: colaborador._id,
         nome: colaborador.nome_colaborador,
@@ -488,6 +502,7 @@ app.post('/colaboradores/login', async (req, res) => {
   }
 });
 
+// Listar colaboradores por id
 app.get('/colaboradores/:id', authMiddleware, async (req, res) => {
     try {
         const colaborador = await Colaborador.findById(req.params.id);

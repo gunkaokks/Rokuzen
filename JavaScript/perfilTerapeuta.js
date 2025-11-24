@@ -14,8 +14,6 @@ function verificarAutenticacao() {
         window.location.href = '/Login/login-funcionario.html';
         return;
     }
-    console.log('Token encontrado:', token);
-    console.log('Usuário no localStorage:', localStorage.getItem('usuario'));
 }
 
 function configurarEventos() {
@@ -26,7 +24,6 @@ function configurarEventos() {
 async function carregarDadosPerfil() {
     try {
         mostrarLoading(true);
-        console.log('Iniciando carregamento do perfil...');
 
         const usuarioData = JSON.parse(localStorage.getItem('usuario'));
         if (!usuarioData || !usuarioData.id) {
@@ -34,27 +31,22 @@ async function carregarDadosPerfil() {
         }
 
         const userId = usuarioData.id;
-        console.log('UserID:', userId);
 
-        let response = await fetch(`${API_BASE}/colaboradores/${userId}`, {
+        // Tenta primeiro o endpoint específico para perfil do colaborador
+        let response = await fetch(`${API_BASE}/meu-perfil-colaborador`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
 
-        console.log('Resposta do perfil colaborador:', response.status);
-
-        if (!response.ok) {
-            console.log('Buscando na lista geral de colaboradores...');
-            await carregarDadosAlternativo(usuarioData);
+        if (response.ok) {
+            const data = await response.json();
+            preencherDadosPerfil(data);
+            mostrarLoading(false);
             return;
         }
 
-        const data = await response.json();
-        console.log('Dados recebidos:', data);
-
-        preencherDadosPerfil(data);
-        mostrarLoading(false);
+        await carregarDadosAlternativo(usuarioData);
 
     } catch (error) {
         console.error('Erro detalhado:', error);
@@ -76,14 +68,12 @@ async function carregarDadosAlternativo(usuarioData) {
         }
 
         const colaboradores = await response.json();
-        console.log('Lista de colaboradores:', colaboradores);
 
-        const colaborador = colaboradores.find(col => 
+        const colaborador = colaboradores.find(col =>
             col._id === usuarioData.id || col.email === usuarioData.email
         );
 
         if (colaborador) {
-            console.log('Colaborador encontrado:', colaborador);
             preencherDadosPerfil(colaborador);
         } else {
             throw new Error('Colaborador não encontrado na lista');
@@ -98,10 +88,10 @@ async function carregarDadosAlternativo(usuarioData) {
 }
 
 function preencherDadosPerfil(dados) {
-    console.log('Preenchendo dados:', dados);
-    document.getElementById('inputNome').value = dados.nome_colaborador || dados.nome || '';
-    document.getElementById('inputEmail').value = dados.email || '';
-    document.getElementById('inputTelefone').value = dados.telefone || '';
+    const dadosColaborador = dados.colaborador || dados;
+    document.getElementById('inputNome').value = dadosColaborador.nome_colaborador || dadosColaborador.nome || '';
+    document.getElementById('inputEmail').value = dadosColaborador.email || '';
+    document.getElementById('inputTelefone').value = dadosColaborador.telefone || '';
 }
 
 async function salvarInformacoesPessoais(event) {
@@ -118,84 +108,10 @@ async function salvarInformacoesPessoais(event) {
             telefone: document.getElementById('inputTelefone').value
         };
 
-        console.log('Enviando dados:', dados);
-
         if (!dados.nome || !dados.email) {
             throw new Error('Nome e e-mail são obrigatórios');
         }
 
-        const usuarioData = JSON.parse(localStorage.getItem('usuario'));
-        const userId = usuarioData.id;
-
-        if (!userId) {
-            throw new Error('ID do usuário não encontrado');
-        }
-
-        const response = await fetch(`${API_BASE}/colaboradores/${userId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(dados)
-        });
-
-        console.log('Resposta salvar colaborador:', response.status);
-
-        if (!response.ok) {
-            const erroData = await response.json();
-            throw new Error(erroData.erro || 'Erro ao salvar alterações');
-        }
-
-        const resultado = await response.json();
-        console.log('Salvou com sucesso:', resultado);
-
-        if (usuarioData) {
-            usuarioData.nome = dados.nome;
-            usuarioData.email = dados.email;
-            localStorage.setItem('usuario', JSON.stringify(usuarioData));
-        }
-        
-        mostrarAlerta('Informações salvas com sucesso!', 'success');
-
-    } catch (error) {
-        console.error('Erro ao salvar:', error);
-        mostrarAlerta(error.message, 'error');
-    } finally {
-        const btnSalvar = document.getElementById('btnSalvarInfo');
-        btnSalvar.disabled = false;
-        btnSalvar.innerHTML = '<i class="fas fa-save me-2"></i>Salvar Alterações';
-    }
-}
-
-function preencherDadosPerfil(dados) {
-    console.log('Preenchendo dados:', dados);
-    document.getElementById('inputNome').value = dados.nome || '';
-    document.getElementById('inputEmail').value = dados.email || '';
-    document.getElementById('inputTelefone').value = dados.telefone || '';
-}
-
-async function salvarInformacoesPessoais(event) {
-    event.preventDefault();
-
-    try {
-        const btnSalvar = document.getElementById('btnSalvarInfo');
-        btnSalvar.disabled = true;
-        btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
-
-        const dados = {
-            nome: document.getElementById('inputNome').value,
-            email: document.getElementById('inputEmail').value,
-            telefone: document.getElementById('inputTelefone').value
-        };
-
-        console.log('Enviando dados:', dados);
-
-        if (!dados.nome || !dados.email) {
-            throw new Error('Nome e e-mail são obrigatórios');
-        }
-
-        // Tenta primeiro salvar como colaborador
         let response = await fetch(`${API_BASE}/meu-perfil-colaborador`, {
             method: 'PUT',
             headers: {
@@ -205,11 +121,15 @@ async function salvarInformacoesPessoais(event) {
             body: JSON.stringify(dados)
         });
 
-        console.log('Resposta salvar colaborador:', response.status);
+        if (response.status === 401 || response.status === 404) {
+            const usuarioData = JSON.parse(localStorage.getItem('usuario'));
+            const userId = usuarioData.id;
 
-        if (response.status === 404) {
-            // Se não encontrar endpoint de colaborador, tenta o normal
-            response = await fetch(`${API_BASE}/meu-perfil`, {
+            if (!userId) {
+                throw new Error('ID do usuário não encontrado');
+            }
+
+            response = await fetch(`${API_BASE}/colaboradores/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -217,16 +137,22 @@ async function salvarInformacoesPessoais(event) {
                 },
                 body: JSON.stringify(dados)
             });
-            console.log('Resposta salvar usuário:', response.status);
         }
 
         if (!response.ok) {
-            const erroData = await response.json();
+            const erroData = await response.json().catch(() => ({ erro: 'Erro desconhecido' }));
             throw new Error(erroData.erro || 'Erro ao salvar alterações');
         }
 
         const resultado = await response.json();
-        console.log('Salvou com sucesso:', resultado);
+
+        const usuarioData = JSON.parse(localStorage.getItem('usuario'));
+        if (usuarioData) {
+            usuarioData.nome = dados.nome;
+            usuarioData.email = dados.email;
+            localStorage.setItem('usuario', JSON.stringify(usuarioData));
+        }
+
         mostrarAlerta('Informações salvas com sucesso!', 'success');
 
     } catch (error) {
@@ -241,7 +167,7 @@ async function salvarInformacoesPessoais(event) {
 
 async function alterarSenha(event) {
     event.preventDefault();
-    
+
     try {
         const btnAlterar = document.getElementById('btnAlterarSenha');
         btnAlterar.disabled = true;
@@ -266,7 +192,7 @@ async function alterarSenha(event) {
         if (novaSenha.length < 6) {
             throw new Error('A senha deve ter pelo menos 6 caracteres');
         }
-        
+
         const response = await fetch(`${API_BASE}/alterar-senha`, {
             method: 'PUT',
             headers: {
@@ -285,7 +211,7 @@ async function alterarSenha(event) {
         }
 
         const resultado = await response.json();
-        
+
         document.getElementById('formAlterarSenha').reset();
         mostrarAlerta('Senha alterada com sucesso!', 'success');
 
