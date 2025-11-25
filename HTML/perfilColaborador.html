@@ -14,129 +14,139 @@
     <!--Ícones da página-->
     <script src="https://kit.fontawesome.com/e64e449d7c.js" crossorigin="anonymous"></script>
     <!--Plugin de acessibilidade-->
-    <!--<script src="https://cdn.userway.org/widget.js" data-account="9AycmX4hek"></script>-->
+    <script src="https://app.embed.im/accessibility.js" defer></script>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
     <link rel="stylesheet" href="../CSS/perfilColaborador.css">
 </head>
 
 <body>
-
-    <div class="container">
-        <a href="javascript:history.back()" class="back-button">&lt;</a>
-        
-    <nav class="navbar navbar-expand-xxl fixed-top">
-        <div class="container-fluid box">
-            <div class="logo">
-                <a href="../index.html"><img src="../Imagens/logo-rokuzen.png" width="160px" alt="Logo Rokuzen"></a>
-            </div>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container-missao fade-in">
-        <div class="missao-titulo">Perfil</div>
-
-        <!--Divisória-->
-        <div class="col-md-8 mx-auto fade-in">
-            <hr>
-        </div>
-
-        <!-- Alertas -->
-        <div id="alertContainer"></div>
-
-        <!-- Card Principal -->
-        <div class="card-perfil position-relative">
-            <!-- Informações Pessoais -->
-            <div class="mb-5">
-                <h3 class="section-title">
-                    <i class="fas fa-user-edit"></i>
-                    Informações Pessoais
-                </h3>
-                <form id="formInformacoesPessoais">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">Nome Completo *</label>
-                                <input type="text" class="form-control" id="inputNome" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">E-mail *</label>
-                                <input type="email" class="form-control" id="inputEmail" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">Telefone *</label>
-                                <input type="tel" class="form-control" id="inputTelefone" required>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary" id="btnSalvarInfo">
-                        <i class="fas fa-save me-2"></i>Salvar Alterações
-                    </button>
-                </form>
-            </div>
-
-            <hr>
-
-            <!-- Alterar Senha -->
-            <div>
-                <h3 class="section-title">
-                    <i class="fas fa-lock"></i>
-                    Alterar Senha
-                </h3>
-                <form id="formAlterarSenha">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">Senha Atual</label>
-                                <input type="password" class="form-control" id="inputSenhaAtual">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">Nova Senha</label>
-                                <input type="password" class="form-control" id="inputNovaSenha">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">Confirmar Nova Senha</label>
-                                <input type="password" class="form-control" id="inputConfirmarSenha">
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary" id="btnAlterarSenha">
-                        <i class="fas fa-key me-2"></i>Alterar Senha
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <div class="text-center mt-4">
-            <button type="button" class="btn btn-outline-danger" onclick="fazerLogout()">
-                <i class="fas fa-sign-out-alt me-2"></i>Sair da Conta
-            </button>
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/JavaScript/perfilColaborador.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
+    <div class="container">
+        <a href="javascript:history.back()" class="back-button">&lt;</a>
+
+        <nav class="navbar navbar-expand-xxl fixed-top">
+            <div class="container-fluid box">
+                <div class="logo">
+                    <a href="../index.html"><img src="../Imagens/logo-rokuzen.png" width="160px" alt="Logo Rokuzen"></a>
+                </div>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                    aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-missao fade-in">
+            <div class="missao-titulo">Perfil</div>
+
+            <!--Divisória-->
+            <div class="col-md-8 mx-auto fade-in">
+                <hr>
+            </div>
+
+            <!-- Alertas -->
+            <div id="alertContainer"></div>
+
+            <!-- Card Principal -->
+            <div class="card-perfil position-relative">
+                <!-- Informações Pessoais -->
+                <div class="mb-5">
+                    <h3 class="section-title">
+                        <i class="fas fa-user-edit"></i>
+                        Informações Pessoais
+                    </h3>
+                    <form id="formInformacoesPessoais">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Nome Completo *</label>
+                                    <input type="text" class="form-control" id="inputNome" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">E-mail *</label>
+                                    <input type="email" class="form-control" id="inputEmail" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Telefone *</label>
+                                    <input type="tel" class="form-control" id="inputTelefone" required>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="btnSalvarInfo">
+                            <i class="fas fa-save me-2"></i>Salvar Alterações
+                        </button>
+                    </form>
+                </div>
+
+                <hr>
+
+                <!-- Alterar Senha -->
+                <div>
+                    <h3 class="section-title">
+                        <i class="fas fa-lock"></i>
+                        Alterar Senha
+                    </h3>
+                    <form id="formAlterarSenha">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Senha Atual</label>
+                                    <input type="password" class="form-control" id="inputSenhaAtual">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Nova Senha</label>
+                                    <input type="password" class="form-control" id="inputNovaSenha">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Confirmar Nova Senha</label>
+                                    <input type="password" class="form-control" id="inputConfirmarSenha">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="btnAlterarSenha">
+                            <i class="fas fa-key me-2"></i>Alterar Senha
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="button" class="btn btn-outline-danger" onclick="fazerLogout()">
+                    <i class="fas fa-sign-out-alt me-2"></i>Sair da Conta
+                </button>
+            </div>
+        </div>
+
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="/JavaScript/perfilColaborador.js"></script>

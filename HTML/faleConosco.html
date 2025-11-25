@@ -17,11 +17,21 @@
     <!--Ícones da página-->
     <script src="https://kit.fontawesome.com/e64e449d7c.js" crossorigin="anonymous"></script>
     <!--Plugin de acessibilidade-->
-    <!--<script src="https://cdn.userway.org/widget.js" data-account="9AycmX4hek"></script>-->
+    <script src="https://app.embed.im/accessibility.js" defer></script>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
 </head>
 
 <body>
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
 
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
     <!-- Scripts Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"

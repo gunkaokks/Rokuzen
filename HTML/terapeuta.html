@@ -14,11 +14,21 @@
     <!--Ícones da página-->
     <script src="https://kit.fontawesome.com/e64e449d7c.js" crossorigin="anonymous"></script>
     <!--Plugin de acessibilidade-->
-    <!--<script src="https://cdn.userway.org/widget.js" data-account="9AycmX4hek"></script>-->
+    <script src="https://app.embed.im/accessibility.js" defer></script>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
     <link rel="stylesheet" href="../CSS/terapeuta.css">
 </head>
 
 <body>
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
     <nav class="navbar navbar-expand-xxl fixed-top">
         <div class="container-fluid box">
             <div class="logo">

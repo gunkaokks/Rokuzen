@@ -12,9 +12,21 @@
     <!-- Ícones -->
     <script src="https://kit.fontawesome.com/e64e449d7c.js" crossorigin="anonymous"></script>
     <link href="../CSS/recepcao.css" rel="stylesheet">
+    <script src="https://app.embed.im/accessibility.js" defer></script>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
 </head>
 
 <body>
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
     <nav class="navbar navbar-expand-xxl fixed-top">
         <div class="container-fluid box">
             <div class="logo">
@@ -130,7 +142,8 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Duração (minutos) *</label>
-                                    <input type="number" class="form-control" id="agendamentoDuracao" value="60" min="15" max="240" required>
+                                    <input type="number" class="form-control" id="agendamentoDuracao" value="60"
+                                        min="15" max="240" required>
                                 </div>
                             </div>
                         </div>
@@ -139,7 +152,8 @@
                             <div class="col-12">
                                 <div class="mb-3">
                                     <label class="form-label">Observações</label>
-                                    <textarea class="form-control" id="agendamentoObservacoes" rows="3" placeholder="Observações adicionais..."></textarea>
+                                    <textarea class="form-control" id="agendamentoObservacoes" rows="3"
+                                        placeholder="Observações adicionais..."></textarea>
                                 </div>
                             </div>
                         </div>

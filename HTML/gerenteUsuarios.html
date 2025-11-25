@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rokuzen - Gerenciar Usuários</title>
+    <title>Rokuzen</title>
     <link rel="shortcut icon" href="../Imagens/LogoTopo.png" type="image/x-icon">
 
     <!-- Bootstrap -->
@@ -12,9 +12,22 @@
     <!-- Ícones -->
     <script src="https://kit.fontawesome.com/e64e449d7c.js" crossorigin="anonymous"></script>
     <link href="../CSS/gerente.css" rel="stylesheet">
+
+    <script src="https://app.embed.im/accessibility.js" defer></script>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
 </head>
 
 <body>
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
     <!-- Barra de navegação -->
     <nav class="navbar navbar-expand-xxl fixed-top">
         <div class="container-fluid box">
@@ -61,75 +74,76 @@
             <hr>
         </div>
 
-    <!-- Painel de Usuários -->
-    <div class="container mt-5 pt-40">
-        <div class="card shadow">
-            <div class="card-header gerente-card text-white d-flex justify-content-between align-items-center">
-                <a href="gerente.html" class="btn btn-light">
-                    <i class="fas fa-arrow-left"></i> Voltar
-                </a>
-            </div>
+        <!-- Painel de Usuários -->
+        <div class="container mt-5 pt-40">
+            <div class="card shadow">
+                <div class="card-header gerente-card text-white d-flex justify-content-between align-items-center">
+                    <a href="gerente.html" class="btn btn-light">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </a>
+                </div>
 
-            <div class="card-body">
-                <!-- Barra de Pesquisa -->
-                <div class="row mb-3">
-                    <div class="col-12">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="pesquisa-usuarios"
-                                placeholder="Pesquisar usuários...">
-                            <span class="input-group-text">
-                                <i class="fas fa-search"></i>
-                            </span>
+                <div class="card-body">
+                    <!-- Barra de Pesquisa -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="pesquisa-usuarios"
+                                    placeholder="Pesquisar usuários...">
+                                <span class="input-group-text">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Tabela de Usuários -->
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover" id="tabela-usuarios">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Nome</th>
-                                <th>Email</th>
-                                <th>Telefone</th>
-                                <th>Tipo</th>
-                                <th>Criado em</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="corpo-tabela-usuarios">
-                            <!-- Dados serão carregados via JavaScript -->
-                        </tbody>
-                    </table>
+                    <!-- Tabela de Usuários -->
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="tabela-usuarios">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Email</th>
+                                    <th>Telefone</th>
+                                    <th>Tipo</th>
+                                    <th>Criado em</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="corpo-tabela-usuarios">
+                                <!-- Dados serão carregados via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Modal para Edição -->
-    <div class="modal fade" id="modalEdicaoUsuario" tabindex="-1" aria-labelledby="modalEdicaoUsuarioLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header gerente-card text-white">
-                    <h5 class="modal-title" id="modalEdicaoUsuarioLabel">Editar Usuário</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="modalEdicaoUsuarioCorpo">
-                    <!-- Conteúdo será carregado via JavaScript -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-gerente-card" id="salvarEdicaoUsuario">Salvar Alterações</button>
+        <!-- Modal para Edição -->
+        <div class="modal fade" id="modalEdicaoUsuario" tabindex="-1" aria-labelledby="modalEdicaoUsuarioLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header gerente-card text-white">
+                        <h5 class="modal-title" id="modalEdicaoUsuarioLabel">Editar Usuário</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modalEdicaoUsuarioCorpo">
+                        <!-- Conteúdo será carregado via JavaScript -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-gerente-card" id="salvarEdicaoUsuario">Salvar
+                            Alterações</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Scripts Bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../JavaScript/gerenteUsuarios.js"></script>
+        <!-- Scripts Bootstrap -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../JavaScript/gerenteUsuarios.js"></script>
 </body>
 
 </html>
