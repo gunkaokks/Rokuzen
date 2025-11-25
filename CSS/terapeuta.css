@@ -295,7 +295,7 @@
       border-bottom: 1px solid var(--cinza-medio);
       padding: 20px;
       border-radius: 12px 12px 0 0 !important;
-      
+
   }
 
   .card-header h4 {
@@ -399,13 +399,13 @@
   }
 
   .btn-pausa {
-      background-color: #ffc107;
-      color: #000;
+      background-color: #7b4bb9;
+      color: #ffffff;
   }
 
   .btn-pausa:hover {
-      background-color: #e0a800;
-      color: #000;
+      background-color: #7b4bb9;
+      color: #ffffff;
   }
 
   .info-box {
@@ -817,6 +817,32 @@
       border-radius: 100%;
       transform: scale(1, 1) translate(-50%);
       transform-origin: 50% 50%;
+  }
+
+  .gerente-card {
+      color: white;
+      background-color: #69a625 !important;
+  }
+
+  .btn-gerente-card {
+      color: white !important;
+      background-color: #69a625 !important;
+  }
+
+  .btn-gerente-card:hover {
+      background-color: #74c716 !important;
+      border-color: #487218;
+      color: white !important;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-gerente-icon-roxo {
+      color: rgb(148, 45, 207) !important;
+  }
+
+  .btn-gerente-icon-roxo:hover {
+      color: rgb(162, 0, 255);
   }
 
   @keyframes ripple {

@@ -103,7 +103,7 @@ class RelatoriosViewManager {
                             </p>
                         </div>
                         <div class="col-md-1">
-                            <button class="btn btn-sm btn-outline-primary btn-detalhes" data-id="${relatorio._id}">
+                            <button class="btn btn-gerente-icon-roxo btn-detalhes" data-id="${relatorio._id}">
                                 <i class="fa-solid fa-eye"></i> Ver
                             </button>
                         </div>
@@ -123,7 +123,7 @@ class RelatoriosViewManager {
 
     getBadgeSatisfacao(satisfacao) {
         if (!satisfacao) return 'bg-secondary';
-        if (satisfacao >= 4) return 'bg-success';
+        if (satisfacao >= 4) return 'gerente-card';
         if (satisfacao >= 3) return 'bg-warning';
         return 'bg-danger';
     }
@@ -163,7 +163,7 @@ class RelatoriosViewManager {
                         <h6>Informações Financeiras</h6>
                         <p><strong>Valor:</strong> R$ ${(relatorio.valor_servico || 0).toFixed(2)}</p>
                         <p><strong>Tipo Pagamento:</strong> ${relatorio.tipo_pagamento || 'N/A'}</p>
-                        <p><strong>Status:</strong> <span class="badge ${relatorio.status_pagamento === 'pago' ? 'bg-success' : 'bg-warning'}">${relatorio.status_pagamento || 'N/A'}</span></p>
+                        <p><strong>Status:</strong> <span class="badge ${relatorio.status_pagamento === 'pago' ? 'gerente-card' : 'bg-warning'}">${relatorio.status_pagamento || 'N/A'}</span></p>
                     </div>
                 </div>
                 
